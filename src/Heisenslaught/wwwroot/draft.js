@@ -58,10 +58,24 @@
     "Zagara": "https://chairleague.s3.amazonaws.com/uploads/avatar/attachment/77/zagara.jpg",
     "Zarya": "https://chairleague.s3.amazonaws.com/uploads/avatar/attachment/8478/zarya.jpg",
     "Zeratul": "https://chairleague.s3.amazonaws.com/uploads/avatar/attachment/78/zeratul.jpg"
-}
+};
 
 $(document).ready(function () {
-    let userName = prompt("Enter your name: ");
+    let queryParam = function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    } ();
+    let userName = queryParam.type;
+    if (userName === "obs")
+    {
+        userName = prompt("Enter your name: ");
+    }
     let chat = $.connection.draftHub;
     chat.client.messageReceived = function (originatorUser, message) {
         $("#draft").append('<li><strong>' + originatorUser + '</strong>: ' + message);
@@ -75,7 +89,18 @@ $(document).ready(function () {
 
     chat.client.newUserAdded = function (newUser) {
         addUser(newUser);
-    }
+    };
+
+    chat.client.updateDraftState = function (draftState) {
+        $("#draftState").text(draftState.CurrentState);
+        $("#team0Timer").text("Team 0: " + draftState.TimeTeam0);
+        $("#team1Timer").text("Team 1: " + draftState.TimeTeam1);
+    };
+
+    $.connection.hub.logging = true;
+    $.connection.hub.start().done(function () {
+        chat.server.connect(userName);
+    });
 
     $("#heroPick").focus();
 
@@ -86,7 +111,7 @@ $(document).ready(function () {
     });
 
     $("#heroPick").keyup(function (event) {
-        if (event.keyCode == 13)
+        if (event.keyCode === 13)
             $("#selectHero").click();
     });
 
@@ -94,16 +119,11 @@ $(document).ready(function () {
         $("#userList").append('<li>' + user + '</li>');
     }
 
-    $.connection.hub.logging = true;
-    $.connection.hub.start().done(function () {
-        chat.server.connect(userName);
-    });
-
     Object.keys(allHeroes).forEach(function (hero) {
         let heroId = hero.replace(/[^a-zA-Z]/gi, '');
         $("#allHeroes").append('<li style="width:150px; height:100px; float:left;" id="allHeroes' + heroId + '">' + "<img src='" + allHeroes[hero] + "'height='50' width='25'>" + hero + "</li>");
         $("#allHeroes" + heroId).click(function () {
-            chat.server.send(userName, "Picked " + hero);
+            chat.server.send(userName, hero);
         });
     });
 });
