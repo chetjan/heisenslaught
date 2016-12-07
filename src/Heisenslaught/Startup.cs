@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace Heisenslaught
 {
@@ -24,14 +25,18 @@ namespace Heisenslaught
         {
             loggerFactory.AddConsole();
 
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+            app.UseStaticFiles();
+            app.UseWebSockets();
+            app.UseSignalR();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseStaticFiles();
-            app.UseWebSockets();
-            app.UseSignalR();
         }
     }
 }
