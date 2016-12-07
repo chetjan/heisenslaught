@@ -8,10 +8,21 @@
 <label for="heroPick">Hero Pick:</label>
 <input type="text" id="heroPick" />
 <input type="button" id="selectHero" value="Select Hero!" />
+
+<h2>Tutorial</h2>
+Draft tool uses 3min + 30sec Fischer time. At the beginning of every pick time is added to your pool and you have the choice to run it all out or keep some for next time.<br />
+To select a hero just click it from the list. <strong>It will not prompt to confirm. A single click will draft the hero.</strong> If you cannot find a hero you can just type it in the box and click Select Hero!.
+
 <h4>Connected Users</h4>
 <div class="userListDiv">
     <ul id="userList"> </ul>
 </div>
+
+<div style="width:900px">
+    <h2>Heroes</h2>
+    <ul id="allHeroes" style="padding: 0; margin: 0; list-style-type: none"></ul>
+</div>
+
 
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.1.min.js"></script>
