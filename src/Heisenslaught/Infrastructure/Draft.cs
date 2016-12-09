@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Heisenslaught.Infrastructure
 {
-    public enum DraftState
+    public enum Team
+    {
+        Team0,
+        Team1
+    }
+    public enum DraftPhase
     {
         Waiting,
         FirstBanTeam0,
@@ -28,56 +33,62 @@ namespace Heisenslaught.Infrastructure
 
     public class Draft
     {
-        private DraftState State = DraftState.Waiting;
-        public string CurrentState
+        public string CurrentPhase
         {
             get
             {
-                return State.ToString();
+                return Phase.ToString();
+            }
+        }
+        public Team CurrentTeam
+        {
+            get
+            {
+                if (Team0Phases.Contains(Phase))
+                {
+                    return Team.Team0;
+                }
+                else 
+                {
+                    return Team.Team1;
+                }
             }
         }
         public int TimeTeam0 = 180, TimeTeam1 = 180, TimeBonus = 30;
-        public string CurrentAction
-        {
-            get
-            {
-                if (BanStates.Contains(State))
-                {
-                    return "Banned: ";
-                }
-                else
-                {
-                    return "Picked: ";
-                }
-            }
-        }
+        public List<string> 
+            BansTeam0 = new List<string>(), 
+            PicksTeam0 = new List<string>(), 
+            BansTeam1 = new List<string>(),
+            PicksTeam1 = new List<string>();
+
+        private DraftPhase Phase = DraftPhase.Waiting;
 
         private Timer Ticker;
 
-        private List<DraftState> Team0States = new List<DraftState> {
-            DraftState.FirstBanTeam0,
-            DraftState.FirstPickTeam0,
-            DraftState.SecondPickTeam0,
-            DraftState.ThirdPickTeam0,
-            DraftState.SecondBanTeam0,
-            DraftState.FourthPickTeam0,
-            DraftState.FifthPickTeam0
+        private List<DraftPhase> Team0Phases = new List<DraftPhase> {
+            DraftPhase.FirstBanTeam0,
+            DraftPhase.FirstPickTeam0,
+            DraftPhase.SecondPickTeam0,
+            DraftPhase.ThirdPickTeam0,
+            DraftPhase.SecondBanTeam0,
+            DraftPhase.FourthPickTeam0,
+            DraftPhase.FifthPickTeam0
         };
-        private List<DraftState> Team1States = new List<DraftState> {
-            DraftState.FirstBanTeam1,
-            DraftState.FirstPickTeam1,
-            DraftState.SecondPickTeam1,
-            DraftState.ThirdPickTeam1,
-            DraftState.SecondBanTeam1,
-            DraftState.FourthPickTeam1,
-            DraftState.FifthPickTeam1
+        private List<DraftPhase> Team1Phases = new List<DraftPhase> {
+            DraftPhase.FirstBanTeam1,
+            DraftPhase.FirstPickTeam1,
+            DraftPhase.SecondPickTeam1,
+            DraftPhase.ThirdPickTeam1,
+            DraftPhase.SecondBanTeam1,
+            DraftPhase.FourthPickTeam1,
+            DraftPhase.FifthPickTeam1
         };
-        private List<DraftState> BanStates = new List<DraftState>
+        private List<DraftPhase> BanPhases = new List<DraftPhase>
         {
-            DraftState.FirstBanTeam0,
-            DraftState.FirstBanTeam1,
-            DraftState.SecondBanTeam0,
-            DraftState.SecondBanTeam1
+            DraftPhase.FirstBanTeam0,
+            DraftPhase.FirstBanTeam1,
+            DraftPhase.SecondBanTeam0,
+            DraftPhase.SecondBanTeam1
         };
 
         public Draft()
@@ -85,29 +96,70 @@ namespace Heisenslaught.Infrastructure
             Ticker = new Timer(Tick, null, 0, 1000);
         }
 
-        public void NextState()
+        public void StartDraft() 
         {
-            if (State != DraftState.Finished)
+            if (DraftPhase.Waiting == Phase)
             {
-                State++;
-                if (Team0States.Contains(State))
+                Phase++;
+            }
+        }
+
+        public bool SelectHero(Team team, string hero)
+        {
+            if (CurrentTeam != team) 
+            {
+                return false;
+            }
+
+            if (Team.Team0 == team) 
+            {
+                if (BanPhases.Contains(Phase))
+                {
+                    BansTeam0.Add(hero);
+                }
+                else
+                {
+                    PicksTeam0.Add(hero);
+                }
+            }
+            else
+            {
+                if (BanPhases.Contains(Phase))
+                {
+                    BansTeam1.Add(hero);
+                }
+                else
+                {
+                    PicksTeam1.Add(hero);
+                }
+            }
+            NextPhase();
+            return true;
+        }
+
+        private void NextPhase()
+        {
+            if (Phase != DraftPhase.Finished)
+            {
+                Phase++;
+                if (Team0Phases.Contains(Phase))
                 {
                     TimeTeam0 += TimeBonus;
                 }
-                else if (Team1States.Contains(State))
+                else if (Team1Phases.Contains(Phase))
                 {
                     TimeTeam1 += TimeBonus;
                 }
             }
         }
 
-        private void Tick(object timerState)
+        private void Tick(object timerPhase)
         {
-            if (Team0States.Contains(State))
+            if (Team0Phases.Contains(Phase))
             {
                 TimeTeam0--;
             }
-            else if (Team1States.Contains(State))
+            else if (Team1Phases.Contains(Phase))
             {
                 TimeTeam1--;
             }

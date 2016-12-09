@@ -72,9 +72,14 @@ $(document).ready(function () {
         return vars;
     } ();
     let userName = queryParam.type;
+    let draftTeam;
     if (userName === "obs")
     {
         userName = prompt("Enter your name: ");
+    } else if (userName === "Team0") {
+        draftTeam = 0;
+    } else if (userName === "Team1") {
+        draftTeam = 1;
     }
     let chat = $.connection.draftHub;
     chat.client.messageReceived = function (originatorUser, message) {
@@ -92,9 +97,13 @@ $(document).ready(function () {
     };
 
     chat.client.updateDraftState = function (draftState) {
-        $("#draftState").text(draftState.CurrentState);
+        $("#draftPhase").text(draftState.CurrentPhase);
         $("#team0Timer").text("Team 0: " + draftState.TimeTeam0);
         $("#team1Timer").text("Team 1: " + draftState.TimeTeam1);
+        $("#bansTeam0").text(JSON.stringify(draftState.BansTeam0));
+        $("#bansTeam1").text(JSON.stringify(draftState.BansTeam1));
+        $("#picksTeam0").text(JSON.stringify(draftState.PicksTeam0));
+        $("#picksTeam1").text(JSON.stringify(draftState.PicksTeam1));
     };
 
     $.connection.hub.logging = true;
@@ -105,7 +114,11 @@ $(document).ready(function () {
     $("#heroPick").focus();
 
     $("#selectHero").click(function () {
-        chat.server.send(userName, $("#heroPick").val());
+        if (draftTeam !== undefined) {
+            chat.server.pick(draftTeam, $("#heroPick").val());
+        } else {
+            chat.server.send(userName, $("#heroPick").val());
+        }
         $("#heroPick").val("");
         $("#heroPick").focus();
     });
@@ -122,8 +135,10 @@ $(document).ready(function () {
     Object.keys(allHeroes).forEach(function (hero) {
         let heroId = hero.replace(/[^a-zA-Z]/gi, '');
         $("#allHeroes").append('<li style="width:150px; height:100px; float:left;" id="allHeroes' + heroId + '">' + "<img src='" + allHeroes[hero] + "'height='50' width='25'>" + hero + "</li>");
-        $("#allHeroes" + heroId).click(function () {
-            chat.server.send(userName, hero);
-        });
+        if (draftTeam !== undefined) {
+            $("#allHeroes" + heroId).click(function () {
+                chat.server.pick(draftTeam, hero); 
+            });
+        }
     });
 });

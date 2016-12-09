@@ -16,9 +16,14 @@ namespace Heisenslaught
 
         public void Send(string originatorUser, string message)
         {
-            Clients.All.messageReceived(originatorUser, CurrentDraft.CurrentAction + message);
-            CurrentDraft.NextState();
+            Clients.All.messageReceived(originatorUser, message);
+        }
+
+        public void Pick(int team, string hero)
+        {
+            bool selectionSuccessful = CurrentDraft.SelectHero((Team) team, hero);
             Clients.All.updateDraftState(CurrentDraft);
+            Send("Team " + team, "Selected: " + hero + (selectionSuccessful ? "" : " (ignoring)"));
         }
 
         public void Connect(string newUser)
@@ -48,6 +53,7 @@ namespace Heisenslaught
                     Clients.All.updateDraftState(CurrentDraft);
                 }, null, 0, 1);
                 Send("Admin", "Starting draft...");
+                CurrentDraft.StartDraft();
                 return;
             }
 

@@ -2,21 +2,28 @@
     ViewBag.Title = "Heisenslaught";
 }
 
-<h2>Heisenslaught's Custom Draft Tool</h2>
-<h3 id="draftState"></h3>
-<h3 id="team0Timer"></h3>
-<h3 id="team1Timer"></h3>
+<h1>Heisenslaught's Custom Draft Tool</h1>
+<h4 id="draftPhase"></h4>
+<h4 id="team0Timer"></h4>
+<h4 id="team1Timer"></h4>
 
+<h2>Draft</h2>
+<div><strong>Bans Team 0: </strong><span id="bansTeam0"></span></div>
+<div><strong>Bans Team 1: </strong><span id="bansTeam1"></span></div>
+<div><strong>Picks Team 0: </strong><span id="picksTeam0"></span></div>
+<div><strong>Picks Team 1: </strong><span id="picksTeam1"></span></div>
+
+<h2>Chat</h2>
 <ul id="draft"></ul>
 <label for="heroPick">Hero Pick:</label>
 <input type="text" id="heroPick" />
 <input type="button" id="selectHero" value="Select Hero!" />
 
-<h2>Tutorial</h2>
+<h3>Tutorial</h3>
 Draft tool uses 3min + 30sec Fischer time. At the beginning of every pick time is added to your pool and you have the choice to run it all out or keep some for next time.<br />
-To select a hero just click it from the list. <strong>It will not prompt to confirm. A single click will draft the hero.</strong> If you cannot find a hero you can just type it in the box and click Select Hero!.
+To select a hero just click it from the list. <strong>It will not prompt to confirm. A single click will draft the hero.</strong> If you cannot find a hero you can just type it in the box and click "Select Hero!". If you are an observer the hero pick box will act as a generic text chat and broadcast to all connected users.
 
-<h4>Connected Users</h4>
+<h3>Connected Users</h3>
 <div class="userListDiv">
     <ul id="userList"> </ul>
 </div>
