@@ -1,0 +1,16 @@
+# /etc/systemd/system/heisenslaught.service
+
+[Unit]
+    Description=Heisenslaught Web App
+
+    [Service]
+    WorkingDirectory=/home/heisenslaught/heisenslaught/src/Heisenslaught/bin/Debug/netcoreapp1.0/publish
+    ExecStart=/usr/bin/dotnet /home/heisenslaught/heisenslaught/src/Heisenslaught/bin/Debug/netcoreapp1.0/publish/Heisenslaught.dll
+    Restart=always
+    RestartSec=10 # Restart service after 10 seconds if dotnet service crashes
+    SyslogIdentifier=heisenslaught
+    User=heisenslaught
+    Environment=ASPNETCORE_ENVIRONMENT=Production 
+
+    [Install]
+    WantedBy=multi-user.target
