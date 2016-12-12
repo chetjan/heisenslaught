@@ -2,10 +2,7 @@
 1. Login as a sudo user
     1. `sudo systemctl stop heisenslaught.service`
 1. Login as the heisenslaught user
-    1. `cd ~/heisenslaught`
-    1. `git pull`
-    1. `dotnet restore`
-    1. `dotnet publish`
+    1. `~/ops/publish.sh`
 1. Login as a sudo user
     1. `sudo systemctl start heisenslaught.service`
 

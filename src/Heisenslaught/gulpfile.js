@@ -1,6 +1,7 @@
-﻿'use strict';
+'use strict';
 
 const Bower = require('gulp-bower');
+const Del = require('del');
 const Gulp = require('gulp');
 const Rename = require('gulp-rename');
 const Sass = require('gulp-sass');
@@ -19,6 +20,10 @@ Gulp.task('default', ['bower', 'icons', 'javascript', 'sass']);
 Gulp.task('bower', function () {
     return Bower()
         .pipe(Gulp.dest(config.bowerDir));
+});
+
+Gulp.task('clean', function() {
+    return Del(['wwwroot']);
 });
 
 Gulp.task('icons', ['bower'], function () {

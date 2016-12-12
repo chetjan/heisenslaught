@@ -3,6 +3,7 @@
   "name": "heisenslaught",
   "private": true,
   "devDependencies": {
+    "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-bower": "^0.0.13",
     "gulp-rename": "^1.2.2",
