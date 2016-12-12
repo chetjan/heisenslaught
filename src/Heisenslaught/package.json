@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "name": "heisenslaught",
+  "private": true,
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-bower": "^0.0.13",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.0.0"
+  }
+}
