@@ -106,7 +106,7 @@ namespace Heisenslaught.Infrastructure
 
         public bool SelectHero(Team team, string hero)
         {
-            if (CurrentTeam != team) 
+            if (CurrentTeam != team || !ValidPick(hero)) 
             {
                 return false;
             }
@@ -115,26 +115,67 @@ namespace Heisenslaught.Infrastructure
             {
                 if (BanPhases.Contains(Phase))
                 {
-                    BansTeam0.Add(hero);
+                    AddHero(BansTeam0, hero);
                 }
                 else
                 {
-                    PicksTeam0.Add(hero);
+                    AddHero(PicksTeam0, hero);
                 }
             }
             else
             {
                 if (BanPhases.Contains(Phase))
                 {
-                    BansTeam1.Add(hero);
+                    AddHero(BansTeam1, hero);
                 }
                 else
                 {
-                    PicksTeam1.Add(hero);
+                    AddHero(PicksTeam1, hero);
                 }
             }
-            NextPhase();
             return true;
+        }
+
+        private bool ValidPick(string hero)
+        {
+            bool chogallCheck = true;
+            if (hero == "Cho" || hero == "Gall") 
+            {
+                chogallCheck = new List<DraftPhase> {
+                    DraftPhase.FirstBanTeam0,
+                    DraftPhase.FirstBanTeam1,
+                    DraftPhase.FirstPickTeam1,
+                    DraftPhase.SecondPickTeam0,
+                    DraftPhase.SecondBanTeam1,
+                    DraftPhase.SecondBanTeam0,
+                    DraftPhase.ThirdPickTeam1,
+                    DraftPhase.FourthPickTeam0,
+                }.Contains(Phase);
+            }
+
+            return !BansTeam0.Contains(hero)
+                && !BansTeam1.Contains(hero)
+                && !PicksTeam0.Contains(hero)
+                && !PicksTeam1.Contains(hero)
+                && chogallCheck;
+        }
+
+        private void AddHero(List<string> list, string hero) 
+        {
+            if (hero == "Cho" || hero == "Gall")
+            {
+                list.Add("Cho");
+                if (!BanPhases.Contains(Phase))
+                {
+                    NextPhase();
+                }
+                list.Add("Gall");
+            }
+            else
+            {
+                list.Add(hero);
+            }
+            NextPhase();
         }
 
         private void NextPhase()
