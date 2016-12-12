@@ -35,6 +35,7 @@
     "Murky": "https://chairleague.s3.amazonaws.com/uploads/avatar/attachment/58/murky.jpg",
     "Nazeebo": "https://chairleague.s3.amazonaws.com/uploads/avatar/attachment/59/nazeebo.jpg",
     "Nova": "https://chairleague.s3.amazonaws.com/uploads/avatar/attachment/60/nova.jpg",
+    "Ragnaros": "http://assets.heisenslaught.com/images/heroes/ragnaros_bust.jpg",
     "Raynor": "https://chairleague.s3.amazonaws.com/uploads/avatar/attachment/61/raynor.jpg",
     "Rehgar": "https://chairleague.s3.amazonaws.com/uploads/avatar/attachment/62/rehgar.jpg",
     "Misha": "https://chairleague.s3.amazonaws.com/uploads/avatar/attachment/63/rexxar.jpg",
