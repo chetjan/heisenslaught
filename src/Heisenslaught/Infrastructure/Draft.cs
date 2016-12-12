@@ -54,7 +54,7 @@ namespace Heisenslaught.Infrastructure
                 }
             }
         }
-        public int TimeTeam0 = 180, TimeTeam1 = 180, TimeBonus = 30;
+        public int TimeTeam0 = 180, TimeTeam1 = 180, TimeBonus = 45;
         public List<string> 
             BansTeam0 = new List<string>(), 
             PicksTeam0 = new List<string>(), 
