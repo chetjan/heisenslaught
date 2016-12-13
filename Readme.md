@@ -6,7 +6,9 @@ A custom drafting tool for (On|Off)slaught.
 
 ### Windows
 1. Install [Visual Studio 2017](https://www.visualstudio.com/vs/visual-studio-2017-rc/)
-	1. Make sure to select Web Development when installing
+	1. Select the following Workloads when installing
+		1. Web Development
+		1. .NET Core and Docker (Preview)
 1. Install [node](https://nodejs.org)
 1. Setup static file compilation
     1. In `src/Heisenslaught` run `npm install`
