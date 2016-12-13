@@ -9,7 +9,8 @@ namespace Heisenslaught.Infrastructure
     public enum Team
     {
         Team0,
-        Team1
+        Team1,
+        None
     }
     public enum DraftPhase
     {
@@ -48,9 +49,13 @@ namespace Heisenslaught.Infrastructure
                 {
                     return Team.Team0;
                 }
-                else 
+                else if (Team1Phases.Contains(Phase))
                 {
                     return Team.Team1;
+                }
+                else
+                {
+                    return Team.None;
                 }
             }
         }
