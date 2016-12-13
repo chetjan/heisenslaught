@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subscriber } from 'rxjs/Rx';
 
-import { ICreateDraftResult, IDraftConfig } from './draft-config';
-import { IDraftState, DraftStatus } from './draft-status';
+import { ICreateDraftResult, IDraftConfig, ICreateDraftData } from './draft-config';
+import { IDraftState, DraftPhase } from './draft-state';
 import { IDraftHubProxy } from './draft-hub-proxy';
 
 
-export { ICreateDraftResult, IDraftConfig } from './draft-config';
-export { IDraftState, DraftStatus } from './draft-status';
+export { ICreateDraftData, ICreateDraftResult, IDraftConfig } from './draft-config';
+export { IDraftState, DraftPhase } from './draft-state';
 
 
 
@@ -32,18 +32,6 @@ export class DraftService {
 
     constructor() {
         this.hub = $.connection['draftHub'];
-
-        this.createDraft({
-            firstPick: 0,
-            bankTime: true,
-            bonusTime: 300,
-            mapName: 'GOT',
-            pickTime: 60,
-            team1Name: 'On',
-            team2Name: 'Off'
-        }).then((cfg) => {
-            console.log('config result:', cfg);
-        });
     }
 
 
@@ -60,10 +48,52 @@ export class DraftService {
         return this.connectPromise;
     }
 
-    public createDraft(createCfg: IDraftConfig): Promise<ICreateDraftResult> {
+    public createDraft(createCfg: ICreateDraftData): Promise<ICreateDraftResult> {
         return new Promise((resolve, reject) => {
             this.connect().then(() => {
                 this.hub.server.configDraft(createCfg).then((config) => {
+                    resolve(config);
+                }, (err) => {
+                    reject(err);
+                });
+            }, (err) => {
+                reject(err);
+            });
+        });
+    }
+
+    public resetDraft(): Promise<ICreateDraftResult> {
+        return new Promise((resolve, reject) => {
+            this.connect().then(() => {
+                this.hub.server.resetDraft().then((config) => {
+                    resolve(config);
+                }, (err) => {
+                    reject(err);
+                });
+            }, (err) => {
+                reject(err);
+            });
+        });
+    }
+
+    public closeDraft(): Promise<ICreateDraftResult> {
+        return new Promise((resolve, reject) => {
+            this.connect().then(() => {
+                this.hub.server.closeDraft().then((config) => {
+                    resolve(config);
+                }, (err) => {
+                    reject(err);
+                });
+            }, (err) => {
+                reject(err);
+            });
+        });
+    }
+
+    public getCurrentAdminConfig(): Promise<ICreateDraftResult> {
+        return new Promise((resolve, reject) => {
+            this.connect().then(() => {
+                this.hub.server.getCurrentAdminConfig().then((config) => {
                     resolve(config);
                 }, (err) => {
                     reject(err);
@@ -85,8 +115,9 @@ export class DraftService {
                         pickTime: 60,
                         bonusTime: 100,
                         bankTime: true,
-                        mapName: 'Blackheart\'s Bay',
-                        disabledHeroes: ['rexxar']
+                        map: 'Blackheart\'s Bay',
+                        disabledHeroes: ['rexxar'],
+                        state: null
                     });
                 }, 50);
             });
@@ -99,7 +130,7 @@ export class DraftService {
         if (!this._draftStatus) {
             this._draftStatus = new Observable<IDraftState>((sub: Subscriber<IDraftState>) => {
                 let draftState: IDraftState = {
-                    status: DraftStatus.WAITING,
+                    phase: DraftPhase.WAITING,
                     pickTime: 60,
                     team1BonusTime: 100,
                     team2BonusTime: 100,
@@ -119,7 +150,7 @@ export class DraftService {
                     }
 
                     if (count === 15) {
-                        draftState.status = DraftStatus.BANNING;
+                        draftState.phase = DraftPhase.PICKING;
                     }
 
                     switch (count) {

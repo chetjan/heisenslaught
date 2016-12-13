@@ -1,0 +1,16 @@
+
+:host{
+    width:600px;
+    margin: auto;
+    margin-top:100px;
+    background-color: white;
+    border: 3px solid rebeccapurple;
+    border-radius: 16px;
+    display: block;
+    min-height: 250px;
+    color: black;
+}
+
+section{
+    padding:24px;
+}

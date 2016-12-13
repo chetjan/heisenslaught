@@ -1,7 +1,6 @@
-export enum DraftStatus {
+export enum DraftPhase {
     WAITING,
     PICKING,
-    BANNING,
     FINISHED
 }
 
@@ -12,7 +11,7 @@ export interface IDraftState {
     team1BonusTime: number;
     team2BonusTime: number;
     picks: string[];
-    status: DraftStatus;
+    phase: DraftPhase;
 }
 
 

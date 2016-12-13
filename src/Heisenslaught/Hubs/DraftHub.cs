@@ -15,6 +15,8 @@ namespace Heisenslaught
         public static Draft CurrentDraft;
         private static Timer DraftUpdate;
 
+        private static AdminDraftConfig CurrentDraftConfig;
+
         public void Send(string originatorUser, string message)
         {
             Clients.All.messageReceived(originatorUser, message);
@@ -27,14 +29,43 @@ namespace Heisenslaught
             Send("Team " + team, "Selected: " + hero + (selectionSuccessful ? "" : " (ignoring)"));
         }
 
-        public DraftConfig ConfigDraft(DraftConfig cfg)
+        public AdminDraftConfig ConfigDraft(DraftConfig cfg)
         {
-            //DraftConfig cfg = JsonConvert.DeserializeObject<DraftConfig>(config);
+            CurrentDraftConfig = new AdminDraftConfig(cfg);
+    
             CurrentDraft = new Draft();
             Clients.All.updateConfig(cfg);
 
-            return cfg;
+            return CurrentDraftConfig;
         }
+
+        public AdminDraftConfig getCurrentAdminConfig()
+        {
+            return CurrentDraftConfig;
+
+        }
+
+        public AdminDraftConfig resetDraft()
+        {
+            if(CurrentDraftConfig != null)
+            {
+                CurrentDraftConfig.reset();
+                Clients.All.updateConfig(CurrentDraftConfig.getConfig());
+            }
+            return CurrentDraftConfig;
+        }
+
+        public AdminDraftConfig closeDraft()
+        {
+            if (CurrentDraftConfig != null)
+            {
+                DraftConfig cfg = CurrentDraftConfig.getConfig();
+                cfg.state.phase = DraftStatePhase.FINISHED;
+                Clients.All.updateConfig(cfg);
+            }
+            return CurrentDraftConfig;
+        }
+
 
         public void Connect(string newUser)
         {

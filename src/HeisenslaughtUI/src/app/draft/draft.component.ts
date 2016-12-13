@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DraftService, IDraftConfig, IDraftState, DraftStatus } from '../services/draft.service';
+import { DraftService, IDraftConfig, IDraftState, DraftPhase } from '../services/draft.service';
 import { HeroesService, HeroData } from '../services/heroes.service';
 
 @Component({
@@ -34,7 +34,7 @@ export class DraftComponent implements OnInit {
     this.draftService.getDraftState('asdf').subscribe((draftState) => {
       this.draftState = draftState;
 
-      if (draftState.status === DraftStatus.WAITING) {
+      if (draftState.phase === DraftPhase.WAITING) {
         if (draftState.team1Ready) {
           this.team1Status = 'Ready';
         }
@@ -42,7 +42,7 @@ export class DraftComponent implements OnInit {
         if (draftState.team2Ready) {
           this.team2Status = 'Ready';
         }
-      } else if (draftState.status !== DraftStatus.FINISHED) {
+      } else if (draftState.phase !== DraftPhase.FINISHED) {
         this.team1Status = draftState.team1BonusTime.toString();
         this.team2Status = draftState.team2BonusTime.toString();
       }
