@@ -18,7 +18,7 @@ export class HeroesService {
 
   public getHeroes(): Observable<HeroData[]> {
     if (!this.heroData) {
-      this.heroData = this.http.get('app/data/heroes.json')
+      this.heroData = this.http.get('data/heroes.json')
         .map((res: Response) => res.json())
         .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
     }

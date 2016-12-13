@@ -10,14 +10,14 @@
     left: 10%;
     width: 80%;
     height: 80%;
-    background-image: url('app/assets/storm_ui_glues_draft_portrait_background.png');
+    background-image: url('assets/storm_ui_glues_draft_portrait_background.png');
     background-size: 100% 100%;
     z-index: 1;
 }
 
 .border {
     position: absolute;
-    background-image: url('app/assets/storm_ui_glues_draft_portrait_normal.png');
+    background-image: url('assets/storm_ui_glues_draft_portrait_normal.png');
     background-size: 100% 100%;
     width: 100%;
     height: 100%;
@@ -26,7 +26,7 @@
 }
 
 :host.team2 .bg {
-    background-image: url('app/assets/storm_ui_glues_draft_portrait_background_red.png');
+    background-image: url('assets/storm_ui_glues_draft_portrait_background_red.png');
 }
 
 :host.ban {
@@ -63,5 +63,5 @@ svg {
 }
 
 :host.picking .border {
-    background-image: url('app/assets/storm_ui_glues_draft_portrait_selected.png');
+    background-image: url('assets/storm_ui_glues_draft_portrait_selected.png');
 }

@@ -39,7 +39,7 @@ section.center div.top div.header {
     width: 1088px;
     height: 200px;
     margin: auto;
-    background-image: url('app/assets/storm_ui_glues_draft_headerbar_vs.png');
+    background-image: url('assets/storm_ui_glues_draft_headerbar_vs.png');
     background-repeat: no-repeat;
     background-position-x: center;
 }
@@ -51,7 +51,7 @@ section.center div.top div.map {
     top: 92px;
     left: 50%;
     margin-left: -256px;
-    background-image: url('app/assets/storm_ui_glues_draft_headerbar_mapbg.png');
+    background-image: url('assets/storm_ui_glues_draft_headerbar_mapbg.png');
     text-align: center;
     font-weight: 700;
     font-size: 24px;
@@ -94,12 +94,12 @@ section.center div.top div.map {
 
 
 .bonus-time.team1 {
-    background-image: url('app/assets/storm_ui_glues_draft_rankbackground_blue.png');
+    background-image: url('assets/storm_ui_glues_draft_rankbackground_blue.png');
     margin-left: -210px;
 }
 
 .bonus-time.team2 {
-    background-image: url('app/assets/storm_ui_glues_draft_rankbackground_red.png');
+    background-image: url('assets/storm_ui_glues_draft_rankbackground_red.png');
     margin-left: 70px;
 }
 
