@@ -1,0 +1,47 @@
+:host {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    display: inline-block;
+    margin: 2px;
+    cursor: pointer;
+}
+
+div {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 4px;
+    background-color: #273a4a;
+    background: linear-gradient(#273a4a, #2f284a);
+    box-sizing: border-box;
+}
+
+div:hover {
+    background-color: #8782d4;
+    background-image: linear-gradient(#8782d4, #6ebfd4);
+}
+
+svg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 3px solid black;
+    box-sizing: border-box;
+}
+
+img {
+    top:-10%;
+    left:-10%;
+    width:120%;
+    height:120%;
+    position: absolute;
+    display:none;
+}
+:host.selected img{
+    display:inline-block;
+}
+
+:host.selected{
+    z-index:10;
+}
