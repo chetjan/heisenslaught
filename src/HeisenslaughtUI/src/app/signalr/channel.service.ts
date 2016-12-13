@@ -6,7 +6,7 @@ import { ChannelConfig } from './config';
 import { ChannelEvent } from './event';
 import { MethodCall } from './method';
 import 'jquery';
-import 'signalr';
+// import 'signalr';
 
 export { ChannelConfig } from './config';
 
@@ -43,7 +43,7 @@ export class ChannelService {
         }
 
         //$.connection.hub.logging = true;
-
+/*
         this.connectionState = this.connectionStateSubject.asObservable();
         this.errorObs = this.errorSubject.asObservable();
         this.startObs = this.startSubject.asObservable();
@@ -67,8 +67,8 @@ export class ChannelService {
                 }
             }
 
-
             // let channel = msg.H .toLowerCase();
+            
         });
         //this.hubConnection.
 
@@ -104,13 +104,18 @@ export class ChannelService {
             if (chanSub !== undefined) {
                 return chanSub.subject.next(event);
             }
-        });
-
+        })
+        ;
+        */
     }
 
     public connect(): void {
         this.hubConnection.start().done(() => {
             this.startSubject.next();
+            console.log('hubConnection', this.hubConnection);
+           
+
+
         }).fail((error) => {
             this.startSubject.error(error);
         });

@@ -22,6 +22,7 @@ export class AppComponent {
   private heroes: any[];
 
   constructor(private chanServe: ChannelService, private ref: ChangeDetectorRef, private heroesService: HeroesService) {
+/*
     heroesService.getHeroes().subscribe((data) => {
       this.heroes = data;
     });
@@ -31,6 +32,11 @@ export class AppComponent {
       this.draftState = draftState;
       this.ref.detectChanges();
     });
-  //  chanServe.connect();
+    ///chanServe.connect();
+
+     setTimeout(() => {
+                console.log('$.connection... hub', $.connection['draftHub']);
+            }, 3000);
+            */
   }
 }

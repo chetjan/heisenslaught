@@ -20,7 +20,7 @@ import { DraftConfigScreenComponent } from './draft-config-screen/draft-config-s
 
 
 let channelConfig = new ChannelConfig();
-channelConfig.url = 'http://34.194.9.34/signalr'; //'http://heisenslaught.com/signalr';
+channelConfig.url = 'http://localhost:64808/signalr'; //'http://heisenslaught.com/signalr';
 channelConfig.hub = 'DraftHub';
 
 

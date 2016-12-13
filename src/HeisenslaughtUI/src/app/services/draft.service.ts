@@ -3,6 +3,8 @@ import { Observable, Subscriber } from 'rxjs/Rx';
 
 import { ICreateDraftResult, IDraftConfig } from './draft-config';
 import { IDraftState, DraftStatus } from './draft-status';
+import { IDraftHubProxy } from './draft-hub-proxy';
+
 
 export { ICreateDraftResult, IDraftConfig } from './draft-config';
 export { IDraftState, DraftStatus } from './draft-status';
@@ -19,11 +21,57 @@ import { HeroData } from './hero';
 
 @Injectable()
 export class DraftService {
+    private hub: IDraftHubProxy;
+    private connectPromise: Promise<any>;
+
+
     private _draftConfig: Observable<IDraftConfig>;
     private _draftStatus: Observable<IDraftState>;
 
-    public createDraft(createCfg: IDraftConfig): Observable<ICreateDraftResult> {
-        return null;
+
+
+    constructor() {
+        this.hub = $.connection['draftHub'];
+
+        this.createDraft({
+            firstPick: 0,
+            bankTime: true,
+            bonusTime: 300,
+            mapName: 'GOT',
+            pickTime: 60,
+            team1Name: 'On',
+            team2Name: 'Off'
+        }).then((cfg) => {
+            console.log('config result:', cfg);
+        });
+    }
+
+
+    private connect(): Promise<any> {
+        if (!this.connectPromise) {
+            this.connectPromise = new Promise<any>((resolve, reject) => {
+                $.connection.hub.start().done(() => {
+                    resolve();
+                }).fail((err) => {
+                    reject(err);
+                });
+            });
+        }
+        return this.connectPromise;
+    }
+
+    public createDraft(createCfg: IDraftConfig): Promise<ICreateDraftResult> {
+        return new Promise((resolve, reject) => {
+            this.connect().then(() => {
+                this.hub.server.configDraft(createCfg).then((config) => {
+                    resolve(config);
+                }, (err) => {
+                    reject(err);
+                });
+            }, (err) => {
+                reject(err);
+            });
+        });
     }
 
     public getDraftConfig(draftToken: string): Observable<IDraftConfig> {

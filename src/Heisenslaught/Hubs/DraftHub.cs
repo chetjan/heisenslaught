@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Heisenslaught
 {
@@ -24,6 +25,15 @@ namespace Heisenslaught
             bool selectionSuccessful = CurrentDraft.SelectHero((Team) team, hero);
             Clients.All.updateDraftState(CurrentDraft);
             Send("Team " + team, "Selected: " + hero + (selectionSuccessful ? "" : " (ignoring)"));
+        }
+
+        public DraftConfig ConfigDraft(DraftConfig cfg)
+        {
+            //DraftConfig cfg = JsonConvert.DeserializeObject<DraftConfig>(config);
+            CurrentDraft = new Draft();
+            Clients.All.updateConfig(cfg);
+
+            return cfg;
         }
 
         public void Connect(string newUser)
