@@ -9,7 +9,6 @@ A custom drafting tool for (On|Off)slaught.
 	1. Select the following Workloads when installing
 		1. Web Development
 		1. .NET Core and Docker (Preview)
-	1. 
 1. Install [node](https://nodejs.org)
 1. Setup static file compilation
     1. In `src/Heisenslaught` run `npm install`
