@@ -9,7 +9,8 @@ namespace Heisenslaught.Infrastructure
     public enum Team
     {
         Team0,
-        Team1
+        Team1,
+        None
     }
     public enum DraftPhase
     {
@@ -48,13 +49,17 @@ namespace Heisenslaught.Infrastructure
                 {
                     return Team.Team0;
                 }
-                else 
+                else if (Team1Phases.Contains(Phase))
                 {
                     return Team.Team1;
                 }
+                else
+                {
+                    return Team.None;
+                }
             }
         }
-        public int TimeTeam0 = 180, TimeTeam1 = 180, TimeBonus = 30;
+        public int TimeTeam0 = 180, TimeTeam1 = 180, TimeBonus = 45;
         public List<string> 
             BansTeam0 = new List<string>(), 
             PicksTeam0 = new List<string>(), 
