@@ -4,10 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 
-
 import { AppComponent } from './app.component';
-
-import { ChannelService, ChannelConfig } from './signalr/channel.service';
 import { HeroesService } from './services/heroes.service';
 import { DraftService } from './services/draft.service';
 
@@ -18,12 +15,6 @@ import { DraftComponent } from './draft/draft.component';
 import { HeroPickComponent } from './hero-pick/hero-pick.component';
 import { HomeComponent } from './home/home.component';
 import { DraftConfigScreenComponent } from './draft-config-screen/draft-config-screen.component';
-
-
-let channelConfig = new ChannelConfig();
-channelConfig.url = 'http://localhost:64808/signalr'; //'http://heisenslaught.com/signalr';
-channelConfig.hub = 'DraftHub';
-
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -53,9 +44,7 @@ const appRoutes: Routes = [
   ],
   providers: [
     HeroesService,
-    DraftService,
-    ChannelService,
-    { provide: 'channel.config', useValue: channelConfig }
+    DraftService
   ],
   bootstrap: [AppComponent]
 })

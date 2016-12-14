@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HeroData } from '../services/hero';
+
 
 @Component({
   selector: 'hero-pick',
@@ -21,14 +22,7 @@ import { HeroData } from '../services/hero';
   `,
   styleUrls: ['./hero-pick.component.css']
 })
-export class HeroPickComponent implements OnInit {
-
+export class HeroPickComponent {
   @Input()
   public hero: HeroData;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

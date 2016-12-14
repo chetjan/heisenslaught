@@ -10,17 +10,11 @@ export { IMapData } from './map';
 
 @Injectable()
 export class HeroesService {
-
   private heroData: Observable<HeroData[]>;
   private mapData: Observable<IMapData[]>;
 
 
-  constructor(
-    private http: Http
-  ) {
-
-
-  }
+  constructor(private http: Http) { }
 
   public getHeroes(): Observable<HeroData[]> {
     if (!this.heroData) {
@@ -31,7 +25,7 @@ export class HeroesService {
     return this.heroData;
   }
 
-   public getMaps(): Observable<IMapData[]> {
+  public getMaps(): Observable<IMapData[]> {
     if (!this.mapData) {
       this.mapData = this.http.get('data/maps.json')
         .map((res: Response) => res.json())
@@ -39,6 +33,4 @@ export class HeroesService {
     }
     return this.mapData;
   }
-
-
 }

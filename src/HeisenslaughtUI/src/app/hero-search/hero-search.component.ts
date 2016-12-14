@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output, ChangeDetectorRef, EventEmitter } from '@angular/core';
+import { Component, Input, Output, ChangeDetectorRef, EventEmitter } from '@angular/core';
 import { HeroesService, HeroData } from '../services/heroes.service';
+
 
 @Component({
   selector: 'hero-search',
@@ -22,15 +23,22 @@ import { HeroesService, HeroData } from '../services/heroes.service';
   `,
   styleUrls: ['./hero-search.component.css']
 })
-export class HeroSearchComponent implements OnInit {
+export class HeroSearchComponent {
   private heroes: HeroData[];
-
-
-
   private _selectedHero: HeroData;
 
   @Output()
   public selectedHeroChange: EventEmitter<HeroData> = new EventEmitter<HeroData>();
+
+  constructor(
+    private heroesService: HeroesService,
+    private ref: ChangeDetectorRef
+
+  ) {
+    heroesService.getHeroes().subscribe((data) => {
+      this.heroes = data;
+    });
+  }
 
   @Input()
   public get selectedHero(): HeroData {
@@ -44,20 +52,5 @@ export class HeroSearchComponent implements OnInit {
     }
   }
 
-  constructor(
-    private heroesService: HeroesService,
-    private ref: ChangeDetectorRef
-
-  ) {
-    heroesService.getHeroes().subscribe((data) => {
-      this.heroes = data;
-    });
-
-  }
-
   public search() { }
-
-  ngOnInit() {
-  }
-
 }

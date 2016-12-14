@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DraftService, IDraftConfig, IDraftState, DraftPhase } from '../services/draft.service';
 import { HeroesService, HeroData, IMapData } from '../services/heroes.service';
@@ -8,21 +8,31 @@ import { HeroesService, HeroData, IMapData } from '../services/heroes.service';
   templateUrl: './draft.component.html',
   styleUrls: ['./draft.component.css']
 })
-export class DraftComponent implements OnInit {
+export class DraftComponent {
+
+  private static firstSlots: number[] = [0, 2, 5, 6, 8, 11, 12];
+  private static secondSlots: number[] = [1, 2, 3, 7, 9, 10, 13];
+  private static firstPickSlots: number[] = [2, 3, 6, 11, 12];
+  private static secondPickSlots: number[] = [3, 4, 9, 10, 13];
+  private static firstBanSlots: number[] = [0, 8];
+  private static secondBanSlots: number[] = [1, 7];
+
+
+  private heroes: HeroData[];
+  private maps: IMapData[];
+  private draftToken: string;
+  private teamToken: string;
+  private team: number;
+  private teamSlots: Array<number[]> = [];
+  private teamPickSlots: Array<number[]> = [];
+  private teamBanSlots: Array<number[]> = [];
 
   public selectedHero: any;
   public draftConfig: IDraftConfig;
   public draftState: IDraftState;
-  private heroes: HeroData[];
-  private maps: IMapData[];
-
   public team1Status: string;
   public team2Status: string;
 
-  private draftToken: string;
-  private teamToken: string;
-
-  private team: number;
 
   constructor(
     private draftService: DraftService,
@@ -30,7 +40,6 @@ export class DraftComponent implements OnInit {
     private route: ActivatedRoute,
     private changeRef: ChangeDetectorRef
   ) {
-
     this.heroesService.getHeroes().subscribe((heroes) => {
       this.heroes = heroes;
     });
@@ -44,9 +53,11 @@ export class DraftComponent implements OnInit {
     this.draftService.connectToDraft(this.draftToken, this.teamToken).then((config) => {
       this.draftConfig = config;
       this.team = config.team;
+      this.configSlots();
       this.updateState(config.state);
       this.draftService.getDraftConfig(this.draftToken).subscribe((cfg) => {
         this.draftConfig = cfg;
+        this.configSlots();
         this.updateState(cfg.state);
       });
       this.draftService.getDraftState(this.draftToken).subscribe((state) => {
@@ -57,11 +68,27 @@ export class DraftComponent implements OnInit {
     });
   }
 
+  private configSlots(): void {
+    if (this.draftConfig.firstPick === 1) {
+      this.teamSlots[0] = DraftComponent.firstSlots;
+      this.teamSlots[1] = DraftComponent.secondSlots;
+      this.teamPickSlots[0] = DraftComponent.firstPickSlots;
+      this.teamPickSlots[1] = DraftComponent.secondPickSlots;
+      this.teamBanSlots[0] = DraftComponent.firstBanSlots;
+      this.teamBanSlots[1] = DraftComponent.secondBanSlots;
+    } else {
+      this.teamSlots[0] = DraftComponent.secondSlots;
+      this.teamSlots[1] = DraftComponent.firstSlots;
+      this.teamPickSlots[0] = DraftComponent.secondPickSlots;
+      this.teamPickSlots[1] = DraftComponent.firstPickSlots;
+      this.teamBanSlots[0] = DraftComponent.secondBanSlots;
+      this.teamBanSlots[1] = DraftComponent.firstBanSlots;
+    }
+  }
+
   private updateState(draftState: IDraftState) {
     this.draftState = draftState;
-    console.log('update state', draftState);
     if (draftState.phase === DraftPhase.WAITING) {
-      console.log('waiting update state......', draftState);
       if (draftState.team1Ready) {
         this.team1Status = 'Ready';
       } else {
@@ -86,6 +113,7 @@ export class DraftComponent implements OnInit {
     }
     return '';
   }
+
   public getPick(team: number, pickId: number): HeroData {
     if (!this.heroes || !this.draftConfig || !this.draftState) {
       return null;
@@ -93,16 +121,7 @@ export class DraftComponent implements OnInit {
     let picks = this.draftState.picks || [];
     let pickedHeroId: string;
 
-    let pickSlots: number[];
-
-
-    let fp = this.draftConfig.firstPick - 1;
-
-    if ((team === fp)) {
-      pickSlots = [2, 5, 6, 11, 12];
-    } else {
-      pickSlots = [3, 4, 9, 10, 13];
-    }
+    let pickSlots: number[] = this.teamPickSlots[team];
 
     pickedHeroId = picks[pickSlots[pickId]];
     return this.getHeroById(pickedHeroId);
@@ -115,21 +134,11 @@ export class DraftComponent implements OnInit {
     let picks = this.draftState.picks || [];
     let pickedHeroId: string;
 
-    let banSlots: number[];
-
-
-    let fp = this.draftConfig.firstPick - 1;
-
-    if ((team === fp)) {
-      banSlots = [0, 8];
-    } else {
-      banSlots = [1, 7];
-    }
+    let banSlots: number[] = this.teamBanSlots[team];
 
     pickedHeroId = picks[banSlots[pickId]];
     return this.getHeroById(pickedHeroId);
   }
-
 
   private getHeroById(heroId: string): HeroData {
     if (!this.heroes) {
@@ -139,7 +148,6 @@ export class DraftComponent implements OnInit {
       return value.id === heroId;
     });
   }
-
 
   public get mapName(): string {
     if (this.maps && this.draftConfig) {
@@ -151,10 +159,6 @@ export class DraftComponent implements OnInit {
       }
     }
     return '';
-  }
-
-  ngOnInit() {
-
   }
 
   public setReady() {

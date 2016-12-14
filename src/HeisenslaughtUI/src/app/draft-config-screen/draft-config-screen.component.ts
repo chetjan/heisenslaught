@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DraftService, ICreateDraftData, ICreateDraftResult, DraftPhase } from '../services/draft.service';
 import { HeroesService, IMapData, HeroData } from '../services/heroes.service';
 
@@ -8,7 +8,7 @@ import { HeroesService, IMapData, HeroData } from '../services/heroes.service';
   templateUrl: './draft-config-screen.component.html',
   styleUrls: ['./draft-config-screen.component.css']
 })
-export class DraftConfigScreenComponent implements OnInit {
+export class DraftConfigScreenComponent {
   public config: ICreateDraftData = <ICreateDraftData>{};
   public currentConfig: ICreateDraftResult;
   public maps: IMapData[];
@@ -55,9 +55,6 @@ export class DraftConfigScreenComponent implements OnInit {
     }, (err) => {
       this.createError = err ? err.toString() : 'Server Error';
     });
-  }
-
-  ngOnInit() {
   }
 
   public createDraft() {
