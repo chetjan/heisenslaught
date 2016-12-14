@@ -171,8 +171,18 @@ export class DraftService {
         return this._draftState;
     }
 
-    public pick(heroId: string, team: number, draftToken: string, teamToken?: string): Observable<boolean> {
-        return null;
+    public pickHero(heroId: string, draftToken: string, teamToken: string): Promise<boolean> {
+         return new Promise((resolve, reject) => {
+            this.connect().then(() => {
+                this.hub.server.pickHero(heroId, draftToken, teamToken).then((success) => {
+                    resolve(success);
+                }, (err) => {
+                    reject(err);
+                });
+            }, (err) => {
+                reject(err);
+            });
+        });
     }
 
 }

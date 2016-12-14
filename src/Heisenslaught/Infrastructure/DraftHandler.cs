@@ -8,6 +8,7 @@ namespace Heisenslaught.Infrastructure
 {
     public class DraftHandler
     {
+        private static Random rnd = new Random((int)DateTime.Now.Ticks);
         private static List<int> firstSlots= new List<int>{0,2,5,6,8,11,12};
         private static List<int> secondSlots = new List<int> {1,2,3,7,9,10,13};
         private static List<int> firstPickSlots = new List<int> {2,3,6,11,12};
@@ -134,6 +135,12 @@ namespace Heisenslaught.Infrastructure
             }
         }
 
+        public bool isValidHero(string heroId)
+        {
+            var hero = HeroDataService.getHeroById(heroId);
+            return hero != null;
+        }
+
         public bool isHeroPickedOrBanned(string heroId)
         {
             return state.picks.Contains(heroId);
@@ -141,12 +148,16 @@ namespace Heisenslaught.Infrastructure
 
         public bool isHeroDisabled(string heroId)
         {
-            return config.disabledHeroes == null || !config.disabledHeroes.Contains(heroId);
+            return config.disabledHeroes != null && config.disabledHeroes.Contains(heroId);
         }
 
         public bool canPickHero(string heroId)
         {
-            var allowed = !isHeroPickedOrBanned(heroId) && !isHeroDisabled(heroId);
+            var isValid = isValidHero(heroId);
+            var isPicked = isHeroPickedOrBanned(heroId);
+            var isDisabled = isHeroDisabled(heroId);
+
+            var allowed = isValidHero(heroId) && !isHeroPickedOrBanned(heroId) && !isHeroDisabled(heroId);
             if (allowed && (heroId == "cho" || heroId == "gall"))
             {
                 if (!isFirstPickOfDoublePick)
@@ -223,8 +234,68 @@ namespace Heisenslaught.Infrastructure
                     if(timeLeft < 0)
                     {
                         // pick random hero for team
+                        if (isBan)
+                        {
+                            state.picks.Add("failed_ban");
+                            state.pickTime = config.pickTime;
+                        }
+                        else
+                        {
+                            pickRandom();
+                        }
                     }
                 }
+            }
+        }
+
+        public bool pickHero(string heroId, string teamToken, bool skipTokenValidation=false)
+        {
+            var team = currentTeam;
+            if (team == -1 || (!skipTokenValidation && teamTokens[team] != teamToken) || !canPickHero(heroId))
+            {
+                return false;
+            }
+
+            state.picks.Add(heroId);
+            
+            if(state.picks.Count >= 14)
+            {
+                state.phase = DraftStatePhase.FINISHED;
+                stop();
+            }
+            else
+            {
+                if(config.bankTime && state.pickTime > 0)
+                {
+                    if(team == 0)
+                    {
+                        state.team1BonusTime += state.pickTime;
+                    }
+                    else
+                    {
+                        state.team2BonusTime += state.pickTime;
+                    }
+                }
+                state.pickTime = config.pickTime;
+            }
+
+            return true;
+        }
+
+        private void pickRandom()
+        {
+            string heroId = null;
+            var heroes = HeroDataService.getHeroes();
+            var max = heroes.Count - 1;
+            while(heroId == null)
+            {
+                var rng = rnd.Next(0, max);
+                var hero = heroes[rng];
+                if(hero.id != "cho" && hero.id != "gall" && canPickHero(hero.id))
+                {
+                    heroId = hero.id;
+                }
+                pickHero(heroId, null, true);
             }
         }
     }

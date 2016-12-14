@@ -13,59 +13,46 @@ namespace Heisenslaught
     {
         public static List<string> ConnectedUsers;
         public static Draft CurrentDraft;
-        private static Timer DraftUpdate;
 
+        private static Timer DraftUpdate;
         private static AdminDraftConfig CurrentDraftConfig;
         private static DraftHandler HandleDraft;
 
-        public void Send(string originatorUser, string message)
-        {
-            Clients.All.messageReceived(originatorUser, message);
-        }
-
-        public void Pick(int team, string hero)
-        {
-            bool selectionSuccessful = CurrentDraft.SelectHero((Team) team, hero);
-            Clients.All.updateDraftState(CurrentDraft);
-            Send("Team " + team, "Selected: " + hero + (selectionSuccessful ? "" : " (ignoring)"));
-        }
+    
 
         public AdminDraftConfig ConfigDraft(DraftConfig cfg)
         {
-            CurrentDraftConfig = new AdminDraftConfig(cfg);
-    
-            CurrentDraft = new Draft();
-            Clients.All.updateConfig(cfg);
             stopDraftUpdates();
+            CurrentDraftConfig = new AdminDraftConfig(cfg);
+            Clients.All.updateConfig(cfg);
             return CurrentDraftConfig;
         }
 
         public AdminDraftConfig getCurrentAdminConfig()
         {
             return CurrentDraftConfig;
-
         }
 
         public AdminDraftConfig resetDraft()
         {
+            stopDraftUpdates();
             if(CurrentDraftConfig != null)
             {
                 CurrentDraftConfig.reset();
                 Clients.All.updateConfig(CurrentDraftConfig.getConfig());
             }
-            stopDraftUpdates();
             return CurrentDraftConfig;
         }
 
         public AdminDraftConfig closeDraft()
         {
+            stopDraftUpdates();
             if (CurrentDraftConfig != null)
             {
                 DraftConfig cfg = CurrentDraftConfig.getConfig();
                 cfg.state.phase = DraftStatePhase.FINISHED;
                 Clients.All.updateConfig(cfg);
             }
-            stopDraftUpdates();
             return CurrentDraftConfig;
         }
 
@@ -118,12 +105,12 @@ namespace Heisenslaught
 
         public bool setReady(string draftToken, string teamToken)
         {
+            bool ready = false;
+
             if (CurrentDraftConfig.draftToken != draftToken)
             {
                 return false;
             }
-            bool ready = false;
-
             if (CurrentDraftConfig.team1DrafterToken == teamToken)
             {
                 CurrentDraftConfig.state.team1Ready = true;
@@ -134,13 +121,11 @@ namespace Heisenslaught
                 CurrentDraftConfig.state.team2Ready = true;
                 ready = true;
             }
-
             if(CurrentDraftConfig.state.team1Ready && CurrentDraftConfig.state.team2Ready)
             {
                 startDraftUpdates();
             }
-            //update state
-            Clients.All.updateConfig(CurrentDraftConfig.getConfig());
+            Clients.All.updateDraftState(CurrentDraftConfig.state);
             return ready;
         }
 
@@ -169,6 +154,26 @@ namespace Heisenslaught
             }
         }
 
+        public bool pickHero(string heroId, string draftToken, string teamToken)
+        {
+            if (HandleDraft == null || CurrentDraftConfig == null || CurrentDraftConfig.draftToken != draftToken)
+            {
+                return false;
+            }
+            return HandleDraft.pickHero(heroId, teamToken);
+        }
+
+        public void Send(string originatorUser, string message)
+        {
+            Clients.All.messageReceived(originatorUser, message);
+        }
+
+        public void Pick(int team, string hero)
+        {
+            bool selectionSuccessful = CurrentDraft.SelectHero((Team)team, hero);
+            Clients.All.updateDraftState(CurrentDraft);
+            Send("Team " + team, "Selected: " + hero + (selectionSuccessful ? "" : " (ignoring)"));
+        }
 
         public void Connect(string newUser)
         {

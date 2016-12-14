@@ -180,4 +180,8 @@ export class DraftComponent implements OnInit {
     return true;
   }
 
+  public pick() {
+    this.draftService.pickHero(this.selectedHero.id, this.draftToken, this.teamToken);
+  }
+
 }

@@ -27,7 +27,7 @@
 			<hero-search [(selectedHero)]="selectedHero"></hero-search>
 		</div>
 		<div class="select-area">
-			<button class="btn-select" [disabled]="!selectedHero">Select</button>
+			<button class="btn-select" [disabled]="!selectedHero" (click)="pick()">Select</button>
 		</div>
 	</div>
 </section>
