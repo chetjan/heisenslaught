@@ -11,7 +11,7 @@ namespace Heisenslaught.Infrastructure
         private static Random rnd = new Random((int)DateTime.Now.Ticks);
         private static List<int> firstSlots= new List<int>{0,2,5,6,8,11,12};
         private static List<int> secondSlots = new List<int> {1,2,3,7,9,10,13};
-        private static List<int> firstPickSlots = new List<int> {2,3,6,11,12};
+        private static List<int> firstPickSlots = new List<int> {2,5,6,11,12};
         private static List<int> secondPickSlots = new List<int> {3,4,9,10,13};
         private static List<int> firstBanSlots = new List<int> {0,8};
         private static List<int> secondBanSlots = new List<int> {1,7};
@@ -82,7 +82,7 @@ namespace Heisenslaught.Infrastructure
             {
                 if (currentPick != -1)
                 {
-                    return teamSlots[0].Contains(currentPick) ? 0 : 1;
+                    return firstSlots.Contains(currentPick) ? 0 : 1;
                 }
                 return -1;
             }
@@ -257,6 +257,11 @@ namespace Heisenslaught.Infrastructure
             }
 
             state.picks.Add(heroId);
+
+            if(heroId == "cho" || heroId == "gall")
+            {
+                state.picks.Add(heroId == "cho" ? "gall" : "cho");
+            }
             
             if(state.picks.Count >= 14)
             {
