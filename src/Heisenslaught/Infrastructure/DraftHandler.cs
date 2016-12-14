@@ -270,7 +270,7 @@ namespace Heisenslaught.Infrastructure
             {
                 if(config.bankTime && state.pickTime > 0)
                 {
-                    if(team == 0)
+                    if((team == 0 && config.firstPick == 1) || (team == 1 && config.firstPick == 2))
                     {
                         state.team1BonusTime += state.pickTime;
                     }
