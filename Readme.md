@@ -5,6 +5,7 @@ A custom drafting tool for (On|Off)slaught.
 ## Local Setup
 
 1. Install [node](https://nodejs.org)
+1. Install `npm install --global typings@0.8.1`
 	
 ### UI
 1. Install [angular cli](https://github.com/angular/angular-cli/)
