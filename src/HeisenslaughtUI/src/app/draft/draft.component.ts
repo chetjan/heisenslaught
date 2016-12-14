@@ -204,6 +204,12 @@ export class DraftComponent {
     return -1;
   }
 
+  public get isBan(): boolean {
+    if (this.draftState && this.draftState.phase === DraftPhase.PICKING) {
+      return this.teamBanSlots[0].indexOf(this.currentPick) !== -1 || this.teamBanSlots[1].indexOf(this.currentPick) !== -1;
+    }
+    return false;
+  }
 
   public get draftStatus(): string {
     if (this.draftState) {
@@ -217,9 +223,9 @@ export class DraftComponent {
         return 'Draft Completed';
       } else {
         if (this.currentTeam === 0) {
-          return 'Blue team picking';
+          return this.isBan ? 'Blue team banning' : 'Blue team picking';
         } else {
-          return 'Red team picking';
+          return this.isBan ? 'Red team banning' : 'Red team picking';
         }
       }
     }
