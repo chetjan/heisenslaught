@@ -288,6 +288,14 @@
         "iconLarge": ""
     },
     {
+        "id":"ragnaros",
+        "name": "Ragnaros",
+        "roles": [],
+        "keywords":[],
+        "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/ragnaros_theFirelord.jpg?v=58-84",
+        "iconLarge": ""
+    },
+    {
         "id":"raynor",
         "name": "Raynor",
         "roles": [],
