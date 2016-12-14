@@ -16,6 +16,7 @@ namespace Heisenslaught
         private static Timer DraftUpdate;
 
         private static AdminDraftConfig CurrentDraftConfig;
+        private static DraftHandler HandleDraft;
 
         public void Send(string originatorUser, string message)
         {
@@ -35,7 +36,7 @@ namespace Heisenslaught
     
             CurrentDraft = new Draft();
             Clients.All.updateConfig(cfg);
-
+            stopDraftUpdates();
             return CurrentDraftConfig;
         }
 
@@ -52,6 +53,7 @@ namespace Heisenslaught
                 CurrentDraftConfig.reset();
                 Clients.All.updateConfig(CurrentDraftConfig.getConfig());
             }
+            stopDraftUpdates();
             return CurrentDraftConfig;
         }
 
@@ -63,6 +65,7 @@ namespace Heisenslaught
                 cfg.state.phase = DraftStatePhase.FINISHED;
                 Clients.All.updateConfig(cfg);
             }
+            stopDraftUpdates();
             return CurrentDraftConfig;
         }
 
@@ -104,10 +107,6 @@ namespace Heisenslaught
                 userName = "observer-"  + ConnectedUsers.Count;
             }
 
-           
-
-            CurrentDraft.StartDraft();
-
             ConnectedUsers.Add(userName);
             //Clients.Caller.getConnectedUsers(ConnectedUsers);
             //Clients.Others.newUserAdded(userName);
@@ -123,22 +122,53 @@ namespace Heisenslaught
             {
                 return false;
             }
+            bool ready = false;
+
             if (CurrentDraftConfig.team1DrafterToken == teamToken)
             {
                 CurrentDraftConfig.state.team1Ready = true;
-                //update state
-                Clients.All.updateConfig(CurrentDraftConfig.getConfig());
-                return true;
+                ready = true;
             }
-            if (CurrentDraftConfig.team2DrafterToken == teamToken)
+            else if (CurrentDraftConfig.team2DrafterToken == teamToken)
             {
                 CurrentDraftConfig.state.team2Ready = true;
-                //update state
-                Clients.All.updateConfig(CurrentDraftConfig.getConfig());
-                return true;
+                ready = true;
             }
-            return false;
+
+            if(CurrentDraftConfig.state.team1Ready && CurrentDraftConfig.state.team2Ready)
+            {
+                startDraftUpdates();
+            }
+            //update state
+            Clients.All.updateConfig(CurrentDraftConfig.getConfig());
+            return ready;
         }
+
+
+        private void startDraftUpdates()
+        {
+            HandleDraft = new DraftHandler(CurrentDraftConfig);
+            DraftUpdate = new Timer(x =>
+            {
+                Clients.All.updateDraftState(CurrentDraftConfig.state);
+            }, null, 0, 250);
+            HandleDraft.start();
+        }
+
+        private void stopDraftUpdates()
+        {
+            if(DraftUpdate != null)
+            {
+                DraftUpdate.Dispose();
+                DraftUpdate = null;
+            }
+            if(HandleDraft != null)
+            {
+                HandleDraft.stop();
+                HandleDraft = null;
+            }
+        }
+
 
         public void Connect(string newUser)
         {
@@ -166,8 +196,7 @@ namespace Heisenslaught
                 {
                     Clients.All.updateDraftState(CurrentDraft);
                 }, null, 0, 1);
-                Send("Admin", "Starting draft...");
-                CurrentDraft.StartDraft();
+        
                 return;
             }
 

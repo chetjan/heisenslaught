@@ -49,7 +49,9 @@ export class DraftComponent implements OnInit {
         this.draftConfig = cfg;
         this.updateState(cfg.state);
       });
-
+      this.draftService.getDraftState(this.draftToken).subscribe((state) => {
+        this.updateState(state);
+      });
     }, (err) => {
       console.log('connect error', err);
     });
@@ -72,12 +74,18 @@ export class DraftComponent implements OnInit {
         this.team2Status = null;
       }
     } else if (draftState.phase !== DraftPhase.FINISHED) {
-      this.team1Status = draftState.team1BonusTime.toString();
-      this.team2Status = draftState.team2BonusTime.toString();
+      this.team1Status = Math.max(draftState.team1BonusTime, 0).toString();
+      this.team2Status = Math.max(draftState.team2BonusTime, 0).toString();
     }
     this.changeRef.detectChanges();
   }
 
+  public get pickTime(): string {
+    if (this.draftState) {
+      return Math.max(this.draftState.pickTime, 0).toString();
+    }
+    return '';
+  }
   public getPick(team: number, pickId: number): HeroData {
     if (!this.heroes || !this.draftConfig || !this.draftState) {
       return null;
