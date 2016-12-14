@@ -128,4 +128,20 @@ export class DraftConfigScreenComponent implements OnInit {
     }
     return str;
   }
+
+  public getLink(draftToken: string, teamToken: string): string {
+    let url = window.location.protocol + '//';
+    url += window.location.host + '/draft/' + draftToken;
+    if (teamToken) {
+      url += '/' + teamToken;
+    }
+    return url;
+  }
+
+  public copyLink(input: HTMLInputElement): void {
+    try {
+      input.select();
+      document.execCommand('copy');
+    } catch (e) { }
+  }
 }

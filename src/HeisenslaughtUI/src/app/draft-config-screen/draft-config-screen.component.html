@@ -51,7 +51,18 @@
       <span class="first-pick">First Pick: {{getFirstPick()}}</span>
     </div>
     <div>
-      <span class="first-pick">Phase: {{getPhase()}}</span>
+      <span class="phase">Phase: {{getPhase()}}</span>
+    </div>
+
+
+    <div class="draft-link">
+      Observer Link: <input #obsLink type="text" [value]="getLink(currentConfig?.draftToken)" (click)="copyLink(obsLink)"/>
+    </div>
+    <div class="draft-link">
+      Team 1 Link: <input #t1Link type="text" [value]="getLink(currentConfig?.draftToken, currentConfig?.team1DrafterToken)" (click)="copyLink(t1Link)"/>
+    </div>
+    <div class="draft-link">
+      Team 2 Link: <input #t2Link type="text" [value]="getLink(currentConfig?.draftToken, currentConfig?.team2DrafterToken)" (click)="copyLink(t2Link)"/>
     </div>
     <button (click)="resetDraft()">Restart Draft</button>
     <button (click)="closeDraft()">Close Draft</button>

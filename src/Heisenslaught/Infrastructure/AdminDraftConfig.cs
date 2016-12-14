@@ -11,11 +11,16 @@ namespace Heisenslaught.Infrastructure
     {
 
         private static Random rnd = new Random((int)DateTime.Now.Ticks);
-
-
         private DraftConfig _config;
-
         private bool _isRandomFirstPick = false;
+
+        public string draftToken;
+        public string team1DrafterToken;
+        public string team2DrafterToken;
+
+
+
+
 
         public AdminDraftConfig(DraftConfig cfg)
         {
@@ -26,11 +31,26 @@ namespace Heisenslaught.Infrastructure
                 cfg.firstPick = (rng % 2) + 1;
                 _isRandomFirstPick = true;
             }
+
+            draftToken = generateToken();
+            team1DrafterToken = generateToken();
+            team2DrafterToken = generateToken();
+
             reset();
         }
 
 
+        private string generateToken()
+        {
 
+            string token = null;
+            while(token == null || token.IndexOfAny(new char[] { '/', '+' }) != -1)
+            {
+                token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            }    
+            
+            return token.TrimEnd('=');
+        }
 
         public void reset()
         {
