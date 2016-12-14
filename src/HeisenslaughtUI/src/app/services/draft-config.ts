@@ -14,6 +14,7 @@ export interface ICreateDraftData {
 
 export interface IDraftConfig extends ICreateDraftData {
     state: IDraftState;
+    team?: number;
 }
 
 export interface ICreateDraftResult extends IDraftConfig {

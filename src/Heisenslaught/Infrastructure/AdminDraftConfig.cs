@@ -60,8 +60,12 @@ namespace Heisenslaught.Infrastructure
             _config.state.team2BonusTime = _config.bonusTime;
         }
 
-        public DraftConfig getConfig()
+        public DraftConfig getConfig(int forTeam = 0)
         {
+            if(forTeam != 0)
+            {
+                return new TeamDraftConfig(forTeam, _config);
+            }
             return _config;   
         }
 

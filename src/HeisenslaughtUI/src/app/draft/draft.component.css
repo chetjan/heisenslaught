@@ -79,19 +79,17 @@ section.center div.top div.map {
     font-size: 32px;
     font-weight: 700;
     letter-spacing: 1px;
-
 }
 
 .team-name.team1 {
-    left:70px;
-    text-align:right;
+    left: 70px;
+    text-align: right;
 }
 
 .team-name.team2 {
-    left:50%;
-    margin-left:110px;
+    left: 50%;
+    margin-left: 110px;
 }
-
 
 .bonus-time.team1 {
     background-image: url('assets/storm_ui_glues_draft_rankbackground_blue.png');
@@ -142,14 +140,43 @@ section.center div.select-area {
     right: 0px;
 }
 
-.pick-time{
-    position:absolute;
-    left:50%;
-    top:20px;
-    margin-left:-72px;
+.pick-time {
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    margin-left: -72px;
     font-size: 52px;
     font-weight: 900;
-    width:150px;
+    width: 150px;
     text-align: center;
     letter-spacing: 2px;
+}
+
+.ready-window {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0px;
+    left: 0px;
+    z-index: 100;
+}
+
+.ready-window .modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0px;
+    left: 0px;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.42);
+}
+
+.ready-window .popup {
+    width: 600px;
+    height: 250px;
+    background-color: white;
+    border-radius: 10px;
+    margin: auto;
+    top:250px;
+    z-index: 101;
 }

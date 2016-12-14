@@ -26,12 +26,35 @@ export class DraftService {
 
 
     private _draftConfig: Observable<IDraftConfig>;
+    private _draftConfigSub: Subscriber<IDraftConfig>;
+
     private _draftStatus: Observable<IDraftState>;
 
 
 
     constructor() {
         this.hub = $.connection['draftHub'];
+        this.hub.client.updateConfig = (config: IDraftConfig) => {
+            console.log('----- config update...', config, this);
+            if (this._draftConfigSub) {
+                this._draftConfigSub.next(config);
+                console.log('config update...', config);
+            }
+        };
+        this._draftConfig = new Observable<IDraftConfig>((sub: Subscriber<IDraftConfig>) => {
+            console.log('this._draftConfigSub', this, this._draftConfigSub);
+            this._draftConfigSub = sub;
+        });
+      
+         this.hub.client.messageReceived = (...args: any[]) => {
+             console.log('msg ', args);
+         };
+         this.hub.client.updateDraftState = (...args: any[]) => {
+             console.log('updateDraftState ', args);
+         };
+         this.hub.client.getConnectedUsers = (...args: any[]) => {
+             console.log('getConnectedUsers ', args);
+         };
     }
 
 
@@ -104,8 +127,38 @@ export class DraftService {
         });
     }
 
+    public connectToDraft(draftToken: string, teamToken?: string): Promise<IDraftConfig> {
+
+        return new Promise((resolve, reject) => {
+            this.connect().then(() => {
+                this.hub.server.connectToDraft(draftToken, teamToken).then((config) => {
+                    resolve(config);
+                }, (err) => {
+                    reject(err);
+                });
+            }, (err) => {
+                reject(err);
+            });
+        });
+    }
+
+    public setReady(draftToken: string, teamToken: string): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.connect().then(() => {
+                this.hub.server.setReady(draftToken, teamToken).then((success) => {
+                    resolve(success);
+                }, (err) => {
+                    reject(err);
+                });
+            }, (err) => {
+                reject(err);
+            });
+        });
+    }
+
+
     public getDraftConfig(draftToken: string): Observable<IDraftConfig> {
-        if (!this._draftConfig) {
+       /* if (!this._draftConfig) {
             this._draftConfig = new Observable<IDraftConfig>((sub: Subscriber<IDraftConfig>) => {
                 setTimeout(() => {
                     sub.next({
@@ -122,7 +175,7 @@ export class DraftService {
                 }, 50);
             });
         }
-
+*/
         return this._draftConfig;
     }
 

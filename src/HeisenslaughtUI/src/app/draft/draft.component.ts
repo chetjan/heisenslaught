@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DraftService, IDraftConfig, IDraftState, DraftPhase } from '../services/draft.service';
-import { HeroesService, HeroData } from '../services/heroes.service';
+import { HeroesService, HeroData, IMapData } from '../services/heroes.service';
 
 @Component({
   selector: 'draft-screen',
@@ -14,41 +14,68 @@ export class DraftComponent implements OnInit {
   public draftConfig: IDraftConfig;
   public draftState: IDraftState;
   private heroes: HeroData[];
+  private maps: IMapData[];
 
   public team1Status: string;
   public team2Status: string;
 
+  private draftToken: string;
+  private teamToken: string;
+
+  private team: number;
 
   constructor(
     private draftService: DraftService,
-    private heroesService: HeroesService
+    private heroesService: HeroesService,
+    private route: ActivatedRoute,
+    private changeRef: ChangeDetectorRef
   ) {
 
     this.heroesService.getHeroes().subscribe((heroes) => {
       this.heroes = heroes;
     });
-
-    this.draftService.getDraftConfig('asdf').subscribe((draftConfig) => {
-      this.draftConfig = draftConfig;
+    this.heroesService.getMaps().subscribe((maps) => {
+      this.maps = maps;
     });
-    this.draftService.getDraftState('asdf').subscribe((draftState) => {
-      this.draftState = draftState;
 
-      if (draftState.phase === DraftPhase.WAITING) {
-        if (draftState.team1Ready) {
-          this.team1Status = 'Ready';
-        }
+    this.draftToken = this.route.snapshot.params['id'];
+    this.teamToken = this.route.snapshot.params['team'];
 
-        if (draftState.team2Ready) {
-          this.team2Status = 'Ready';
-        }
-      } else if (draftState.phase !== DraftPhase.FINISHED) {
-        this.team1Status = draftState.team1BonusTime.toString();
-        this.team2Status = draftState.team2BonusTime.toString();
+    this.draftService.connectToDraft(this.draftToken, this.teamToken).then((config) => {
+      this.draftConfig = config;
+      this.team = config.team;
+      this.updateState(config.state);
+      this.draftService.getDraftConfig(this.draftToken).subscribe((cfg) => {
+        this.draftConfig = cfg;
+        this.updateState(cfg.state);
+      });
+
+    }, (err) => {
+      console.log('connect error', err);
+    });
+  }
+
+  private updateState(draftState: IDraftState) {
+    this.draftState = draftState;
+    console.log('update state', draftState);
+    if (draftState.phase === DraftPhase.WAITING) {
+      console.log('waiting update state......', draftState);
+      if (draftState.team1Ready) {
+        this.team1Status = 'Ready';
+      } else {
+        this.team1Status = null;
       }
 
-
-    });
+      if (draftState.team2Ready) {
+        this.team2Status = 'Ready';
+      } else {
+        this.team2Status = null;
+      }
+    } else if (draftState.phase !== DraftPhase.FINISHED) {
+      this.team1Status = draftState.team1BonusTime.toString();
+      this.team2Status = draftState.team2BonusTime.toString();
+    }
+    this.changeRef.detectChanges();
   }
 
   public getPick(team: number, pickId: number): HeroData {
@@ -106,8 +133,43 @@ export class DraftComponent implements OnInit {
   }
 
 
+  public get mapName(): string {
+    if (this.maps && this.draftConfig) {
+      let map = this.maps.find((value) => {
+        return value.id === this.draftConfig.map;
+      });
+      if (map) {
+        return map.name;
+      }
+    }
+    return '';
+  }
+
   ngOnInit() {
 
+  }
+
+  public setReady() {
+    this.draftService.setReady(this.draftToken, this.teamToken);
+  }
+
+  public get showReady(): boolean {
+    if (!this.teamToken) {
+      return false;
+    }
+    if (!this.draftState || !this.draftConfig) {
+      return false;
+    }
+
+    if (this.draftState.team1Ready && this.team === 1) {
+      return false;
+    }
+
+    if (this.draftState.team2Ready && this.team === 2) {
+      return false;
+    }
+
+    return true;
   }
 
 }
