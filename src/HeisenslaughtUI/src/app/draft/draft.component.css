@@ -78,6 +78,21 @@ section.center div.top div.map {
     letter-spacing: 1px;
 }
 
+
+.draft-status{
+    position: absolute;
+    top:178px;
+    width:450px;
+    margin-left:-225px;
+    left:50%;
+    z-index: 20;
+    text-align: center;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
 .team-name.team1 {
     left: 70px;
     text-align: right;
@@ -177,3 +192,4 @@ section.center div.select-area {
     top: 250px;
     z-index: 101;
 }
+

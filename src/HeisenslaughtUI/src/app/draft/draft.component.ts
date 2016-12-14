@@ -188,4 +188,42 @@ export class DraftComponent {
     this.draftService.pickHero(this.selectedHero.id, this.draftToken, this.teamToken);
   }
 
+  public get currentPick(): number {
+    if (!this.draftState || this.draftState.phase !== DraftPhase.PICKING) {
+      return -1;
+    }
+    return this.draftState.picks ? this.draftState.picks.length : -1;
+  }
+
+  public get currentTeam(): number {
+    if (this.currentPick !== -1) {
+      return DraftComponent.firstSlots.indexOf(this.currentPick) !== -1 ?
+        (this.draftConfig.firstPick === 1 ? 0 : 1) :
+        (this.draftConfig.firstPick === 1 ? 1 : 0);
+    }
+    return -1;
+  }
+
+
+  public get draftStatus(): string {
+    if (this.draftState) {
+      if (this.draftState.phase === DraftPhase.WAITING) {
+        if (this.draftConfig.firstPick === 1) {
+          return 'Blue team picks first';
+        } else {
+          return 'Red team picks first';
+        }
+      } else if (this.draftState.phase === DraftPhase.FINISHED) {
+        return 'Draft Completed';
+      } else {
+        if (this.currentTeam === 0) {
+          return 'Blue team picking';
+        } else {
+          return 'Red team picking';
+        }
+      }
+    }
+    return '';
+  }
+
 }
