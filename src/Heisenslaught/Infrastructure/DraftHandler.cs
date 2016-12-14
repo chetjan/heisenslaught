@@ -153,14 +153,12 @@ namespace Heisenslaught.Infrastructure
 
         public bool canPickHero(string heroId)
         {
-            var isValid = isValidHero(heroId);
-            var isPicked = isHeroPickedOrBanned(heroId);
-            var isDisabled = isHeroDisabled(heroId);
-
+        
             var allowed = isValidHero(heroId) && !isHeroPickedOrBanned(heroId) && !isHeroDisabled(heroId);
             if (allowed && (heroId == "cho" || heroId == "gall"))
             {
-                if (!isFirstPickOfDoublePick)
+                
+                if (!isFirstPickOfDoublePick && !isBan)
                 {
                     allowed = false;
                 }
@@ -258,7 +256,7 @@ namespace Heisenslaught.Infrastructure
 
             state.picks.Add(heroId);
 
-            if(heroId == "cho" || heroId == "gall")
+            if(!isBan && (heroId == "cho" || heroId == "gall"))
             {
                 state.picks.Add(heroId == "cho" ? "gall" : "cho");
             }
