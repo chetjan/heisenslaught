@@ -44,6 +44,8 @@
     "ts-node": "1.2.1",
     "tslint": "3.13.0",
     "typescript": "~2.0.3",
+    "@types/jquery": "1.10.31",
+    "@types/signalr": "^2.2.1",
     "webdriver-manager": "10.2.5"
   }
 }

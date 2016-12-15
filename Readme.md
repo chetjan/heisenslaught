@@ -5,24 +5,22 @@ A custom drafting tool for (On|Off)slaught.
 ## Local Setup
 
 1. Install [node](https://nodejs.org)
-1. Install `npm install --global typings@0.8.1`
 	
 ### UI
-1. Install [angular cli](https://github.com/angular/angular-cli/)
 1. In `src/HeisenslaughtUI` run `npm install`
-1. In `src/HeisenslaughtUI` run `ng build`
+1. In `src/HeisenslaughtUI` run `./node_modules/bin/ng.cmd build` (Windows) or `./node_modules/.bin/ng build` (OS X / Linux)
+    1. Alternatively you can install [angular cli](https://github.com/angular/angular-cli/) globally and just run `ng build`
+
 Please complete these steps before running the server
 
 ### Windows Server
 1. Install [Visual Studio 2017](https://www.visualstudio.com/vs/visual-studio-2017-rc/)
-	1. Select the following Workloads when installing
-		1. Web Development
-		1. .NET Core and Docker (Preview)
-
+    1. Select the following Workloads when installing
+        1. Web Development
+        1. .NET Core and Docker (Preview)
 1. Setup static file compilation
     1. In `src/Heisenslaught` run `npm install`
     1. Open `Heisenslaught.sln` 
-
 1. Press `F5` to launch the application
 
 ### OS X / Linux Server
