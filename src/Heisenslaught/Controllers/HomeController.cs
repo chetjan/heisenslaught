@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,9 +12,9 @@ namespace Heisenslaught.Controllers
     public class HomeController : Controller
     {
         // GET: /<controller>/
-        public IActionResult Index()
+        public FileResult Index()
         {
-            return View();
+            return new PhysicalFileResult(Directory.GetCurrentDirectory() + "/wwwroot/index.html", "text/html");
         }
     }
 }

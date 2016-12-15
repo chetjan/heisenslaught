@@ -1,0 +1,67 @@
+:host {
+    width: 150px;
+    height: 150px;
+    display: block;
+}
+
+.bg {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    background-image: url('assets/storm_ui_glues_draft_portrait_background.png');
+    background-size: 100% 100%;
+    z-index: 1;
+}
+
+.border {
+    position: absolute;
+    background-image: url('assets/storm_ui_glues_draft_portrait_normal.png');
+    background-size: 100% 100%;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 3;
+}
+
+:host.team2 .bg {
+    background-image: url('assets/storm_ui_glues_draft_portrait_background_red.png');
+}
+
+:host.ban {
+    width: 96px;
+    height: 96px;
+    position: absolute;
+    top: 110px;
+    left: 50%;
+}
+
+:host.ban.team1.ban1 {
+    margin-left: -440px;
+}
+
+:host.ban.team1.ban2 {
+    margin-left: -340px;
+}
+
+:host.ban.team2.ban1 {
+    margin-left: 240px;
+}
+
+:host.ban.team2.ban2 {
+    margin-left: 340px;
+}
+
+svg {
+    position: absolute;
+    top: 8%;
+    left: 8%;
+    width: 80%;
+    height: 80%;
+    z-index: 2;
+}
+
+:host.picking .border {
+    background-image: url('assets/storm_ui_glues_draft_portrait_selected.png');
+}

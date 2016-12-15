@@ -1,0 +1,51 @@
+<section class="left">
+	<div class="picked-heroes team1">
+		<hero-pick class="team1" [hero]="getPick(0, 0)"></hero-pick>
+		<hero-pick class="team1" [hero]="getPick(0, 1)"></hero-pick>
+		<hero-pick class="team1" [hero]="getPick(0, 2)"></hero-pick>
+		<hero-pick class="team1" [hero]="getPick(0, 3)"></hero-pick>
+		<hero-pick class="team1" [hero]="getPick(0, 4)"></hero-pick>
+	</div>
+</section>
+<section class="center">
+	<div class="top">
+		<div class="header">
+			<div class="map">{{mapName}}</div>
+			<div class="pick-time">{{pickTime}}</div>
+			<div class="bonus-time team1">{{team1Status || 'Waiting...'}}</div>
+			<div class="bonus-time team2">{{team2Status || 'Waiting...'}}</div>
+			<div class="team-name team1">{{draftConfig?.team1Name}}</div>
+			<div class="team-name team2">{{draftConfig?.team2Name}}</div>
+			<div class="draft-status">{{draftStatus}}</div>
+			<hero-pick class="ban team1 ban1" [hero]="getBan(0, 0)"></hero-pick>
+			<hero-pick class="ban team1 ban2" [hero]="getBan(0, 1)"></hero-pick>
+			<hero-pick class="ban team2 ban1" [hero]="getBan(1, 0)"></hero-pick>
+			<hero-pick class="ban team2 ban2" [hero]="getBan(1, 1)"></hero-pick>
+
+		</div>
+	</div>
+	<div class="bottom">
+		<div class="search-area">
+			<hero-search [(selectedHero)]="selectedHero"></hero-search>
+		</div>
+		<div class="select-area">
+			<button class="btn-select" [disabled]="!selectedHero" (click)="pick()" *ngIf="!!team">Select</button>
+		</div>
+	</div>
+</section>
+<section class="right">
+	<div class="picked-heroes team2">
+		<hero-pick class="team2" [hero]="getPick(1, 0)"></hero-pick>
+		<hero-pick class="team2" [hero]="getPick(1, 1)"></hero-pick>
+		<hero-pick class="team2" [hero]="getPick(1, 2)"></hero-pick>
+		<hero-pick class="team2" [hero]="getPick(1, 3)"></hero-pick>
+		<hero-pick class="team2" [hero]="getPick(1, 4)"></hero-pick>
+	</div>
+</section>
+<section class="ready-window" *ngIf="showReady">
+	<div class="modal"></div>
+	<div class="popup">
+		Team: {{team}}
+		<button (click)="setReady()">Ready</button>
+	</div>
+</section>

@@ -19,6 +19,9 @@ namespace Heisenslaught
         {
             services.AddMvc();
             services.AddSignalR();
+            services.AddRouting(options => {
+                options.LowercaseUrls = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -31,16 +34,22 @@ namespace Heisenslaught
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
             app.UseStaticFiles();
-
+           
             app.UseMvc(routes =>
             {
+                
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller}/{action}/{id?}",
+                    template: "{controller}/{action}",
                     defaults: new { controller = "Home", action = "Index" }
                 );
+                routes.MapRoute(
+                   name: "draft",
+                   template: "draft/{id?}/{team?}",
+                   defaults: new { controller = "Draft", action = "Index" }
+               );
             });
-
+            
             app.UseWebSockets();
             app.UseSignalR();
 

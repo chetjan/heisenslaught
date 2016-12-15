@@ -9,16 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Heisenslaught.Controllers
 {
-    public class DraftController : Controller
+    public class AdminController : Controller
     {
-        /*
-        // GET: /<controller>/
-        public IActionResult Index()
-        {
-            return View();
-        }
-        */
-
         // GET: /<controller>/
         public FileResult Index()
         {
