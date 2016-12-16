@@ -5,18 +5,16 @@
 	<div class="top">
 		<div class="header">
 			<div class="map">{{mapName}}</div>
+			
 			<div class="pick-time">{{pickTime}}</div>
 			<div class="bonus-time team1">{{team1Status || 'Waiting...'}}</div>
 			<div class="bonus-time team2">{{team2Status || 'Waiting...'}}</div>
-			<div class="team-name team1">{{draftConfig?.team1Name}}</div>
-			<div class="team-name team2">{{draftConfig?.team2Name}}</div>
+			
+			<div class="team-name team1">{{draftConfig?.team1Name || 'Blue Team'}}</div>
+			<div class="team-name team2">{{draftConfig?.team2Name || 'Red Team'}}</div>
+			
 			<div class="draft-status">{{draftStatus}}</div>
-			<!--
-			<hero-pick class="ban team1 ban1" [hero]="getBan(0, 0)"></hero-pick>
-			<hero-pick class="ban team1 ban2" [hero]="getBan(0, 1)"></hero-pick>
-			<hero-pick class="ban team2 ban1" [hero]="getBan(1, 0)"></hero-pick>
-			<hero-pick class="ban team2 ban2" [hero]="getBan(1, 1)"></hero-pick>
-			-->
+
 			<team-hero-picks class="bans" [team]="0" [slots]="teamBanSlots[0]"  [config]="draftConfig" [state]="draftState"></team-hero-picks>
 			<team-hero-picks class="bans" [team]="1" [slots]="teamBanSlots[1]"  [config]="draftConfig" [state]="draftState"></team-hero-picks>
 		</div>
@@ -26,7 +24,9 @@
 			<hero-search [(selectedHero)]="selectedHero"></hero-search>
 		</div>
 		<div class="select-area">
-			<button class="btn-select" [disabled]="!selectedHero" (click)="pick()" *ngIf="!!team">Select</button>
+			<heroes-button label="SELECT"  *ngIf="!!team" 
+			[disabled]="!selectedHero  || !draftState?.team1Ready || !draftState?.team2Ready" 
+			(click)="pick()"></heroes-button>
 		</div>
 	</div>
 </section>
@@ -38,8 +38,8 @@
 	<div class="popup">
 		<h1 [class.team1]="team === 1" [class.team2]="team === 2">
 			{{team === 1 
-				? draftConfig?.team1Name || 'Team 1'
-				: draftConfig?.team2Name || 'Team 2'
+				? draftConfig?.team1Name || 'Blue Team'
+				: draftConfig?.team2Name || 'Red Team'
 			}}
 		</h1>
 		<heroes-button (click)="setReady()" label="Ready!"></heroes-button>

@@ -133,21 +133,21 @@ section.center div.top div.map {
 section.center div.bottom {
     width: 100%;
     position: absolute;
-    top: 230px;
+    top: 250px;
     bottom: 0px;
 }
 
 section.center div.search-area {
     position: absolute;
     top: 0px;
-    bottom: 100px;
+    bottom: 200px;
     width: 100%;
 }
 
 section.center div.select-area {
     position: absolute;
     bottom: 0px;
-    height: 100px;
+    height: 200px;
     width: 100%;
     text-align: center;
     padding: 25px;
@@ -218,4 +218,12 @@ section.center div.select-area {
             text-shadow: 0 0 60px red, 0 0 60px red, 0 0 5px red, 0 0 5px red;
         }
     }
+}
+
+.team-name.team1 {
+    text-shadow: 0 0 60px blue, 0 0 60px blue, 0 0 60px blue, 0 0 5px blue, 0 0 5px blue, 0 0 5px blue, 0 0 5px blue, 0 0 5px blue;
+}
+
+.team-name.team2 {
+    text-shadow: 0 0 60px red, 0 0 60px red, 0 0 5px red, 0 0 5px red;
 }
