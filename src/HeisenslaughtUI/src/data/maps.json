@@ -1,10 +1,58 @@
 [
     {
+        "id": "boe",
+        "name": "Battlefield of Eternity"
+    },
+    {
+        "id": "bh",
+        "name": "Baraxis Holdout"
+    },
+    {
+        "id": "bhb",
+        "name": "Blackheart's Bay"
+    },
+    {
+        "id": "ch",
+        "name": "Cursed Hollow"
+    },
+    {
+        "id": "ds",
+        "name": "Dragon Shire"
+    },
+    {
         "id": "got",
         "name": "Garden of Terror"
     },
     {
-        "id": "dragonshire",
-        "name": "Dragon Shire"
+        "id": "hm",
+        "name": "Haunted Mines"
+    },
+    {
+        "id": "is",
+        "name": "Infernal Shrines"
+    },
+    {
+        "id": "lc",
+        "name": "Lost Cavern"
+    },
+    {
+        "id": "st",
+        "name": "Sky Temple"
+    },
+    {
+        "id": "mro",
+        "name": "The Mines Reopen"
+    },
+    {
+        "id": "totsq",
+        "name": "Tomb of the Spider Queen"
+    },
+    {
+        "id": "tod",
+        "name": "Towers of Doom"
+    },
+    {
+        "id": "wj",
+        "name": "Warhead Junction"
     }
 ]
