@@ -6,7 +6,7 @@ import { HeroesService, HeroData, IMapData } from '../services/heroes.service';
 @Component({
   selector: 'draft-screen',
   templateUrl: './draft.component.html',
-  styleUrls: ['./draft.component.css']
+  styleUrls: ['./draft.component.scss']
 })
 export class DraftComponent {
 
@@ -24,9 +24,9 @@ export class DraftComponent {
   private teamToken: string;
   private team: number;
   private teamSlots: Array<number[]> = [];
-  private teamPickSlots: Array<number[]> = [];
   private teamBanSlots: Array<number[]> = [];
 
+  public teamPickSlots: Array<number[]> = [];
   public selectedHero: any;
   public draftConfig: IDraftConfig;
   public draftState: IDraftState;
@@ -139,6 +139,7 @@ export class DraftComponent {
     pickedHeroId = picks[banSlots[pickId]];
     return this.getHeroById(pickedHeroId);
   }
+  
 
   private getHeroById(heroId: string): HeroData {
     if (!this.heroes) {

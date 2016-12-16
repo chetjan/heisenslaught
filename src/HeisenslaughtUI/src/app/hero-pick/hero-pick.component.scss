@@ -1,0 +1,290 @@
+$nameplateTopWidth: 60%;
+$nameplateBottomWidth: 55%;
+:host {
+    display: block;
+    svg {
+        position: absolute;
+        top: 8%;
+        left: 8%;
+        width: 80%;
+        height: 80%;
+        z-index: 2;
+    }
+    .bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-size: 100% 100%;
+        z-index: 1;
+        opacity: 0.33;
+    }
+    .border,
+    .border-outline {
+        position: absolute;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    .border {
+        background-image: url('assets/hero-pick/storm_ui_glues_draft_portrait_disabled.png');
+        z-index: 3;
+    }
+    .border-outline {
+        z-index: 4;
+    }
+    .border-glow {
+        position: absolute;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        width: 122%;
+        height: 117%;
+        top: -9%;
+        left: -11%;
+        display: block;
+        z-index: 5;
+        opacity: 0.2;
+    }
+    .name-plate {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: block;
+        z-index: 10;
+        //display:none;
+        .top,
+        .bottom {
+            position: absolute;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+        .top {
+            width: $nameplateTopWidth;
+            height: $nameplateTopWidth * 0.8210526315789474;
+            bottom: -4%;
+            z-index: 1;
+            .hero-name {
+                position: absolute;
+                top: 42%;
+                width: 90%;
+                font-weight: 700;
+                text-transform: uppercase;
+                font-size:14px;
+            }
+        }
+        .bottom {
+            width: $nameplateBottomWidth;
+            height: $nameplateBottomWidth * 0.8;
+            bottom: -6.5%;
+            z-index: 2;
+            display: none;
+        }
+    }
+    &.team1 {
+        .bg {
+            background-image: url('assets/hero-pick/storm_ui_glues_draft_portrait_bg_blue.png');
+        }
+        .name-plate {
+            .top {
+                background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_disabled_blue.png');
+                left: -1%;
+                .hero-name {
+                    transform: rotate(27.5deg);
+                    left: 10%;
+                }
+            }
+            .bottom {
+                background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_hero_disabled_blue.png');
+                left: 1%;
+            }
+        }
+    }
+    &.team2 {
+        .bg {
+            background-image: url('assets/hero-pick/storm_ui_glues_draft_portrait_bg_red.png');
+        }
+        .name-plate {
+            .top {
+                background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_disabled_red.png');
+                right: -1%;
+                .hero-name {
+                    transform: rotate(-27.5deg);
+                    text-align: right;
+                }
+            }
+            .bottom {
+                background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_hero_disabled_red.png');
+                right: 1%;
+            }
+        }
+    }
+    &.team-picking {
+        &.team1 {
+            .border-glow {
+                background-image: url('assets/hero-pick/storm_ui_glues_draft_portrait_selecting_glow_blue.png');
+            }
+        }
+        &.team2 {
+            .border-glow {
+                background-image: url('assets/hero-pick/storm_ui_glues_draft_portrait_selecting_glow_red.png');
+            }
+        }
+    }
+    &.current-pick {
+        .border {
+            background-image: url('assets/hero-pick/storm_ui_glues_draft_portrait_selected.png');
+        }
+        .bg {
+            opacity: 1;
+        }
+        .border-glow {
+            opacity: 1;
+        }
+        &.team1 {
+            .name-plate {
+                .top {
+                    background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_notselected_blue.png');
+                }
+                .bottom {
+                    background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_selected_hero_blue.png');
+                }
+            }
+        }
+        &.team2 {
+            .name-plate {
+                .top {
+                    background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_notselected_red.png');
+                }
+                .bottom {
+                    background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_selected_hero_red.png');
+                }
+            }
+        }
+    }
+    &.next-pick {
+        .bg {
+            opacity: 1;
+        }
+        .border-glow {
+            opacity: 0.4;
+        }
+    }
+    &.picked {
+        .border {
+            background-image: url('assets/hero-pick/storm_ui_glues_draft_portrait_disabled_selected.png');
+        }
+        &.team1 {
+            .name-plate {
+                .top {
+                    background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_selected_blue.png');
+                    .hero-name {
+                        color: black;
+                    }
+                }
+                .bottom {
+                    background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_selected_hero_blue.png');
+                }
+            }
+        }
+        &.team2 {
+            .name-plate {
+                .top {
+                    background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_selected_red.png');
+                    .hero-name {
+                        color: black;
+                    }
+                }
+                .bottom {
+                    background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_selected_hero_red.png');
+                }
+            }
+        }
+    }
+}
+
+
+.bans :host{
+    .name-plate{
+        display: none;
+    }
+}
+
+/*
+.border-glow {
+    display: none;
+    z-index: 4;
+}
+
+.border-outline {
+    display: none;
+    z-index: 3;
+    width: 122%;
+    height: 117%;
+    top: -9%;
+    left: -11%;
+}
+
+:host.picking .border {
+    background-image: url('assets/hero-pick/storm_ui_glues_draft_portrait_selected.png');
+    display: block;
+}
+
+:host.picking .border-glow {
+    background-image: url('assets/hero-pick/storm_ui_glues_draft_portrait_highlight.png');
+    display: block;
+}
+
+:host.active .border-outline,
+:host.picking .border-outline {
+    background-image: url('assets/hero-pick/storm_ui_glues_draft_portrait_selecting_glow_blue.png');
+    display: block;
+}
+
+:host.picking .bg {
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    background-image: url('assets/hero-pick/storm_ui_glues_draft_portrait_background.png');
+}
+
+
+/*
+
+
+:host.team2 .bg {
+    background-image: url('assets/storm_ui_glues_draft_portrait_background_red.png');
+}
+
+:host.ban {
+    width: 96px;
+    height: 96px;
+    position: absolute;
+    top: 110px;
+    left: 50%;
+}
+
+:host.ban.team1.ban1 {
+    margin-left: -440px;
+}
+
+:host.ban.team1.ban2 {
+    margin-left: -340px;
+}
+
+:host.ban.team2.ban1 {
+    margin-left: 240px;
+}
+
+:host.ban.team2.ban2 {
+    margin-left: 340px;
+}
+
+
+
+:host.picking .border {
+    background-image: url('assets/storm_ui_glues_draft_portrait_selected.png');
+}
+
+*/

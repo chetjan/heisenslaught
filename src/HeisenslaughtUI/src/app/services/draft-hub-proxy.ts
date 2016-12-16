@@ -1,5 +1,6 @@
 import { ICreateDraftData, ICreateDraftResult, IDraftConfig } from './draft-config';
 
+
 export interface IDraftHubServerProxy {
     configDraft(config: ICreateDraftData): JQueryPromise<ICreateDraftResult>;
     getCurrentAdminConfig(): JQueryPromise<ICreateDraftResult>;
