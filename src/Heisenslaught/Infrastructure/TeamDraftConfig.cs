@@ -13,7 +13,7 @@ namespace Heisenslaught.Infrastructure
         {
             this.team = team;
             team1Name = cfg.team1Name;
-            team1Name = cfg.team2Name;
+            team2Name = cfg.team2Name;
             firstPick = cfg.firstPick;
             pickTime = cfg.pickTime;
             bonusTime = cfg.bonusTime;
