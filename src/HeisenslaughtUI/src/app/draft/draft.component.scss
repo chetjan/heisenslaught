@@ -197,15 +197,25 @@ section.center div.select-area {
     top: 0px;
     left: 0px;
     z-index: 100;
-    background-color: rgba(0, 0, 0, 0.42);
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 .ready-window .popup {
     width: 600px;
-    height: 250px;
-    background-color: white;
     border-radius: 10px;
     margin: auto;
     top: 250px;
     z-index: 101;
+    text-align: center;
+    h1 {
+        font-weight: 900;
+        letter-spacing: 3px;
+        font-size: 49px;
+        &.team1 {
+            text-shadow: 0 0 60px blue, 0 0 60px blue, 0 0 60px blue, 0 0 5px blue, 0 0 5px blue, 0 0 5px blue, 0 0 5px blue, 0 0 5px blue;
+        }
+        &.team2 {
+            text-shadow: 0 0 60px red, 0 0 60px red, 0 0 5px red, 0 0 5px red;
+        }
+    }
 }
