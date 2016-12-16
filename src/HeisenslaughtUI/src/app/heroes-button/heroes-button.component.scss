@@ -1,0 +1,31 @@
+:host {
+    display: inline-block;
+    button {
+        width: 380px;
+        height: 128px;
+        border: none;
+        background-color: transparent;
+        color: white;
+        font-weight: 700;
+        font-size: 24px;
+        background-image: url('assets/button/large_storm_button.png');
+        background-repeat: no-repeat;
+        background-position: 0px 0px;
+        &:active,
+        &:focus {
+            outline: none;
+        }
+        &:hover {
+            background-position: 0px -128px;
+        }
+        &:active {
+            background-position: 0px -256px;
+        }
+        &:disabled {
+            background-position: 0px -384px;
+            span{
+                opacity: 0.3;
+            }
+        }
+    }
+}

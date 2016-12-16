@@ -36,7 +36,12 @@
 <section class="ready-window" *ngIf="showReady">
 	<div class="modal"></div>
 	<div class="popup">
-		Team: {{team}}
-		<button (click)="setReady()">Ready</button>
+		<h1 [class.team1]="team === 1" [class.team2]="team === 2">
+			{{team === 1 
+				? draftConfig?.team1Name || 'Team 1'
+				: draftConfig?.team2Name || 'Team 2'
+			}}
+		</h1>
+		<heroes-button (click)="setReady()" label="Ready!"></heroes-button>
 	</div>
 </section>

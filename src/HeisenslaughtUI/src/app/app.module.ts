@@ -16,6 +16,7 @@ import { HeroPickComponent } from './hero-pick/hero-pick.component';
 import { HomeComponent } from './home/home.component';
 import { DraftConfigScreenComponent } from './draft-config-screen/draft-config-screen.component';
 import { TeamHeroPicksComponent } from './team-hero-picks/team-hero-picks.component';
+import { HeroesButtonComponent } from './heroes-button/heroes-button.component';
 
 
 const appRoutes: Routes = [
@@ -37,7 +38,8 @@ const appRoutes: Routes = [
     HeroPickComponent,
     HomeComponent,
     DraftConfigScreenComponent,
-    TeamHeroPicksComponent
+    TeamHeroPicksComponent,
+    HeroesButtonComponent
   ],
   imports: [
     BrowserModule,
