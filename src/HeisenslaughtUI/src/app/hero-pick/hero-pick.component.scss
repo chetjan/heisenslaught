@@ -2,10 +2,10 @@ $nameplateTopWidth: 60%;
 $nameplateBottomWidth: 55%;
 :host {
     display: block;
-    svg {
+    .hero-image {
         position: absolute;
-        top: 8%;
-        left: 8%;
+        top: 10%;
+        left: 10%;
         width: 80%;
         height: 80%;
         z-index: 2;
@@ -70,7 +70,7 @@ $nameplateBottomWidth: 55%;
                 width: 90%;
                 font-weight: 700;
                 text-transform: uppercase;
-                font-size:14px;
+                font-size: 14px;
             }
         }
         .bottom {
@@ -203,12 +203,12 @@ $nameplateBottomWidth: 55%;
     }
 }
 
-
-.bans :host{
-    .name-plate{
+.bans :host {
+    .name-plate {
         display: none;
     }
 }
+
 
 /*
 .border-glow {
