@@ -12,8 +12,7 @@ namespace Heisenslaught
     public class DraftHub : Hub
     {
         public static List<string> ConnectedUsers;
-        public static Draft CurrentDraft;
-
+     
         private static Timer DraftUpdate;
         private static AdminDraftConfig CurrentDraftConfig;
         private static DraftHandler HandleDraft;
@@ -167,47 +166,6 @@ namespace Heisenslaught
         {
             Clients.All.messageReceived(originatorUser, message);
         }
-
-        public void Pick(int team, string hero)
-        {
-            bool selectionSuccessful = CurrentDraft.SelectHero((Team)team, hero);
-            Clients.All.updateDraftState(CurrentDraft);
-            Send("Team " + team, "Selected: " + hero + (selectionSuccessful ? "" : " (ignoring)"));
-        }
-
-        public void Connect(string newUser)
-        {
-            if (ConnectedUsers == null)
-            {
-                ConnectedUsers = new List<string>();
-            }
-
-            if (CurrentDraft == null)
-            {
-                CurrentDraft = new Draft();
-            }
-
-            if (newUser == "reset")
-            {
-                CurrentDraft = new Draft();
-                Send("Admin", "Resetting draft...");
-                return;
-            }
-
-            if (newUser == "start")
-            {
-                CurrentDraft = new Draft();
-                DraftUpdate = new Timer(x =>
-                {
-                    Clients.All.updateDraftState(CurrentDraft);
-                }, null, 0, 1);
         
-                return;
-            }
-
-            ConnectedUsers.Add(newUser);
-            Clients.Caller.getConnectedUsers(ConnectedUsers);
-            Clients.Others.newUserAdded(newUser);
-        }
     }
 }
