@@ -6,7 +6,7 @@
     [class.current-pick]="currentPickIndex === i"
     [class.next-pick]="nextPickIndex === i"
     [class.picked]="currentPick > getSlot(i)"
+    [hero]="getPick(i)"
   >
   </hero-pick>
 </div>
-{{currentPick}}

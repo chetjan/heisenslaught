@@ -17,6 +17,7 @@ import { HomeComponent } from './home/home.component';
 import { DraftConfigScreenComponent } from './draft-config-screen/draft-config-screen.component';
 import { TeamHeroPicksComponent } from './team-hero-picks/team-hero-picks.component';
 
+
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'admin', component: DraftConfigScreenComponent },

@@ -64,13 +64,21 @@ $nameplateBottomWidth: 55%;
             height: $nameplateTopWidth * 0.8210526315789474;
             bottom: -4%;
             z-index: 1;
+            .hero-name {
+                position: absolute;
+                top: 42%;
+                width: 90%;
+                font-weight: 700;
+                text-transform: uppercase;
+                font-size:14px;
+            }
         }
         .bottom {
             width: $nameplateBottomWidth;
             height: $nameplateBottomWidth * 0.8;
             bottom: -6.5%;
             z-index: 2;
-            display:none;
+            display: none;
         }
     }
     &.team1 {
@@ -81,6 +89,10 @@ $nameplateBottomWidth: 55%;
             .top {
                 background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_disabled_blue.png');
                 left: -1%;
+                .hero-name {
+                    transform: rotate(27.5deg);
+                    left: 10%;
+                }
             }
             .bottom {
                 background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_hero_disabled_blue.png');
@@ -96,6 +108,10 @@ $nameplateBottomWidth: 55%;
             .top {
                 background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_disabled_red.png');
                 right: -1%;
+                .hero-name {
+                    transform: rotate(-27.5deg);
+                    text-align: right;
+                }
             }
             .bottom {
                 background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_hero_disabled_red.png');
@@ -162,6 +178,9 @@ $nameplateBottomWidth: 55%;
             .name-plate {
                 .top {
                     background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_selected_blue.png');
+                    .hero-name {
+                        color: black;
+                    }
                 }
                 .bottom {
                     background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_selected_hero_blue.png');
@@ -172,6 +191,9 @@ $nameplateBottomWidth: 55%;
             .name-plate {
                 .top {
                     background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_selected_red.png');
+                    .hero-name {
+                        color: black;
+                    }
                 }
                 .bottom {
                     background-image: url('assets/hero-pick/storm_ui_glues_draft_nameplate_selected_hero_red.png');
@@ -181,6 +203,12 @@ $nameplateBottomWidth: 55%;
     }
 }
 
+
+.bans :host{
+    .name-plate{
+        display: none;
+    }
+}
 
 /*
 .border-glow {

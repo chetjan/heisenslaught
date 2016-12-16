@@ -9,6 +9,10 @@ section.left {
     width: 20vw;
     height: 100vh;
     position: absolute;
+    team-hero-picks {
+        margin-top: 100px;
+        float: right;
+    }
 }
 
 section.center {
@@ -25,11 +29,25 @@ section.right {
     width: 20vw;
     height: 100vh;
     position: absolute;
+    team-hero-picks {
+        margin-top: 100px;
+        float: left;
+    }
 }
 
 section.center div.top {
     width: 100%;
     height: 250px;
+    team-hero-picks {
+        position: absolute;
+        top: 115px;
+        &[team="0"] {
+            left: 120px;
+        }
+        &[team="1"] {
+            left: 780px;
+        }
+    }
 }
 
 section.center div.top div.header {
@@ -78,13 +96,12 @@ section.center div.top div.map {
     letter-spacing: 1px;
 }
 
-
-.draft-status{
+.draft-status {
     position: absolute;
-    top:178px;
-    width:450px;
-    margin-left:-225px;
-    left:50%;
+    top: 178px;
+    width: 450px;
+    margin-left: -225px;
+    left: 50%;
     z-index: 20;
     text-align: center;
     font-weight: 700;
@@ -192,4 +209,3 @@ section.center div.select-area {
     top: 250px;
     z-index: 101;
 }
-

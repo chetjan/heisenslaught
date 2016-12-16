@@ -1,6 +1,8 @@
 import { Component, Input, HostBinding } from '@angular/core';
 
 import { IDraftConfig, IDraftState, DraftPhase } from '../services/draft.service';
+import { HeroesService, HeroData } from '../services/heroes.service';
+
 
 @Component({
   selector: 'team-hero-picks',
@@ -18,35 +20,23 @@ export class TeamHeroPicksComponent {
   public slots: number[];
 
   @Input()
-  public state: IDraftState = {
-    phase: DraftPhase.PICKING,
-    pickTime: 0,
-    team1BonusTime: 0,
-    team2BonusTime: 0,
-    team1Ready: true,
-    team2Ready: true,
-    picks: ['a', 'b', 'c', 'd', 'e']
-  };
+  public state: IDraftState;
 
   @Input()
-  public config: IDraftConfig = {
-    bankTime: true,
-    bonusTime: 100,
-    disabledHeroes: null,
-    firstPick: 1,
-    map: '',
-    pickTime: 10,
-    team1Name: '',
-    team2Name: '',
-    state: null
-  };
+  public config: IDraftConfig;
+
+  private heroes: HeroData[];
 
 
+  constructor(private heroesService: HeroesService) {
+    heroesService.getHeroes().subscribe((heroes) => {
+      this.heroes = heroes;
+    });
 
-  constructor() { }
+  }
 
   public get currentPick(): number {
-    return this.state && this.state.phase === DraftPhase.PICKING ? this.state.picks.length : -1;
+    return this.state && this.state.phase !== DraftPhase.WAITING ? this.state.picks.length : -1;
   }
 
   public get currentPickIndex(): number {
@@ -68,8 +58,20 @@ export class TeamHeroPicksComponent {
     return this.slots.indexOf(this.currentPick) !== -1;
   }
 
-  public getSlot(index):number{
+  public getSlot(index): number {
     return this.slots ? this.slots[index] : -1;
+  }
+
+  private getHeroById(heroId: string): HeroData {
+    if (this.heroes) {
+      return this.heroes.find((value) => {
+        return value.id === heroId;
+      });
+    }
+    return null;
+  }
+  getPick(index) {
+    return this.slots && this.heroes && this.state && this.state.picks ? this.getHeroById(this.state.picks[this.slots[index]]) : null;
   }
 
 }
