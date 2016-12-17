@@ -93,17 +93,7 @@ namespace Heisenslaught.Services
             }
         }
 
-        
-
-
-
-
-
-
-
-
-
-
+        /*
         public List<DraftConfigAdminDTO> getActiveDrafts()
         {
             List<DraftConfigAdminDTO> list = new List<DraftConfigAdminDTO>();
@@ -148,5 +138,7 @@ namespace Heisenslaught.Services
             }
             return null;
         }
+
+    */
     }
 }
