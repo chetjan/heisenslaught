@@ -1,64 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR.Hubs;
+﻿using System.Collections.Generic;
 using Heisenslaught.Models;
 using Heisenslaught.Services;
+using Heisenslaught.Exceptions;
+using Heisenslaught.DataTransfer;
 
 namespace Heisenslaught.Infrastructure
 {
-
-    public enum DraftConnectionType
-    {
-        OBSERVER,
-        DRAFTER,
-        ADMIN
-    }
-    public class DraftRoomConnection
-    {
-        private string _id;
-        private DraftConnectionType _type;
-
-
-        public DraftRoomConnection(string id, DraftConnectionType type)
-        {
-            _id = id;
-            _type = type;
-        }
-
-        public string id
-        {
-            get
-            {
-                return _id;
-            }
-        }
-
-        public DraftConnectionType type
-        {
-            get
-            {
-                return _type;
-            }
-        }
-    }
-
     public class DraftRoom
     {
         private DraftModel model;
         private DraftService service;
-
         private Dictionary<string, DraftRoomConnection> connections = new Dictionary<string, DraftRoomConnection>();
 
+        private string roomName;
 
         public DraftRoom(DraftService service, DraftModel model)
         {
             this.service = service;
             this.model = model;
+            this.roomName = "draftRoom-" + model.draftToken;
         }
 
-        public DraftModel draftModel
+        public DraftModel DraftModel
         {
             get
             {
@@ -66,21 +29,23 @@ namespace Heisenslaught.Infrastructure
             }
         }
 
-        public DraftRoomConnection connect(HubCallerContext callerContext, string authToken)
+        public DraftRoomConnection Connect(DraftHub hub, string authToken)
         {
-            var connection = new DraftRoomConnection(callerContext.ConnectionId, getConnectionType(authToken));
-            if (connections.ContainsKey(callerContext.ConnectionId))
-                connections.Remove(callerContext.ConnectionId);
-            connections.Add(callerContext.ConnectionId, connection); 
+            var connection = new DraftRoomConnection(hub.Context.ConnectionId, GetConnectionType(authToken));
+            if (!connections.ContainsKey(hub.Context.ConnectionId))
+            {
+                connections.Add(hub.Context.ConnectionId, connection);
+                hub.Groups.Add(hub.Context.ConnectionId, roomName);
+            }
             return connection;
         }
 
-        public bool disconnect(HubCallerContext callerContext)
+        public bool Disconnect(DraftHub hub)
         {
-            return connections.Remove(callerContext.ConnectionId);
+            return connections.Remove(hub.Context.ConnectionId);
         }
 
-        public int connectionCount
+        public int ConnectionCount
         {
             get
             {
@@ -88,11 +53,27 @@ namespace Heisenslaught.Infrastructure
             }
         }
 
-        public bool isActive
+        public bool IsActive
         {
             get
             {
-                return (draftModel.state.phase == DraftStatePhase.PICKING) ||  connectionCount > 0;
+                return (DraftModel.state.phase == DraftStatePhase.PICKING) ||  ConnectionCount > 0;
+            }
+        }
+
+        private DraftStateModel DraftState
+        {
+            get
+            {
+                return DraftModel.state;
+            }
+        }
+
+        private DraftStatePhase Phase
+        {
+            get
+            {
+                return DraftState.phase;
             }
         }
 
@@ -101,16 +82,126 @@ namespace Heisenslaught.Infrastructure
 
         }
 
-        private DraftConnectionType getConnectionType(string authToken)
+        private DraftConnectionType GetConnectionType(string authToken)
         {
-            if (authToken == draftModel.adminToken)
+            if (authToken == DraftModel.adminToken)
                 return DraftConnectionType.ADMIN;
-            if (authToken == draftModel.team1DrafterToken || authToken == draftModel.team2DrafterToken)
+            if (authToken == DraftModel.team1DrafterToken || authToken == DraftModel.team2DrafterToken)
                 return DraftConnectionType.DRAFTER;
             return DraftConnectionType.OBSERVER;
         }
 
-        
+        public void ResetDraft(DraftHub hub, string authToken)
+        {
+            if(Phase == DraftStatePhase.FINISHED)
+            {
+                throw new MethodNotAllowedInPhaseException();
+            }
+            var conType = GetConnectionType(authToken);
+            if(conType != DraftConnectionType.ADMIN)
+            {
+                throw new InsufficientDraftPermissionsException();
+            }
 
+            DraftModel.state = new DraftStateModel();
+            UpdateDraftState(hub);
+        }
+
+        public void CloseDraft(DraftHub hub, string authToken)
+        {
+            if (Phase == DraftStatePhase.FINISHED)
+            {
+                throw new MethodNotAllowedInPhaseException();
+            }
+            var conType = GetConnectionType(authToken);
+            if (conType != DraftConnectionType.ADMIN)
+            {
+                throw new InsufficientDraftPermissionsException();
+            }
+            DraftState.phase = DraftStatePhase.FINISHED;
+            UpdateDraftState(hub);
+        }
+
+        public void SetReady(DraftHub hub, string authToken)
+        {
+            if (Phase != DraftStatePhase.WAITING)
+            {
+                throw new MethodNotAllowedInPhaseException();
+            }
+            var conType = GetConnectionType(authToken);
+            if (conType != DraftConnectionType.DRAFTER)
+            {
+                throw new InsufficientDraftPermissionsException();
+            }
+            if(DraftModel.team1DrafterToken == authToken)
+            {
+                DraftState.team1Ready = true;
+            }
+            else if (DraftModel.team2DrafterToken == authToken)
+            {
+                DraftState.team2Ready = true;
+            }
+            // TODO impl draft handler
+            UpdateDraftState(hub);
+        }
+
+        public void PickHero(DraftHub hub, string heroId, string authToken)
+        {
+            if (Phase != DraftStatePhase.PICKING)
+            {
+                throw new MethodNotAllowedInPhaseException();
+            }
+            var conType = GetConnectionType(authToken);
+            if (conType != DraftConnectionType.DRAFTER)
+            {
+                throw new InsufficientDraftPermissionsException();
+            }
+            // TODO: pick hero
+            UpdateDraftState(hub);
+        }
+
+
+        private void UpdateDraftState(DraftHub hub)
+        {
+            hub.Clients.Group(roomName).updateDraftState(new DraftStateDTO(DraftState));
+        }
+
+    }
+
+    public enum DraftConnectionType
+    {
+        OBSERVER,
+        DRAFTER,
+        ADMIN
+    }
+
+    public class DraftRoomConnection
+    {
+        private string id;
+        private DraftConnectionType type;
+
+
+        public DraftRoomConnection(string id, DraftConnectionType type)
+        {
+            this.id = id;
+        
+            this.type = type;
+        }
+
+        public string Id
+        {
+            get
+            {
+                return id;
+            }
+        }
+
+        public DraftConnectionType Type
+        {
+            get
+            {
+                return type;
+            }
+        }
     }
 }

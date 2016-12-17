@@ -11,104 +11,89 @@ using Heisenslaught.Persistence;
 
 namespace Heisenslaught.Services
 {
-
-
     public class DraftService
     {
-        private static MongoDraftRepository DraftRepo = new MongoDraftRepository();
-
+        private static MongoDraftRepository draftRepo = new MongoDraftRepository();
         private Dictionary<string, DraftRoom> activeRooms = new Dictionary<string, DraftRoom>();
         private Dictionary<string, DraftRoom> connectionsRoom = new Dictionary<string, DraftRoom>();
-//        private Dictionary<DraftRoom, List<string>> roomConnections = new Dictionary<DraftRoom, List<string>>();
 
-        public DraftHub hub;
 
-        public DraftService(DraftHub hub)
-        {
-            this.hub = hub;
-        }
-
-        public DraftConfigAdminDTO createDraft(CreateDraftDTO config)
+        public DraftConfigAdminDTO CreateDraft(CreateDraftDTO config)
         {
             var model = new DraftModel(config.ToModel());
-            DraftRepo.createDraft(model);
+            draftRepo.createDraft(model);
             return new DraftConfigAdminDTO(model);
         }
 
-
-        public DraftConfigDTO connectToDraft(HubCallerContext callerContext, string draftToken, string authToken = null)
+        public DraftConfigDTO ConnectToDraft(DraftHub hub, string draftToken, string authToken = null)
         {
             DraftConfigDTO config = null;
-            var room = getDraftRoom(draftToken, true);
-            var connection = room.connect(callerContext, authToken);
+            var room = GetDraftRoom(draftToken, true);
+            var connection = room.Connect(hub, authToken);
             // TODO: if user is connecected to another room disconnect from that room or support multi room connections;
-            if(!connectionsRoom.ContainsKey(callerContext.ConnectionId))
-                connectionsRoom.Add(callerContext.ConnectionId, room);
+            if(!connectionsRoom.ContainsKey(hub.Context.ConnectionId))
+                connectionsRoom.Add(hub.Context.ConnectionId, room);
 
-            tryActivateDraftRoom(room);
+            TryActivateDraftRoom(room);
 
-            switch (connection.type)
+            switch (connection.Type)
             {
                 case DraftConnectionType.ADMIN:
-                    config = new DraftConfigAdminDTO(room.draftModel);
+                    config = new DraftConfigAdminDTO(room.DraftModel);
                     break;
                 case DraftConnectionType.DRAFTER:
-                    config = new DraftConfigDrafterDTO(room.draftModel, authToken);
+                    config = new DraftConfigDrafterDTO(room.DraftModel, authToken);
                     break;
                 case DraftConnectionType.OBSERVER:
-                    config = new DraftConfigDTO(room.draftModel);
+                    config = new DraftConfigDTO(room.DraftModel);
                     break;
             }
-               
             return config;
         }
 
-
-        public DraftRoom getDraftRoom(string draftToken, bool autoCreate=false)
+        public DraftRoom GetDraftRoom(string draftToken, bool autoCreate=false)
         {
             var room = activeRooms.ContainsKey(draftToken) ? activeRooms[draftToken] : null;
             if (room == null && autoCreate)
             {
-                DraftModel config = DraftRepo.findByDraftToken(draftToken);
+                DraftModel config = draftRepo.findByDraftToken(draftToken);
                 room = new DraftRoom(this, config);
             }
             return room;
         }
 
-
-        public void clientDisconnected(HubCallerContext callerContext)
+        public void ClientDisconnected(DraftHub hub)
         {
-            var id = callerContext.ConnectionId;
+            var id = hub.Context.ConnectionId;
             if (connectionsRoom.ContainsKey(id))
             {
                 var room = connectionsRoom[id];
-                if (room.disconnect(callerContext))
+                if (room.Disconnect(hub))
                 {
                     connectionsRoom.Remove(id);
-                    tryDeactivateDraftRoom(room);
+                    TryDeactivateDraftRoom(room);
                 }
             }
         }
 
-
-        private void tryActivateDraftRoom(DraftRoom room)
+        private void TryActivateDraftRoom(DraftRoom room)
         {
-            if(!activeRooms.ContainsKey(room.draftModel.draftToken) && room.isActive)
+            if(!activeRooms.ContainsKey(room.DraftModel.draftToken) && room.IsActive)
             {
-                activeRooms.Add(room.draftModel.draftToken, room);
+                activeRooms.Add(room.DraftModel.draftToken, room);
             }
         }
 
-        private void tryDeactivateDraftRoom(DraftRoom room)
+        private void TryDeactivateDraftRoom(DraftRoom room)
         {
-            if (activeRooms.ContainsKey(room.draftModel.draftToken) && !room.isActive)
+            if (activeRooms.ContainsKey(room.DraftModel.draftToken) && !room.IsActive)
             {
-                activeRooms.Remove(room.draftModel.draftToken);
+                activeRooms.Remove(room.DraftModel.draftToken);
                 room.Dispose();
             }
         }
 
-
+        
 
 
 
@@ -124,7 +109,7 @@ namespace Heisenslaught.Services
             List<DraftConfigAdminDTO> list = new List<DraftConfigAdminDTO>();
             foreach (var pair in activeRooms)
             {
-                list.Add(new DraftConfigAdminDTO(pair.Value.draftModel));
+                list.Add(new DraftConfigAdminDTO(pair.Value.DraftModel));
             }
             return list;
         }
@@ -140,11 +125,11 @@ namespace Heisenslaught.Services
             var room = activeRooms[draftToken];
             if(room != null)
             {
-                model = room.draftModel;
+                model = room.DraftModel;
             }
             else
             {
-                model = DraftRepo.findByDraftToken(draftToken);
+                model = draftRepo.findByDraftToken(draftToken);
             }
             if (model != null)
             {
@@ -162,32 +147,6 @@ namespace Heisenslaught.Services
                 }
             }
             return null;
-        }
-
-       
-
-        
-
-        
-
-        public DraftConfigAdminDTO resetDraft(string draftToken, string admintoken)
-        {
-            return null;
-        }
-
-        public bool closeDraft(string draftToken, string admintoken)
-        {
-            return false;
-        }
-
-        public bool setReady(string draftToken, string teamToken)
-        {
-            return false;
-        }
-
-        public bool pickHero(string heroId, string draftToken, string teamToken)
-        {
-            return false;
         }
     }
 }

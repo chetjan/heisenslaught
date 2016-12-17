@@ -1,51 +1,81 @@
-﻿using Heisenslaught.Infrastructure;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Heisenslaught.Services;
+
 using Heisenslaught.DataTransfer;
+using Heisenslaught.Exceptions;
+using Heisenslaught.Services;
+
 
 namespace Heisenslaught
 {
     public class DraftHub : Hub
     {
+        private static DraftService Draft = new DraftService();
 
-        private static DraftService Draft = null;
-
-        public static List<string> ConnectedUsers;
-     
-        private static Timer DraftUpdate;
-        private static AdminDraftConfig CurrentDraftConfig;
-        private static DraftHandler HandleDraft;
-
-        public DraftHub()
-        {
-            if (Draft == null)
-                Draft = new DraftService(this);
-            else
-                Draft.hub = this;
-            
-        }
         
         public override Task OnDisconnected(bool stopCalled)
         {
-            Draft.clientDisconnected(Context);
+            Draft.ClientDisconnected(this);
             return base.OnDisconnected(stopCalled);
         }
 
         public DraftConfigAdminDTO CreateDraft(CreateDraftDTO cfg)
         {
-            
-            return Draft.createDraft(cfg);
+            return Draft.CreateDraft(cfg);
         }
 
         public DraftConfigDTO ConnectToDraft(string draftToken, string teamToken = null)
         {
-            return Draft.connectToDraft(Context, draftToken, teamToken);
+            return Draft.ConnectToDraft(this, draftToken, teamToken);
+        }
+
+        public void RestartDraft(string draftToken, string adminToken)
+        {
+            try
+            {
+                Draft.GetDraftRoom(draftToken).ResetDraft(this, adminToken);
+            }
+            catch (NullReferenceException)
+            {
+                throw new NoSuchDraftException();
+            }
+        }
+
+        public void CloseDraft(string draftToken, string adminToken)
+        {
+            try
+            {
+                Draft.GetDraftRoom(draftToken).CloseDraft(this, adminToken);
+            }
+            catch (NullReferenceException)
+            {
+                throw new NoSuchDraftException();
+            }
+        }
+
+        public void SetReady(string draftToken, string teamToken)
+        {
+            try
+            {
+                Draft.GetDraftRoom(draftToken).SetReady(this, teamToken);
+            }
+            catch (NullReferenceException)
+            {
+                throw new NoSuchDraftException();
+            }
+        }
+
+        public void PickHero(string heroId, string draftToken, string teamToken)
+        {
+            try
+            {
+                Draft.GetDraftRoom(draftToken).PickHero(this, heroId, teamToken);
+            }
+            catch (NullReferenceException)
+            {
+                throw new NoSuchDraftException();
+            }
         }
 
 
@@ -54,19 +84,7 @@ namespace Heisenslaught
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        /*
         public AdminDraftConfig ConfigDraft(DraftConfig cfg)
         {
 
@@ -94,7 +112,7 @@ namespace Heisenslaught
             return CurrentDraftConfig;
         }
 
-        public AdminDraftConfig resetDraft()
+        public AdminDraftConfig resetDraft2()
         {
             stopDraftUpdates();
             if(CurrentDraftConfig != null)
@@ -105,7 +123,7 @@ namespace Heisenslaught
             return CurrentDraftConfig;
         }
 
-        public AdminDraftConfig closeDraft()
+        public AdminDraftConfig closeDraft2()
         {
             stopDraftUpdates();
             if (CurrentDraftConfig != null)
@@ -164,7 +182,7 @@ namespace Heisenslaught
             return CurrentDraftConfig.getConfig(team);
         }
 
-        public bool setReady(string draftToken, string teamToken)
+        public bool setReady2(string draftToken, string teamToken)
         {
             bool ready = false;
 
@@ -215,7 +233,7 @@ namespace Heisenslaught
             }
         }
 
-        public bool pickHero(string heroId, string draftToken, string teamToken)
+        public bool pickHero2(string heroId, string draftToken, string teamToken)
         {
             if (HandleDraft == null || CurrentDraftConfig == null || CurrentDraftConfig.draftToken != draftToken)
             {
@@ -223,11 +241,11 @@ namespace Heisenslaught
             }
             return HandleDraft.pickHero(heroId, teamToken);
         }
-
+        
         public void Send(string originatorUser, string message)
         {
             Clients.All.messageReceived(originatorUser, message);
         }
-        
+        */
     }
 }
