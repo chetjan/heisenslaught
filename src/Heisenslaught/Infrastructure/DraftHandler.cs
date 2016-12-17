@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using Heisenslaught.Models;
 
 namespace Heisenslaught.Infrastructure
 {
@@ -17,21 +18,21 @@ namespace Heisenslaught.Infrastructure
         private static List<int> secondBanSlots = new List<int> {1,7};
 
         private Timer timer;
-        private AdminDraftConfig config;
+        private DraftModel model;
         private List<List<int>> teamSlots = new List<List<int>>();
         private List<List<int>> teamPickSlots = new List<List<int>>();
         private List<List<int>> teamBanSlots = new List<List<int>>();
 
         private List<string> teamTokens = new List<string>();
 
-        public DraftHandler(AdminDraftConfig config)
+        public DraftHandler(DraftModel model)
         {
-            this.config = config;
+            this.model = model;
             if(state.picks == null)
             {
                 state.picks = new List<string>();
             }
-            if(config.firstPick == 1)
+            if(model.config.firstPick == 1)
             {
                 teamSlots.Add(firstSlots);
                 teamSlots.Add(secondSlots);
@@ -39,8 +40,8 @@ namespace Heisenslaught.Infrastructure
                 teamPickSlots.Add(secondPickSlots);
                 teamBanSlots.Add(firstBanSlots);
                 teamBanSlots.Add(secondBanSlots);
-                teamTokens.Add(config.team1DrafterToken);
-                teamTokens.Add(config.team2DrafterToken);
+                teamTokens.Add(model.team1DrafterToken);
+                teamTokens.Add(model.team2DrafterToken);
             }
             else
             {
@@ -50,17 +51,17 @@ namespace Heisenslaught.Infrastructure
                 teamPickSlots.Add(firstPickSlots);
                 teamBanSlots.Add(secondBanSlots);
                 teamBanSlots.Add(firstBanSlots);
-                teamTokens.Add(config.team2DrafterToken);
-                teamTokens.Add(config.team1DrafterToken);
+                teamTokens.Add(model.team2DrafterToken);
+                teamTokens.Add(model.team1DrafterToken);
             }
 
         }
 
-        public DraftState state
+        public DraftStateModel state
         {
             get
             {
-                return this.config.state;
+                return this.model.state;
             }
         }
 
@@ -68,7 +69,7 @@ namespace Heisenslaught.Infrastructure
         {
             get
             {
-                if(state.phase == DraftStatePhase2.PICKING)
+                if(state.phase == DraftStatePhase.PICKING)
                 {
                     return state.picks.Count;
                 }
@@ -148,7 +149,7 @@ namespace Heisenslaught.Infrastructure
 
         public bool isHeroDisabled(string heroId)
         {
-            return config.disabledHeroes != null && config.disabledHeroes.Contains(heroId);
+            return model.config.disabledHeroes != null && model.config.disabledHeroes.Contains(heroId);
         }
 
         public bool canPickHero(string heroId)
@@ -194,25 +195,25 @@ namespace Heisenslaught.Infrastructure
 
         public void tick(object timerPhase)
         {
-            if(state.phase == DraftStatePhase2.WAITING)
+            if(state.phase == DraftStatePhase.WAITING)
             {
                 if(state.team1Ready && state.team2Ready)
                 {
-                    state.phase = DraftStatePhase2.PICKING;
-                    state.pickTime = config.pickTime;
-                    state.team1BonusTime = config.bonusTime;
-                    state.team2BonusTime = config.bonusTime;
+                    state.phase = DraftStatePhase.PICKING;
+                    state.pickTime = model.config.pickTime;
+                    state.team1BonusTime = model.config.bonusTime;
+                    state.team2BonusTime = model.config.bonusTime;
                 }
             }
-            else if(state.phase == DraftStatePhase2.FINISHED)
+            else if(state.phase == DraftStatePhase.FINISHED)
             {
                 stop();
             }
-            else if(state.phase == DraftStatePhase2.PICKING)
+            else if(state.phase == DraftStatePhase.PICKING)
             {
                 if(state.picks.Count >= 14)
                 {
-                    state.phase = DraftStatePhase2.FINISHED;
+                    state.phase = DraftStatePhase.FINISHED;
                 }
                 else if (state.pickTime > -1)
                 {
@@ -235,7 +236,7 @@ namespace Heisenslaught.Infrastructure
                         if (isBan)
                         {
                             state.picks.Add("failed_ban");
-                            state.pickTime = config.pickTime;
+                            state.pickTime = model.config.pickTime;
                         }
                         else
                         {
@@ -263,14 +264,14 @@ namespace Heisenslaught.Infrastructure
             
             if(state.picks.Count >= 14)
             {
-                state.phase = DraftStatePhase2.FINISHED;
+                state.phase = DraftStatePhase.FINISHED;
                 stop();
             }
             else
             {
-                if(config.bankTime && state.pickTime > 0)
+                if(model.config.bankTime && state.pickTime > 0)
                 {
-                    if((team == 0 && config.firstPick == 1) || (team == 1 && config.firstPick == 2))
+                    if((team == 0 && model.config.firstPick == 1) || (team == 1 && model.config.firstPick == 2))
                     {
                         state.team1BonusTime += state.pickTime;
                     }
@@ -279,7 +280,7 @@ namespace Heisenslaught.Infrastructure
                         state.team2BonusTime += state.pickTime;
                     }
                 }
-                state.pickTime = config.pickTime;
+                state.pickTime = model.config.pickTime;
             }
 
             return true;
