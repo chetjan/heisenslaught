@@ -144,7 +144,7 @@ namespace Heisenslaught.Infrastructure
 
         private bool IsValidHero(string heroId)
         {
-            var hero = HeroDataService.getHeroById(heroId);
+            var hero = HeroDataService.GetHeroById(heroId);
             return hero != null;
         }
 
@@ -271,7 +271,7 @@ namespace Heisenslaught.Infrastructure
         private void PickRandomHero()
         {
             string heroId = null;
-            var heroes = HeroDataService.getHeroes();
+            var heroes = HeroDataService.GetHeroes();
             var max = heroes.Count - 1;
             while(heroId == null)
             {
