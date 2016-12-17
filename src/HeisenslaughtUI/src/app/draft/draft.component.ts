@@ -100,7 +100,7 @@ export class DraftComponent {
       } else {
         this.team2Status = null;
       }
-    } else if (draftState.phase !== DraftPhase.FINISHED) {
+    } else {
       this.team1Status = Math.max(draftState.team1BonusTime, 0).toString();
       this.team2Status = Math.max(draftState.team2BonusTime, 0).toString();
     }
@@ -139,7 +139,7 @@ export class DraftComponent {
     pickedHeroId = picks[banSlots[pickId]];
     return this.getHeroById(pickedHeroId);
   }
-  
+
 
   private getHeroById(heroId: string): HeroData {
     if (!this.heroes) {

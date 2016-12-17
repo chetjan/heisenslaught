@@ -21,7 +21,7 @@ namespace Heisenslaught.Services
         public DraftConfigAdminDTO CreateDraft(CreateDraftDTO config)
         {
             var model = new DraftModel(config.ToModel());
-            draftRepo.createDraft(model);
+            draftRepo.CreateDraft(model);
             return new DraftConfigAdminDTO(model);
         }
 
@@ -56,7 +56,7 @@ namespace Heisenslaught.Services
             var room = activeRooms.ContainsKey(draftToken) ? activeRooms[draftToken] : null;
             if (room == null && autoCreate)
             {
-                DraftModel config = draftRepo.findByDraftToken(draftToken);
+                DraftModel config = draftRepo.FindByDraftToken(draftToken);
                 room = new DraftRoom(this, config);
             }
             return room;
@@ -74,6 +74,12 @@ namespace Heisenslaught.Services
                     TryDeactivateDraftRoom(room);
                 }
             }
+        }
+
+        public void CompleteDraft(DraftRoom room)
+        {
+            draftRepo.SaveDraft(room.DraftModel);
+            TryDeactivateDraftRoom(room);
         }
 
         private void TryActivateDraftRoom(DraftRoom room)

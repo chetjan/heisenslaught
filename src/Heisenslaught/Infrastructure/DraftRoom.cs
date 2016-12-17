@@ -211,7 +211,7 @@ namespace Heisenslaught.Infrastructure
 
         private void CompleteDraft()
         {
-
+            service.CompleteDraft(this);
         }
 
     }

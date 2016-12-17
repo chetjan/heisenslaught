@@ -11,33 +11,32 @@ namespace Heisenslaught.Persistence
 {
     public class MongoDraftRepository
     {
-        private MongoClient Client;
-        private IMongoDatabase Database;
+        private MongoClient client;
+        private IMongoDatabase database;
 
-        private IMongoCollection<DraftModel> DraftCollection;
+        private IMongoCollection<DraftModel> draftCollection;
 
         public MongoDraftRepository(string dbName = "Heisenslaught", string connectionString = "mongodb://localhost:27017")
         {
-            Client = new MongoClient(connectionString);
-            Database = Client.GetDatabase(dbName);
-            if (!collectionExists("drafts"))
+            client = new MongoClient(connectionString);
+            database = client.GetDatabase(dbName);
+            if (!CollectionExists("drafts"))
             {
-                createDraftCollection();
+                CreateDraftCollection();
             }
-            DraftCollection = Database.GetCollection<DraftModel>("drafts");
+            draftCollection = database.GetCollection<DraftModel>("drafts");
         }
 
-        private bool collectionExists(string collectionName)
+        private bool CollectionExists(string collectionName)
         {
             var filter = new BsonDocument("name", collectionName);
-            var collections = Database.ListCollections(new ListCollectionsOptions { Filter = filter });
+            var collections = database.ListCollections(new ListCollectionsOptions { Filter = filter });
             return collections.Any();
         }
 
-
-        private void createDraftCollection()
+        private void CreateDraftCollection()
         {
-            Database.CreateCollection("drafts", new CreateCollectionOptions
+            database.CreateCollection("drafts", new CreateCollectionOptions
             {
                 AutoIndexId = true
             });
@@ -48,24 +47,28 @@ namespace Heisenslaught.Persistence
             var mapIndex = builder.Ascending(_ => _.config.map);
             var phaseIndex = builder.Ascending(_ => _.state.phase);
 
-
-            var collection = Database.GetCollection<DraftModel>("drafts");
+            var collection = database.GetCollection<DraftModel>("drafts");
             collection.Indexes.CreateOne(draftTokenIndex, new CreateIndexOptions { Unique = true });
             collection.Indexes.CreateOne(adminTokenIndex);
             collection.Indexes.CreateOne(mapIndex);
             collection.Indexes.CreateOne(phaseIndex);
         }
 
-        public DraftModel createDraft(DraftModel draft)
+        public void CreateDraft(DraftModel draft)
         {
-            DraftCollection.InsertOne(draft);
-            return draft;
+            draftCollection.InsertOne(draft);
         }
 
-        public DraftModel findByDraftToken(string draftToken)
+        public DraftModel FindByDraftToken(string draftToken)
         {
             var q = Builders<DraftModel>.Filter.Eq("draftToken", draftToken);
-            return DraftCollection.Find<DraftModel>(q).First<DraftModel>();
+            return draftCollection.Find<DraftModel>(q).First<DraftModel>();
+        }
+
+        public ReplaceOneResult SaveDraft(DraftModel draft)
+        {
+            var q = Builders<DraftModel>.Filter.Eq("_id", draft._id);
+            return draftCollection.ReplaceOne(q, draft);
         }
 
     }
