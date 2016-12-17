@@ -8,17 +8,18 @@ namespace Heisenslaught.Infrastructure
 {
     public class DraftRoom
     {
-        private DraftModel model;
-        private DraftService service;
         private Dictionary<string, DraftRoomConnection> connections = new Dictionary<string, DraftRoomConnection>();
-
+        private DraftModel model;
         private string roomName;
+        private DraftService service;
+        private DraftHandler draftHandler;
 
         public DraftRoom(DraftService service, DraftModel model)
         {
             this.service = service;
             this.model = model;
             this.roomName = "draftRoom-" + model.draftToken;
+            this.draftHandler = new DraftHandler(this);
         }
 
         public DraftModel DraftModel
