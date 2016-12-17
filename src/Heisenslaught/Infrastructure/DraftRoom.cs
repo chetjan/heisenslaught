@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Threading;
 using Heisenslaught.Models;
 using Heisenslaught.Services;
 using Heisenslaught.Exceptions;
@@ -9,10 +11,11 @@ namespace Heisenslaught.Infrastructure
     public class DraftRoom
     {
         private Dictionary<string, DraftRoomConnection> connections = new Dictionary<string, DraftRoomConnection>();
+        private DraftHandler draftHandler;
         private DraftModel model;
         private string roomName;
         private DraftService service;
-        private DraftHandler draftHandler;
+        private Timer timer;
 
         public DraftRoom(DraftService service, DraftModel model)
         {
@@ -80,7 +83,7 @@ namespace Heisenslaught.Infrastructure
 
         public void Dispose()
         {
-
+            StopTimer();
         }
 
         private DraftConnectionType GetConnectionType(string authToken)
@@ -105,6 +108,7 @@ namespace Heisenslaught.Infrastructure
             }
 
             DraftModel.state = new DraftStateModel();
+            StopTimer();
             UpdateDraftState(hub);
         }
 
@@ -121,6 +125,8 @@ namespace Heisenslaught.Infrastructure
             }
             DraftState.phase = DraftStatePhase.FINISHED;
             UpdateDraftState(hub);
+            StopTimer();
+            CompleteDraft();
         }
 
         public void SetReady(DraftHub hub, string authToken)
@@ -142,7 +148,10 @@ namespace Heisenslaught.Infrastructure
             {
                 DraftState.team2Ready = true;
             }
-            // TODO impl draft handler
+            if(DraftState.team1Ready && DraftState.team2Ready)
+            {
+                StartTimer(hub);
+            }
             UpdateDraftState(hub);
         }
 
@@ -157,7 +166,12 @@ namespace Heisenslaught.Infrastructure
             {
                 throw new InsufficientDraftPermissionsException();
             }
-            // TODO: pick hero
+            draftHandler.PickHero(heroId, authToken);
+            if (DraftState.phase == DraftStatePhase.FINISHED)
+            {
+                StopTimer();
+                CompleteDraft();
+            }
             UpdateDraftState(hub);
         }
 
@@ -165,6 +179,39 @@ namespace Heisenslaught.Infrastructure
         private void UpdateDraftState(DraftHub hub)
         {
             hub.Clients.Group(roomName).updateDraftState(new DraftStateDTO(DraftState));
+        }
+
+        public void StartTimer(DraftHub hub)
+        {
+            if (timer == null)
+            {
+                timer = new Timer(x=> {
+                    if (draftHandler.Tick())
+                    {
+                        UpdateDraftState(hub);
+                        if(DraftState.phase == DraftStatePhase.FINISHED)
+                        {
+                            StopTimer();
+                            CompleteDraft();
+                        }
+                    }
+                }, null, 0, 1000);
+            }
+
+        }
+
+        public void StopTimer()
+        {
+            if (timer != null)
+            {
+                timer.Dispose();
+                timer = null;
+            }
+        }
+
+        private void CompleteDraft()
+        {
+
         }
 
     }
