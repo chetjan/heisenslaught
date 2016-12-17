@@ -6,21 +6,48 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Heisenslaught.Services;
+using Heisenslaught.DataTransfer;
 
 namespace Heisenslaught
 {
     public class DraftHub : Hub
     {
+
+        private DraftService Draft;
+
         public static List<string> ConnectedUsers;
      
         private static Timer DraftUpdate;
         private static AdminDraftConfig CurrentDraftConfig;
         private static DraftHandler HandleDraft;
 
-    
+        public DraftHub()
+        {
+            this.Draft = new DraftService(this);
+            
+        }
+
+
+
+
 
         public AdminDraftConfig ConfigDraft(DraftConfig cfg)
         {
+
+            var config = new CreateDraftDTO();
+            config.bankTime = cfg.bankTime;
+            config.bonusTime = cfg.bonusTime;
+            config.disabledHeroes = cfg.disabledHeroes;
+            config.firstPick = cfg.firstPick;
+            config.map = cfg.map;
+            config.pickTime = cfg.pickTime;
+            config.team1Name = cfg.team1Name;
+            config.team2Name = cfg.team2Name;
+
+            this.Draft.createDraft(config);
+
+
             stopDraftUpdates();
             CurrentDraftConfig = new AdminDraftConfig(cfg);
             Clients.All.updateConfig(cfg);
