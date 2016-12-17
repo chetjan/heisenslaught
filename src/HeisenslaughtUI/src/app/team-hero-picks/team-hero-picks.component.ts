@@ -1,6 +1,6 @@
 import { Component, Input, HostBinding } from '@angular/core';
 
-import { IDraftConfig, IDraftState, DraftPhase } from '../services/draft.service';
+import { IDraftConfigDTO, IDraftState, DraftPhase } from '../services/draft.service';
 import { HeroesService, HeroData } from '../services/heroes.service';
 
 
@@ -23,7 +23,7 @@ export class TeamHeroPicksComponent {
   public state: IDraftState;
 
   @Input()
-  public config: IDraftConfig;
+  public config: IDraftConfigDTO;
 
   private heroes: HeroData[];
 

@@ -8,7 +8,7 @@ namespace Heisenslaught.DataTransfer
 {
     public class DraftConfigDTO : CreateDraftDTO
     {
-        DraftStateDTO state;
+        public DraftStateDTO state;
 
         public DraftConfigDTO(DraftModel model) : base(model)
         {

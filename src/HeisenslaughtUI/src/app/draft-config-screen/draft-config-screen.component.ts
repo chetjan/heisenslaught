@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { DraftService, ICreateDraftData, ICreateDraftResult, DraftPhase } from '../services/draft.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DraftService, ICreateDraftDTO, IDraftConfigAdminDTO, DraftPhase } from '../services/draft.service';
 import { HeroesService, IMapData, HeroData } from '../services/heroes.service';
 
 
@@ -9,63 +10,123 @@ import { HeroesService, IMapData, HeroData } from '../services/heroes.service';
   styleUrls: ['./draft-config-screen.component.css']
 })
 export class DraftConfigScreenComponent {
-  public config: ICreateDraftData = <ICreateDraftData>{};
-  public currentConfig: ICreateDraftResult;
+  private draftToken: string;
+  private adminToken: string;
+  private loadedHeroes: boolean;
+  private loadedMaps: boolean;
+  private loadedConfig: boolean;
+
+  public config: ICreateDraftDTO = <ICreateDraftDTO>{};
+  public currentConfig: IDraftConfigAdminDTO;
   public maps: IMapData[];
   public heroes: HeroData[];
-  public loaded: boolean = false;
-
   public createError: string;
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private heroesService: HeroesService,
     private draftService: DraftService
   ) {
 
     heroesService.getMaps().subscribe((maps: IMapData[]) => {
       this.maps = maps;
+      this.loadedMaps = true;
     });
 
     heroesService.getHeroes().subscribe((heroes: HeroData[]) => {
       this.heroes = heroes;
+      this.loadedHeroes = true;
     });
 
-    draftService.getCurrentAdminConfig().then((cfg) => {
-      if (cfg) {
-        if (cfg.state.phase === DraftPhase.FINISHED) {
-          this.config = cfg;
-          if (cfg.randomFirstPick) {
-            this.config.firstPick = 0;
+    this.draftToken = this.route.snapshot.params['id'];
+    this.adminToken = this.route.snapshot.params['adminToken'];
+
+    if (this.draftToken && this.adminToken) {
+      this.initConfigDraft();
+    } else {
+      this.initCreateDraft();
+    }
+
+    /*
+        draftService.getCurrentAdminConfig().then((cfg) => {
+          if (cfg) {
+            if (cfg.state.phase === DraftPhase.FINISHED) {
+              this.config = cfg;
+              if (cfg.randomFirstPick) {
+                this.config.firstPick = 0;
+              }
+              this.currentConfig = null;
+            } else {
+              this.currentConfig = cfg;
+            }
+          } else {
+            this.config = <ICreateDraftData>{
+              firstPick: 0,
+              bankTime: true,
+              team1Name: 'Team 1',
+              team2Name: 'Team 2',
+              pickTime: 60,
+              bonusTime: 180
+            };
           }
-          this.currentConfig = null;
-        } else {
-          this.currentConfig = cfg;
-        }
-      } else {
-        this.config = <ICreateDraftData>{
-          firstPick: 0,
-          bankTime: true,
-          team1Name: 'Team 1',
-          team2Name: 'Team 2',
-          pickTime: 60,
-          bonusTime: 180
-        };
-      }
-      this.loaded = true;
+          this.loaded = true;
+        }, (err) => {
+          this.createError = err ? err.toString() : 'Server Error';
+        });
+    
+        */
+  }
+
+  public get loaded(): boolean {
+    return this.loadedConfig && this.loadedHeroes && this.loadedMaps;
+  }
+
+  private initCreateDraft(): void {
+    this.config = <ICreateDraftDTO>{
+      firstPick: 0,
+      bankTime: true,
+      team1Name: 'Blue Team',
+      team2Name: 'Red Team',
+      pickTime: 60,
+      bonusTime: 180
+    };
+    this.loadedConfig = true;
+  }
+
+  private initConfigDraft() {
+    this.draftService.connectToDraft(this.draftToken, this.adminToken).then((config) => {
+      this.currentConfig = <IDraftConfigAdminDTO>config;
+      console.log('connected to draft', config);
+      this.draftService.getDraftState(this.draftToken).subscribe((state) => {
+        this.currentConfig.state = state;
+      });
+      this.loadedConfig = true;
     }, (err) => {
-      this.createError = err ? err.toString() : 'Server Error';
+      console.log('connect error', err);
     });
   }
 
   public createDraft() {
     this.createError = undefined;
-
     this.draftService.createDraft(this.config).then((cfg) => {
-      this.currentConfig = cfg;
+      this.router.navigate(['draft/config', cfg.draftToken, cfg.adminToken]);
     }, (err) => {
       this.createError = err ? err.toString() : 'Server Error';
     });
   }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   public resetDraft() {
@@ -82,7 +143,7 @@ export class DraftConfigScreenComponent {
     this.draftService.closeDraft().then((cfg) => {
       this.currentConfig = null;
       this.config = cfg;
-      if (cfg.randomFirstPick) {
+      if (cfg.wasFirstPickRandom) {
         this.config.firstPick = 0;
       }
     }, (err) => {
@@ -107,7 +168,7 @@ export class DraftConfigScreenComponent {
     let str = '';
     if (this.currentConfig) {
       str = this.currentConfig.firstPick === 1 ? this.currentConfig.team1Name : this.currentConfig.team2Name;
-      if (this.currentConfig.randomFirstPick) {
+      if (this.currentConfig.wasFirstPickRandom) {
         str += ' (Random)';
       }
     }

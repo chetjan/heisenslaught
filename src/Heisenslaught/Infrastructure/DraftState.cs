@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Heisenslaught.Infrastructure
 {
 
-    public enum DraftStatePhase
+    public enum DraftStatePhase2
     {
         WAITING,
         PICKING,
@@ -15,7 +15,7 @@ namespace Heisenslaught.Infrastructure
 
     public class DraftState
     {
-        public DraftStatePhase phase = DraftStatePhase.WAITING;
+        public DraftStatePhase2 phase = DraftStatePhase2.WAITING;
         public bool team1Ready = false;
         public bool team2Ready = false;
         public int pickTime = 0;

@@ -22,9 +22,14 @@ import { HeroesButtonComponent } from './heroes-button/heroes-button.component';
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'admin', component: DraftConfigScreenComponent },
+  // specific draft management screen
+  { path: 'draft/config/:id/:adminToken', component: DraftConfigScreenComponent },
+  // team drafter screen
   { path: 'draft/:id/:team', component: DraftComponent },
+  // draft observer screen
   { path: 'draft/:id', component: DraftComponent },
-  { path: 'draft', component: DraftComponent }
+  // Draft creation screen
+  { path: 'draft', component: DraftConfigScreenComponent }
 ];
 
 

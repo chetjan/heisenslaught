@@ -62,5 +62,11 @@ namespace Heisenslaught.Persistence
             return draft;
         }
 
+        public DraftModel findByDraftToken(string draftToken)
+        {
+            var q = Builders<DraftModel>.Filter.Eq("draftToken", draftToken);
+            return DraftCollection.Find<DraftModel>(q).First<DraftModel>();
+        }
+
     }
 }

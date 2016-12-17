@@ -45,7 +45,7 @@ namespace Heisenslaught
                 );
                 routes.MapRoute(
                    name: "draft",
-                   template: "draft/{id?}/{team?}",
+                   template: "draft/{cfg?}/{id?}/{team?}",
                    defaults: new { controller = "Draft", action = "Index" }
                );
             });

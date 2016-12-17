@@ -68,7 +68,7 @@ namespace Heisenslaught.Infrastructure
         {
             get
             {
-                if(state.phase == DraftStatePhase.PICKING)
+                if(state.phase == DraftStatePhase2.PICKING)
                 {
                     return state.picks.Count;
                 }
@@ -194,25 +194,25 @@ namespace Heisenslaught.Infrastructure
 
         public void tick(object timerPhase)
         {
-            if(state.phase == DraftStatePhase.WAITING)
+            if(state.phase == DraftStatePhase2.WAITING)
             {
                 if(state.team1Ready && state.team2Ready)
                 {
-                    state.phase = DraftStatePhase.PICKING;
+                    state.phase = DraftStatePhase2.PICKING;
                     state.pickTime = config.pickTime;
                     state.team1BonusTime = config.bonusTime;
                     state.team2BonusTime = config.bonusTime;
                 }
             }
-            else if(state.phase == DraftStatePhase.FINISHED)
+            else if(state.phase == DraftStatePhase2.FINISHED)
             {
                 stop();
             }
-            else if(state.phase == DraftStatePhase.PICKING)
+            else if(state.phase == DraftStatePhase2.PICKING)
             {
                 if(state.picks.Count >= 14)
                 {
-                    state.phase = DraftStatePhase.FINISHED;
+                    state.phase = DraftStatePhase2.FINISHED;
                 }
                 else if (state.pickTime > -1)
                 {
@@ -263,7 +263,7 @@ namespace Heisenslaught.Infrastructure
             
             if(state.picks.Count >= 14)
             {
-                state.phase = DraftStatePhase.FINISHED;
+                state.phase = DraftStatePhase2.FINISHED;
                 stop();
             }
             else

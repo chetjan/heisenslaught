@@ -14,7 +14,7 @@ namespace Heisenslaught
     public class DraftHub : Hub
     {
 
-        private DraftService Draft;
+        private static DraftService Draft = null;
 
         public static List<string> ConnectedUsers;
      
@@ -24,9 +24,44 @@ namespace Heisenslaught
 
         public DraftHub()
         {
-            this.Draft = new DraftService(this);
+            if (Draft == null)
+                Draft = new DraftService(this);
+            else
+                Draft.hub = this;
             
         }
+        
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            Draft.clientDisconnected(Context);
+            return base.OnDisconnected(stopCalled);
+        }
+
+        public DraftConfigAdminDTO CreateDraft(CreateDraftDTO cfg)
+        {
+            
+            return Draft.createDraft(cfg);
+        }
+
+        public DraftConfigDTO ConnectToDraft(string draftToken, string teamToken = null)
+        {
+            return Draft.connectToDraft(Context, draftToken, teamToken);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -45,7 +80,7 @@ namespace Heisenslaught
             config.team1Name = cfg.team1Name;
             config.team2Name = cfg.team2Name;
 
-            this.Draft.createDraft(config);
+            Draft.createDraft(config);
 
 
             stopDraftUpdates();
@@ -76,14 +111,14 @@ namespace Heisenslaught
             if (CurrentDraftConfig != null)
             {
                 DraftConfig cfg = CurrentDraftConfig.getConfig();
-                cfg.state.phase = DraftStatePhase.FINISHED;
+                cfg.state.phase = DraftStatePhase2.FINISHED;
                 Clients.All.updateConfig(cfg);
             }
             return CurrentDraftConfig;
         }
 
 
-        public DraftConfig connectToDraft(string draftToken, string teamToken = null)
+        public DraftConfig connectToDraft2(string draftToken, string teamToken = null)
         {
             string userName = "";
             int team = 0;
