@@ -103,7 +103,7 @@ namespace Heisenslaught.Infrastructure
             {
                 if (currentTeam != -1)
                 {
-                    return teamBanSlots[currentTeam].Contains(currentPick);
+                    return teamBanSlots[0].Contains(currentPick) || teamBanSlots[1].Contains(currentPick);
                 }
                 return false;
             }

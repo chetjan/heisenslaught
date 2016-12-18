@@ -21,7 +21,7 @@ export class HeroPickComponent implements OnChanges {
       let ctx = canvas.getContext('2d');
       let w = canvas.width;
       let h = canvas.height;
-      if (this.hero) {
+      if (this.hero && this.hero.id !== 'failed_ban') {
         let img = new Image(w, h);
         img.onload = event => {
           ctx.clearRect(0, 0, w, h);

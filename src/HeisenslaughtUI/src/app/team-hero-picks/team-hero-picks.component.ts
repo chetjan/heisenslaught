@@ -71,7 +71,20 @@ export class TeamHeroPicksComponent {
     return null;
   }
   getPick(index) {
-    return this.slots && this.heroes && this.state && this.state.picks ? this.getHeroById(this.state.picks[this.slots[index]]) : null;
+    if (this.slots && this.heroes && this.state && this.state.picks) {
+      let pickedHeroId = this.state.picks[this.slots[index]];
+      if (pickedHeroId === 'failed_ban') {
+        return {
+          id: 'failed_ban',
+          iconSmall: null,
+          keywords: [],
+          roles: [],
+          name: 'Failed Ban'
+        };
+      }
+      return this.getHeroById(pickedHeroId);
+    }
+    return null;
   }
 
 }
