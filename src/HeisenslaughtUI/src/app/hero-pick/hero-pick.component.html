@@ -1,10 +1,13 @@
-<div class="bg"></div>
-<canvas #heroCanvas class="hero-image"></canvas>
-<div class="border"></div>
-<div class="border-glow"></div>
-<div class="border-outline"></div>
-<div class="name-plate">
-    <div class="top">
-        <div class="hero-name">{{hero?.nameShort || hero?.name}}</div>
+<div class="container" [class.failed]="hero?.id === 'failed_ban'">
+    <div class="bg"></div>
+    <canvas #heroCanvas class="hero-image"></canvas>
+    <div class="border"></div>
+    <div class="border-glow"></div>
+    <div class="border-outline"></div>
+    <div class="ban-lock"></div>
+    <div class="name-plate">
+        <div class="top">
+            <div class="hero-name">{{hero?.nameShort || hero?.name}}</div>
+        </div>
     </div>
 </div>
