@@ -2,6 +2,10 @@ $nameplateTopWidth: 60%;
 $nameplateBottomWidth: 55%;
 :host {
     display: block;
+    .container {
+        width: 100%;
+        height: 100%;
+    }
     .hero-image {
         position: absolute;
         top: 10%;
@@ -45,6 +49,10 @@ $nameplateBottomWidth: 55%;
         display: block;
         z-index: 5;
         opacity: 0.2;
+    }
+    .ban-lock {
+        display: none;
+        position: absolute;
     }
     .name-plate {
         position: absolute;
@@ -204,8 +212,76 @@ $nameplateBottomWidth: 55%;
 }
 
 .bans :host {
+    .hero-image {
+        top: 15%;
+        left: 15%;
+        width: 70%;
+        height: 70%;
+    }
     .name-plate {
         display: none;
+    }
+    .border {
+        background-image: url('assets/hero-pick/storm_ui_draft_ban_frame_normal.png');
+    }
+    .border-outline,
+    .border-glow {
+        display: none;
+    }
+    .ban-lock {
+        display: block;
+        background-image: url('assets/hero-pick/storm_ui_draft_ban_lock_normal.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        width: 30%;
+        height: 30%;
+        position: absolute;
+        z-index: 1000;
+        bottom: 3%;
+        left: 35%;
+    }
+    &.current-pick {
+        .border {
+            background-image: url('assets/hero-pick/storm_ui_draft_ban_frame_selected.png');
+        }
+        .ban-lock {
+            background-image: url('assets/hero-pick/storm_ui_draft_ban_lock_selected.png');
+        }
+    }
+    &.picked {
+        .border {
+            background-image: url('assets/hero-pick/storm_ui_glues_draft_portrait_picking.png');
+        }
+        .ban-lock {
+            background-image: url('assets/hero-pick/storm_ui_draft_ban_lock_picking.png');
+        }
+    }
+    .container.failed {
+        .bg {
+            background-image: url('assets/hero-pick/storm_ui_draft_ban_frame_shard_01.png'), url('assets/hero-pick/storm_ui_draft_ban_frame_shard_02.png'), url('assets/hero-pick/storm_ui_draft_ban_frame_shard_03.png'), url('assets/hero-pick/storm_ui_draft_ban_frame_shard_04.png'), url('assets/hero-pick/storm_ui_draft_ban_frame_shard_05.png');
+            background-size: 40% 40%, 38% 37%, 22% 40%, 43% 43%, 59% 47%;
+            background-position: 84% 29%, 83% 85%, 48% 93%, 18% 78%, 24% 11%;
+            ;
+            background-repeat: no-repeat;
+            opacity: 1;
+            width: 88%;
+            height: 87%;
+            left: 6%;
+            top: 5%;
+        }
+        .border {
+            display: none;
+        }
+        .ban-lock {
+            background-image: url('assets/hero-pick/storm_ui_draft_ban_lock_normal.png');
+        }
+    }
+}
+
+.bans :host.failed {
+    .border {
+        display: none;
+        background-image: url('assets/hero-pick/storm_ui_draft_ban_frame_normal.png');
     }
 }
 

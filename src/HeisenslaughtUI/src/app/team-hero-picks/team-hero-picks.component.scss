@@ -49,14 +49,17 @@ $iconSize: 180px;
 }
 
 :host.bans {
-    width: 200px;
+    width: 256px;
     .pick-container {
-        width: 200px;
+        width: 256px;
         height: 100%;
         hero-pick {
-            width: 96px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             float:left;
+            &:last-of-type{
+                margin-left: -20px;
+            }
         }
     }
 }
