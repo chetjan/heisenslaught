@@ -1,8 +1,13 @@
+import 'hammerjs';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
+
+import { MaterialModule } from '@angular/material';
+
+import { MdSidenavModule } from '@angular/material/sidenav';
 
 import { AppComponent } from './app.component';
 import { HeroesService } from './services/heroes.service';
@@ -50,6 +55,8 @@ const appRoutes: Routes = [
     BrowserModule,
     HttpModule,
     FormsModule,
+    MaterialModule.forRoot(),
+    MdSidenavModule.forRoot(),
     RouterModule.forRoot(appRoutes)
   ],
   providers: [

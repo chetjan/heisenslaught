@@ -19,10 +19,10 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
-        "styles.css"
+        "heisenslaught.theme.scss",
+        "styles.scss"
       ],
-      "scripts": [
-      ],
+      "scripts": [],
       "environments": {
         "source": "environments/environment.ts",
         "dev": "environments/environment.ts",
@@ -30,10 +30,8 @@
       }
     }
   ],
-  "addons": [
-  ],
-  "packages": [
-  ],
+  "addons": [],
+  "packages": [],
   "e2e": {
     "protractor": {
       "config": "./protractor.conf.js"
