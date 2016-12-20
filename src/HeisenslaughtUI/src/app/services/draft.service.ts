@@ -78,10 +78,10 @@ export class DraftService {
         });
     }
 
-    public resetDraft(): Promise<IDraftConfigAdminDTO> {
+    public resetDraft(draftToken: string, adminToken: string): Promise<IDraftConfigAdminDTO> {
         return new Promise((resolve, reject) => {
             this.connect().then(() => {
-                this.hub.server.resetDraft().then((config) => {
+                this.hub.server.resetDraft(draftToken, adminToken).then((config) => {
                     resolve(config);
                 }, (err) => {
                     reject(err);
@@ -92,24 +92,10 @@ export class DraftService {
         });
     }
 
-    public closeDraft(): Promise<IDraftConfigAdminDTO> {
+    public closeDraft(draftToken: string, adminToken: string): Promise<IDraftConfigAdminDTO> {
         return new Promise((resolve, reject) => {
             this.connect().then(() => {
-                this.hub.server.closeDraft().then((config) => {
-                    resolve(config);
-                }, (err) => {
-                    reject(err);
-                });
-            }, (err) => {
-                reject(err);
-            });
-        });
-    }
-
-    public getCurrentAdminConfig(): Promise<IDraftConfigAdminDTO> {
-        return new Promise((resolve, reject) => {
-            this.connect().then(() => {
-                this.hub.server.getCurrentAdminConfig().then((config) => {
+                this.hub.server.closeDraft(draftToken, adminToken).then((config) => {
                     resolve(config);
                 }, (err) => {
                     reject(err);
