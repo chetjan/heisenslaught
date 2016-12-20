@@ -21,34 +21,39 @@ export class DraftService {
 
 
     constructor() {
-        this.hub = $.connection['draftHub'];
-        this.hub.client.updateConfig = (config: IDraftConfigDTO) => {
-            if (this._draftConfigSub) {
-                this._draftConfigSub.next(config);
-            }
-        };
+        try {
+            this.hub = $.connection['draftHub'];
+            this.hub.client.updateConfig = (config: IDraftConfigDTO) => {
+                if (this._draftConfigSub) {
+                    this._draftConfigSub.next(config);
+                }
+            };
 
-        this._draftConfig = new Observable<IDraftConfigDTO>((sub: Subscriber<IDraftConfigDTO>) => {
-            this._draftConfigSub = sub;
-        });
+            this._draftConfig = new Observable<IDraftConfigDTO>((sub: Subscriber<IDraftConfigDTO>) => {
+                this._draftConfigSub = sub;
+            });
 
-        this.hub.client.updateDraftState = (state: IDraftState) => {
-            if (this._draftStateSub) {
-                this._draftStateSub.next(state);
-            }
-        };
+            this.hub.client.updateDraftState = (state: IDraftState) => {
+                if (this._draftStateSub) {
+                    this._draftStateSub.next(state);
+                }
+            };
 
-        this._draftState = new Observable<IDraftState>((sub: Subscriber<IDraftState>) => {
-            this._draftStateSub = sub;
-        });
+            this._draftState = new Observable<IDraftState>((sub: Subscriber<IDraftState>) => {
+                this._draftStateSub = sub;
+            });
 
-        this.hub.client.messageReceived = (...args: any[]) => {
-            //   console.log('msg ', args);
-        };
+            this.hub.client.messageReceived = (...args: any[]) => {
+                //   console.log('msg ', args);
+            };
 
-        this.hub.client.getConnectedUsers = (...args: any[]) => {
-            //  console.log('getConnectedUsers ', args);
-        };
+            this.hub.client.getConnectedUsers = (...args: any[]) => {
+                //  console.log('getConnectedUsers ', args);
+            };
+
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     private connect(): Promise<any> {

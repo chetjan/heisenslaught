@@ -10,6 +10,14 @@ $navWidth: 300px;
         width: $navWidth;
         background-color: #0C051D;
     }
+    .nav-btn{
+        position: absolute;
+        top:0px;
+        left:0px;
+        padding-left:10px;
+        padding-top:15px;
+        z-index:1000;
+    }
     .content {
         position: absolute;
         width: 100%;
@@ -25,39 +33,9 @@ $navWidth: 300px;
         bottom: 0px;
         border-top: 1px solid rgba(255, 255, 255, .07);
         background-color: #0C051D;
+        text-align: center;
+        padding-top:6px;
+        color:rgba(255, 255, 255, .28);
+        font-size:12px;
     }
 }
-
-
-/*
- :host /deep/  > md-sidenav-layout>.md-sidenav-content {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-*/
-
-
-/*
-:host {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    /* &>md-sidenav-layout {
-        position: absolute;
-        top: 0px;
-        bottom: $footHeight;
-        width: 100%;
-        &>md-sidenav {
-            width: $navWidth;
-        }
-    }
-    /*&>.app-footer {
-        position: fixed;
-        width: 100%;
-        height: $footHeight;
-        bottom: 0px;
-    }
-}*/

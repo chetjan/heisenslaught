@@ -2,9 +2,106 @@
 
 @import '~@angular/material/core/theming/all-theme';
 
+@import '~@covalent/core/styles/layout';
 
+$primary: (
+        50: #a654f8,
+        100: #993cf7,
+        200: #8c23f6,
+        300: #7f0bf5,
+        400: #7309dd,
+        500: #6608c5,
+        600: #5907ac,
+        700: #4d0694,
+        800: #40057b,
+        900: #330463,
+        A100: #b36df9,
+        A200: #bf85fa,
+        A400: #cc9efb,
+        A700: #27034a,
+    contrast: (
+        50: $black-87-opacity,
+        100: $black-87-opacity,
+        200: $black-87-opacity,
+        300: $black-87-opacity,
+        400: $black-87-opacity,
+        500: white,
+        600: white,
+        700: white,
+        800: $white-87-opacity,
+        900: $white-87-opacity,
+        A100: $black-87-opacity,
+        A200: white,
+        A400: white,
+        A700: white,
+    )
+);
 
+$accent: (
+        50: #005666,
+        100: #006c80,
+        200: #008299,
+        300: #0097b3,
+        400: #00adcc,
+        500: #00c2e6,
+        600: #1adcff,
+        700: #33e0ff,
+        800: #4de4ff,
+        900: #66e8ff,
+        A100: #1adcff,
+        A200: #00d8ff,
+        A400: #00c2e6,
+        A700: #80ebff,
+    contrast: (
+        50: $black-87-opacity,
+        100: $black-87-opacity,
+        200: $black-87-opacity,
+        300: $black-87-opacity,
+        400: white,
+        500: white,
+        600: white,
+        700: white,
+        800: $white-87-opacity,
+        900: $white-87-opacity,
+        A100: $black-87-opacity,
+        A200: white,
+        A400: white,
+        A700: white,
+    )
+);
 
+$warn: (
+        50: #ffac80,
+        100: #ff9b66,
+        200: #ff8b4d,
+        300: #ff7a33,
+        400: #ff6a1a,
+        500: #ff5900,
+        600: #e65000,
+        700: #cc4700,
+        800: #b33e00,
+        900: #993500,
+        A100: #ffbd99,
+        A200: #ffcdb3,
+        A400: #ffdecc,
+        A700: #802c00,
+    contrast: (
+        50: $black-87-opacity,
+        100: $black-87-opacity,
+        200: $black-87-opacity,
+        300: $black-87-opacity,
+        400: $black-87-opacity,
+        500: white,
+        600: white,
+        700: white,
+        800: $white-87-opacity,
+        900: $white-87-opacity,
+        A100: $black-87-opacity,
+        A200: white,
+        A400: white,
+        A700: white,
+    )
+);
 
 // Include the base styles for Angular Material core. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -15,16 +112,16 @@
 // hue.
 @debug $md-deep-purple;
 
-$heisenslaught-primary: md-palette($md-deep-purple, 700, 500, 900);
-$heisenslaught-accent:  md-palette($md-blue, 700, 500, 900);
+$heisenslaught-primary: md-palette($primary, 600, 400, 900);
+$heisenslaught-accent:  md-palette($accent, A100, 900, A400);
 
 // The warn palette is optional (defaults to red).
-$heisenslaught-warn:    md-palette($md-deep-orange, 600, 500, 800);
+$heisenslaught-warn:    md-palette($warn, 500, 400, 700);
 
 
 
 // Create the theme object (a Sass map containing all of the palettes).
-$heisenslaught-theme: md-dark-theme($heisenslaught-primary, $heisenslaught-accent, $heisenslaught-warn);
+$heisenslaught-theme: md-light-theme($heisenslaught-primary, $heisenslaught-accent, $heisenslaught-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -33,7 +130,7 @@ $heisenslaught-theme: md-dark-theme($heisenslaught-primary, $heisenslaught-accen
 
 @include angular-material-theme($heisenslaught-theme);
 
-.hs-light-theme{
-    $heisenslaught-light-theme: md-light-theme($heisenslaught-primary, $heisenslaught-accent, $heisenslaught-warn);
+.hs-dark-theme{
+    $heisenslaught-light-theme: md-dark-theme($heisenslaught-primary, $heisenslaught-accent, $heisenslaught-warn);
     @include angular-material-theme($heisenslaught-light-theme);
 }

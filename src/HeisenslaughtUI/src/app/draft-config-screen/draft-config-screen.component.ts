@@ -7,7 +7,7 @@ import { HeroesService, IMapData, HeroData } from '../services/heroes.service';
 @Component({
   selector: 'draft-config-screen',
   templateUrl: './draft-config-screen.component.html',
-  styleUrls: ['./draft-config-screen.component.css']
+  styleUrls: ['./draft-config-screen.component.scss']
 })
 export class DraftConfigScreenComponent {
   private draftToken: string;
@@ -21,6 +21,8 @@ export class DraftConfigScreenComponent {
   public maps: IMapData[];
   public heroes: HeroData[];
   public createError: string;
+
+
 
   constructor(
     private router: Router,
@@ -117,18 +119,6 @@ export class DraftConfigScreenComponent {
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
   public resetDraft() {
     this.createError = undefined;
     this.draftService.resetDraft().then((cfg) => {
@@ -162,6 +152,10 @@ export class DraftConfigScreenComponent {
       }
     }
     return mapName;
+  }
+
+  public getStatus(): string {
+    return 'WAITING';
   }
 
   public getFirstPick(): string {

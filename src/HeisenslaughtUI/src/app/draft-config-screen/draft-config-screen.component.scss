@@ -1,0 +1,116 @@
+:host {
+    padding-top: 100px;
+    display: block;
+}
+
+md-card {
+    width: 800px;
+    margin: auto;
+    md-card-actions{
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+    }
+}
+
+table {
+    width: 100%;
+    border-spacing: 0px;
+    td {
+        height: 55px;
+        &:first-child {
+            padding-right: 10px;
+        }
+        &:last-child {
+            padding-left: 10px;
+        }
+        &:only-child {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+        vertical-align: bottom;
+        &.small {
+            height: 30px;
+        }
+        md-select,
+        md-input,
+        md-radio-group {
+            width: 100%;
+        }
+        md-radio-group {
+            display: block;
+            padding-left: 5px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.38);
+        }
+        md-checkbox {
+            margin-left: 5px;
+        }
+        &.disabled-heroes-container {
+            height: auto;
+            md-list {
+                overflow-y: scroll;
+                max-height: 250px;
+                min-height: 250px;
+                md-checkbox {
+                    margin-left: 0px;
+                }
+            }
+        }
+        label {
+            display: block;
+            padding-bottom: 5px;
+            padding-left: 5px;
+            font-size: 12px;
+            color: rgba(0, 0, 0, 0.38);
+        }
+    }
+}
+
+md-card.active-draft{
+    md-card-title{
+        text-align: center;
+    }
+    table{
+        td{
+            height: 30px;
+            label{
+                display: inline;
+                padding-left: 0px;
+            }
+            &:first-child{
+                text-align: right;
+                white-space: nowrap;
+            }
+            &:last-child{
+                text-align: left;
+                width:100%;
+            }
+            .draft-link{
+                width:100%;
+                height: 100%;
+                padding:0px;
+                padding-top: 5px;
+                border:none;
+                vertical-align: bottom;
+            }
+        }
+    }
+}
+
+/*:host {
+    width: 600px;
+    margin: auto;
+    margin-top: 100px;
+    background-color: white;
+    border: 3px solid rebeccapurple;
+    border-radius: 16px;
+    display: block;
+    min-height: 250px;
+    color: black;
+}
+
+section {
+    padding: 24px;
+}
+*/

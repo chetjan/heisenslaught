@@ -1,3 +1,128 @@
+<md-card *ngIf="loaded && !currentConfig" class="create-draft">
+  <md-card-title>Create Draft</md-card-title>
+  <md-card-content>
+    <table>
+      <tr>
+        <td>
+          <md-input #team1Name name="team1Name" placeholder="Blue Team's Name" [(ngModel)]="config.team1Name"></md-input>
+        </td>
+        <td>
+          <md-input name="team2Name" placeholder="Red Team's Name" [(ngModel)]="config.team2Name"></md-input>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="small">
+          <label>First Pick:</label>
+          <md-radio-group name="firstPick" [(ngModel)]="config.firstPick">
+            <md-radio-button style="padding-right:10px;" name="firstPick" [value]="0">Random</md-radio-button>
+            <md-radio-button style="padding-right:10px;" name="firstPick" [value]="1">Blue Team</md-radio-button>
+            <md-radio-button style="padding-right:10px;" name="firstPick" [value]="2">Red Team</md-radio-button>
+          </md-radio-group>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <md-select placeholder="Select Map" name="map" [(ngModel)]="config.map">
+            <md-option *ngFor="let map of maps" [value]="map.id">{{map.name}}</md-option>
+          </md-select>
+        </td>
+      </tr>        
+      <tr>
+        <td>
+          <md-input type="number" name="pickTime" placeholder="Pick Time" [(ngModel)]="config.pickTime"></md-input>
+        </td>
+        <td>
+          <md-input type="number" name="bonusTime" placeholder="Bonus Time" [(ngModel)]="config.bonusTime"></md-input>
+        </td>
+      </tr>    
+      <tr>
+        <td class="small"></td>
+        <td class="small">
+          <md-checkbox name="bankTime" [(ngModel)]="config.bankTime">Bank Time</md-checkbox>
+        </td>
+      </tr>    
+      <tr *ngIf="false">
+        <td class="small" colspan="2">
+          <md-checkbox name="showDisabledHeroes">Disabled Heroes (NYI)</md-checkbox>
+        <td>
+      </tr>
+      <tr *ngIf="false">
+        <td class="disabled-heroes-container" colspan="2">
+          <md-list name="showDisabledHeroes">
+            <md-list-item *ngFor="let hero of heroes">
+              <md-checkbox name="disabledHeroes">{{hero.name}}</md-checkbox>
+            </md-list-item>
+          </md-list>
+        <td>
+      </tr>
+    </table>
+  </md-card-content>  
+  <md-card-actions align="start">
+    <button md-raised-button class="md-primary" (click)="createDraft()">Create</button>
+  </md-card-actions>
+</md-card>
+<br/>
+<md-card class="active-draft" *ngIf="loaded && currentConfig">
+  <md-card-title><span class="team1">{{currentConfig?.team1Name}}</span><span class="vs"> VS </span><span class="team2">{{currentConfig?.team2Name}}</span></md-card-title>
+  <md-card-content> 
+    <table>
+      <tr>
+        <td>
+          <label>Draft Status:</label>
+        </td>
+        <td>
+          {{getPhase()}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>First Pick:</label>
+        </td>
+        <td>
+          {{getFirstPick()}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>Map:</label>
+        </td>
+        <td>
+          {{getMapName()}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>Observer Link:</label>
+        </td>
+        <td>
+          <input class="draft-link" readonly title="Click to copy link" #obsLink type="text" [value]="getLink(currentConfig?.draftToken)" (click)="copyLink(obsLink)"/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>Blue Team Link:</label>
+        </td>
+        <td>
+          <input class="draft-link" readonly title="Click to copy link" #t1Link type="text" [value]="getLink(currentConfig?.draftToken, currentConfig?.team1DrafterToken)" (click)="copyLink(t1Link)"/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>Red Team Link:</label>
+        </td>
+        <td>
+          <input class="draft-link" readonly title="Click to copy link" #t2Link type="text" [value]="getLink(currentConfig?.draftToken, currentConfig?.team2DrafterToken)" (click)="copyLink(t2Link)"/>
+        </td>
+      </tr>
+    </table>
+  </md-card-content> 
+  <md-card-actions align="start">
+    <button md-raised-button class="md-primary" (click)="resetDraft()">Restart Draft</button>
+    <button md-raised-button class="md-warn" (click)="closeDraft()">Close Draft</button>
+  </md-card-actions>
+</md-card>
+
+  <!--
 <section>
   <form novalidate name="draftConfig" *ngIf="loaded && !currentConfig">
     <div>
@@ -66,3 +191,5 @@
     <button (click)="closeDraft()">Close Draft</button>
   </div>
 </section>
+
+-->

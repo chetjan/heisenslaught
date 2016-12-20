@@ -9,6 +9,9 @@ import { MaterialModule } from '@angular/material';
 
 import { MdSidenavModule } from '@angular/material/sidenav';
 
+
+import { CovalentCoreModule } from '@covalent/core';
+
 import { AppComponent } from './app.component';
 import { HeroesService } from './services/heroes.service';
 import { DraftService } from './services/draft.service';
@@ -57,6 +60,7 @@ const appRoutes: Routes = [
     FormsModule,
     MaterialModule.forRoot(),
     MdSidenavModule.forRoot(),
+    CovalentCoreModule.forRoot(),
     RouterModule.forRoot(appRoutes)
   ],
   providers: [
