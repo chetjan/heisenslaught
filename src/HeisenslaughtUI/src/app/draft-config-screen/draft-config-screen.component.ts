@@ -49,35 +49,6 @@ export class DraftConfigScreenComponent {
     } else {
       this.initCreateDraft();
     }
-
-    /*
-        draftService.getCurrentAdminConfig().then((cfg) => {
-          if (cfg) {
-            if (cfg.state.phase === DraftPhase.FINISHED) {
-              this.config = cfg;
-              if (cfg.randomFirstPick) {
-                this.config.firstPick = 0;
-              }
-              this.currentConfig = null;
-            } else {
-              this.currentConfig = cfg;
-            }
-          } else {
-            this.config = <ICreateDraftData>{
-              firstPick: 0,
-              bankTime: true,
-              team1Name: 'Team 1',
-              team2Name: 'Team 2',
-              pickTime: 60,
-              bonusTime: 180
-            };
-          }
-          this.loaded = true;
-        }, (err) => {
-          this.createError = err ? err.toString() : 'Server Error';
-        });
-    
-        */
   }
 
   public get loaded(): boolean {
@@ -118,10 +89,9 @@ export class DraftConfigScreenComponent {
     });
   }
 
-
   public resetDraft() {
     this.createError = undefined;
-    this.draftService.resetDraft().then((cfg) => {
+    this.draftService.resetDraft(this.draftToken, this.adminToken).then((cfg) => {
       this.currentConfig = cfg;
     }, (err) => {
       this.createError = err ? err.toString() : 'Server Error';
@@ -130,7 +100,7 @@ export class DraftConfigScreenComponent {
 
   public closeDraft() {
     this.createError = undefined;
-    this.draftService.closeDraft().then((cfg) => {
+    this.draftService.closeDraft(this.draftToken, this.adminToken).then((cfg) => {
       this.currentConfig = null;
       this.config = cfg;
       if (cfg.wasFirstPickRandom) {
