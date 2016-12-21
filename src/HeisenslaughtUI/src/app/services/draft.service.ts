@@ -81,7 +81,7 @@ export class DraftService {
     public resetDraft(draftToken: string, adminToken: string): Promise<IDraftConfigAdminDTO> {
         return new Promise((resolve, reject) => {
             this.connect().then(() => {
-                this.hub.server.resetDraft(draftToken, adminToken).then((config) => {
+                this.hub.server.restartDraft(draftToken, adminToken).then((config) => {
                     resolve(config);
                 }, (err) => {
                     reject(err);
@@ -95,8 +95,8 @@ export class DraftService {
     public closeDraft(draftToken: string, adminToken: string): Promise<IDraftConfigAdminDTO> {
         return new Promise((resolve, reject) => {
             this.connect().then(() => {
-                this.hub.server.closeDraft(draftToken, adminToken).then((config) => {
-                    resolve(config);
+                this.hub.server.closeDraft(draftToken, adminToken).then(() => {
+                    resolve();
                 }, (err) => {
                     reject(err);
                 });

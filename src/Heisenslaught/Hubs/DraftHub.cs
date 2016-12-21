@@ -30,11 +30,12 @@ namespace Heisenslaught
             return Draft.ConnectToDraft(this, draftToken, teamToken);
         }
 
-        public void RestartDraft(string draftToken, string adminToken)
+        public DraftConfigAdminDTO RestartDraft(string draftToken, string adminToken)
         {
             try
             {
                 Draft.GetDraftRoom(draftToken).ResetDraft(this, adminToken);
+                return new DraftConfigAdminDTO(Draft.GetDraftRoom(draftToken).DraftModel);
             }
             catch (NullReferenceException)
             {
