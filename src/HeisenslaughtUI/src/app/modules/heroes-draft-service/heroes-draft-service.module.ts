@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { DraftService } from './services/draft.service';
+
+export * from './services/draft.service';
+
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: []
+  providers: [
+    DraftService
+  ]
 })
 export class HeroesDraftServiceModule { }

@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
+export * from './services/heroes.service';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: []
+
 })
 export class HeroesDataServiceModule { }
