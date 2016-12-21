@@ -89,7 +89,14 @@ namespace Heisenslaught.Infrastructure
             {
                 if (CurrentPick != -1)
                 {
-                    return firstSlots.Contains(CurrentPick) ? 0 : 1;
+                    if(Config.firstPick == 1)
+                    {
+                        return firstSlots.Contains(CurrentPick) ? 0 : 1;
+                    }
+                    else
+                    {
+                        return firstSlots.Contains(CurrentPick) ? 1 : 0;
+                    }
                 }
                 return -1;
             }
@@ -254,7 +261,12 @@ namespace Heisenslaught.Infrastructure
             {
                 if(Config.bankTime && State.pickTime > 0)
                 {
-                    if((team == 0 && Config.firstPick == 1) || (team == 1 && Config.firstPick == 2))
+                    if (!IsBan && (heroId == "cho" || heroId == "gall"))
+                    {
+                        // bank sencond pick time
+                        State.pickTime += Config.pickTime;
+                    }
+                    if (team == 0)
                     {
                         State.team1BonusTime += State.pickTime;
                     }

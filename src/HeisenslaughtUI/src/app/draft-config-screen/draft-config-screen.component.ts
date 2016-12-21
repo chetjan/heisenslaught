@@ -100,12 +100,7 @@ export class DraftConfigScreenComponent {
 
   public closeDraft() {
     this.createError = undefined;
-    this.draftService.closeDraft(this.draftToken, this.adminToken).then((cfg) => {
-      this.currentConfig = null;
-      this.config = cfg;
-      if (cfg.wasFirstPickRandom) {
-        this.config.firstPick = 0;
-      }
+    this.draftService.closeDraft(this.draftToken, this.adminToken).then(() => {
     }, (err) => {
       this.createError = err ? err.toString() : 'Server Error';
     });
@@ -144,7 +139,13 @@ export class DraftConfigScreenComponent {
     if (this.currentConfig) {
       switch (this.currentConfig.state.phase) {
         case DraftPhase.WAITING:
-          str = 'Waiting for teams to be ready';
+          str = 'Waiting';
+          break;
+        case DraftPhase.PICKING:
+          str = 'Picking';
+          break;
+        case DraftPhase.FINISHED:
+          str = 'Completed';
           break;
       }
     }
