@@ -25,6 +25,10 @@ import { HomeComponent } from './home/home.component';
 import { DraftConfigScreenComponent } from './draft-config-screen/draft-config-screen.component';
 import { TeamHeroPicksComponent } from './team-hero-picks/team-hero-picks.component';
 import { HeroesButtonComponent } from './heroes-button/heroes-button.component';
+import { HeroesDraftingComponent } from './modules/heroes-drafting/heroes-drafting.component';
+import { HeroesCommonComponent } from './modules/heroes-common/heroes-common.component';
+import { HeroesDraftServiceComponent } from './modules/heroes-draft-service/heroes-draft-service.component';
+import { HeroesDataServiceComponent } from './modules/heroes-data-service/heroes-data-service.component';
 
 
 const appRoutes: Routes = [
@@ -52,7 +56,11 @@ const appRoutes: Routes = [
     HomeComponent,
     DraftConfigScreenComponent,
     TeamHeroPicksComponent,
-    HeroesButtonComponent
+    HeroesButtonComponent,
+    HeroesDraftingComponent,
+    HeroesCommonComponent,
+    HeroesDraftServiceComponent,
+    HeroesDataServiceComponent
   ],
   imports: [
     BrowserModule,
