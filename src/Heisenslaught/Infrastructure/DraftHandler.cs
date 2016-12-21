@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using Heisenslaught.Models;
 
 namespace Heisenslaught.Infrastructure
 {
@@ -16,22 +17,21 @@ namespace Heisenslaught.Infrastructure
         private static List<int> firstBanSlots = new List<int> {0,8};
         private static List<int> secondBanSlots = new List<int> {1,7};
 
-        private Timer timer;
-        private AdminDraftConfig config;
         private List<List<int>> teamSlots = new List<List<int>>();
         private List<List<int>> teamPickSlots = new List<List<int>>();
         private List<List<int>> teamBanSlots = new List<List<int>>();
-
         private List<string> teamTokens = new List<string>();
+        private DraftModel model;
 
-        public DraftHandler(AdminDraftConfig config)
+
+        public DraftHandler(DraftRoom draftRoom)
         {
-            this.config = config;
-            if(state.picks == null)
+            this.model = draftRoom.DraftModel;
+            if(State.picks == null)
             {
-                state.picks = new List<string>();
+                State.picks = new List<string>();
             }
-            if(config.firstPick == 1)
+            if(Config.firstPick == 1)
             {
                 teamSlots.Add(firstSlots);
                 teamSlots.Add(secondSlots);
@@ -39,8 +39,8 @@ namespace Heisenslaught.Infrastructure
                 teamPickSlots.Add(secondPickSlots);
                 teamBanSlots.Add(firstBanSlots);
                 teamBanSlots.Add(secondBanSlots);
-                teamTokens.Add(config.team1DrafterToken);
-                teamTokens.Add(config.team2DrafterToken);
+                teamTokens.Add(model.team1DrafterToken);
+                teamTokens.Add(model.team2DrafterToken);
             }
             else
             {
@@ -50,255 +50,250 @@ namespace Heisenslaught.Infrastructure
                 teamPickSlots.Add(firstPickSlots);
                 teamBanSlots.Add(secondBanSlots);
                 teamBanSlots.Add(firstBanSlots);
-                teamTokens.Add(config.team2DrafterToken);
-                teamTokens.Add(config.team1DrafterToken);
-            }
-
-        }
-
-        public DraftState state
-        {
-            get
-            {
-                return this.config.state;
+                teamTokens.Add(model.team2DrafterToken);
+                teamTokens.Add(model.team1DrafterToken);
             }
         }
 
-        public int currentPick
+        private DraftStateModel State
         {
             get
             {
-                if(state.phase == DraftStatePhase.PICKING)
+                return this.model.state;
+            }
+        }
+
+        private DraftConfigModel Config
+        {
+            get
+            {
+                return this.model.config;
+            }
+        }
+
+        private int CurrentPick
+        {
+            get
+            {
+                if(State.phase == DraftStatePhase.PICKING)
                 {
-                    return state.picks.Count;
+                    return State.picks.Count;
                 }
                 return -1;
             }
         }
 
-        public int currentTeam
+        private int CurrentTeam
         {
             get
             {
-                if (currentPick != -1)
+                if (CurrentPick != -1)
                 {
-                    return firstSlots.Contains(currentPick) ? 0 : 1;
+                    if(Config.firstPick == 1)
+                    {
+                        return firstSlots.Contains(CurrentPick) ? 0 : 1;
+                    }
+                    else
+                    {
+                        return firstSlots.Contains(CurrentPick) ? 1 : 0;
+                    }
                 }
                 return -1;
             }
         }
 
-        public bool isCurrentTeamToken(string token)
+        private bool IsCurrentTeamToken(string token)
         {
-            if (currentTeam != -1)
+            if (CurrentTeam != -1)
             {
-                return teamTokens[currentTeam] == token;
+                return teamTokens[CurrentTeam] == token;
             }
             return false;
         }
 
-        public bool isBan
+        private bool IsBan
         {
             get
             {
-                if (currentTeam != -1)
+                if (CurrentTeam != -1)
                 {
-                    return teamBanSlots[0].Contains(currentPick) || teamBanSlots[1].Contains(currentPick);
+                    return teamBanSlots[CurrentTeam].Contains(CurrentPick);
                 }
                 return false;
             }
         }
 
-        public bool isPick
+        private bool IsPick
         {
             get
             {
-                if (currentTeam != -1)
+                if (CurrentTeam != -1)
                 {
-                    return teamPickSlots[currentTeam].Contains(currentPick);
+                    return teamPickSlots[CurrentTeam].Contains(CurrentPick);
                 }
                 return false;
             }
         }
 
-        public bool isFirstPickOfDoublePick
+        private bool IsFirstPickOfDoublePick
         {
             get
             {
-                if (isPick)
+                if (IsPick)
                 {
-                    var pickSlots = teamPickSlots[currentTeam];
-                    var idx = pickSlots.IndexOf(currentPick);
-                    return idx != -1 && pickSlots.Contains(currentPick + 1);
+                    var pickSlots = teamPickSlots[CurrentTeam];
+                    var idx = pickSlots.IndexOf(CurrentPick);
+                    return idx != -1 && pickSlots.Contains(CurrentPick + 1);
                 }
                 return false;
             }
         }
 
-        public bool isValidHero(string heroId)
+        private bool IsValidHero(string heroId)
         {
-            var hero = HeroDataService.getHeroById(heroId);
+            var hero = HeroDataService.GetHeroById(heroId);
             return hero != null;
         }
 
-        public bool isHeroPickedOrBanned(string heroId)
+        private bool IsHeroPickedOrBanned(string heroId)
         {
-            return state.picks.Contains(heroId);
+            return State.picks.Contains(heroId);
         }
 
-        public bool isHeroDisabled(string heroId)
+        private bool IsHeroDisabled(string heroId)
         {
-            return config.disabledHeroes != null && config.disabledHeroes.Contains(heroId);
+            return Config.disabledHeroes != null && Config.disabledHeroes.Contains(heroId);
         }
 
-        public bool canPickHero(string heroId)
+        private bool CanPickHero(string heroId)
         {
-        
-            var allowed = isValidHero(heroId) && !isHeroPickedOrBanned(heroId) && !isHeroDisabled(heroId);
+            var allowed = IsValidHero(heroId) && !IsHeroPickedOrBanned(heroId) && !IsHeroDisabled(heroId);
             if (allowed && (heroId == "cho" || heroId == "gall"))
             {
-                
-                if (!isFirstPickOfDoublePick && !isBan)
+                if (!IsFirstPickOfDoublePick && !IsBan)
                 {
                     allowed = false;
                 }
                 else
                 {
                     var other = heroId == "cho" ? "gall" : "cho";
-                    allowed = !isHeroPickedOrBanned(other) && !isHeroDisabled(other);
+                    allowed = !IsHeroPickedOrBanned(other) && !IsHeroDisabled(other);
                 }
             }
             return allowed;
         }
 
-
-
-        public void start()
+        public bool Tick()
         {
-            if(timer == null)
+            if(State.phase == DraftStatePhase.WAITING)
             {
-                timer = new Timer(tick, null, 0, 1000);
-            }
-            
-        }
-
-        public void stop()
-        {
-            if(timer != null)
-            {
-                timer.Dispose();
-                timer = null;
-            }
-        }
-
-
-        public void tick(object timerPhase)
-        {
-            if(state.phase == DraftStatePhase.WAITING)
-            {
-                if(state.team1Ready && state.team2Ready)
+                if(State.team1Ready && State.team2Ready)
                 {
-                    state.phase = DraftStatePhase.PICKING;
-                    state.pickTime = config.pickTime;
-                    state.team1BonusTime = config.bonusTime;
-                    state.team2BonusTime = config.bonusTime;
+                    State.phase = DraftStatePhase.PICKING;
+                    State.pickTime = Config.pickTime;
+                    State.team1BonusTime = Config.bonusTime;
+                    State.team2BonusTime = Config.bonusTime;
+                    return true;
                 }
             }
-            else if(state.phase == DraftStatePhase.FINISHED)
+            else if(State.phase == DraftStatePhase.PICKING)
             {
-                stop();
-            }
-            else if(state.phase == DraftStatePhase.PICKING)
-            {
-                if(state.picks.Count >= 14)
+                if(State.picks.Count >= 14)
                 {
-                    state.phase = DraftStatePhase.FINISHED;
+                    State.phase = DraftStatePhase.FINISHED;
+                    return true;
                 }
-                else if (state.pickTime > -1)
+                else if (State.pickTime > -1)
                 {
-                    --state.pickTime;
+                    --State.pickTime;
+                    return true;
                 }
                 else
                 {
                     var timeLeft = 100;
-                    if(currentTeam == 0)
+                    if(CurrentTeam == 0)
                     {
-                        timeLeft = --state.team1BonusTime;
+                        timeLeft = --State.team1BonusTime;
                     }
-                    else if(currentTeam == 1)
+                    else if(CurrentTeam == 1)
                     {
-                        timeLeft = --state.team2BonusTime;
+                        timeLeft = --State.team2BonusTime;
                     }
                     if(timeLeft < 0)
                     {
                         // pick random hero for team
-                        if (isBan)
+                        if (IsBan)
                         {
-                            state.picks.Add("failed_ban");
-                            state.pickTime = config.pickTime;
+                            State.picks.Add("failed_ban");
+                            State.pickTime = Config.pickTime;
                         }
                         else
                         {
-                            pickRandom();
+                            PickRandomHero();
                         }
                     }
+                    return true;
                 }
             }
+            return false;
         }
 
-        public bool pickHero(string heroId, string teamToken, bool skipTokenValidation=false)
+        public bool PickHero(string heroId, string teamToken, bool skipTokenValidation=false)
         {
-            var team = currentTeam;
-            if (team == -1 || (!skipTokenValidation && teamTokens[team] != teamToken) || !canPickHero(heroId))
+            var team = CurrentTeam;
+            if (team == -1 || (!skipTokenValidation && teamTokens[team] != teamToken) || !CanPickHero(heroId))
             {
                 return false;
             }
 
-            state.picks.Add(heroId);
+            State.picks.Add(heroId);
 
-            if(!isBan && (heroId == "cho" || heroId == "gall"))
+            if(!IsBan && (heroId == "cho" || heroId == "gall"))
             {
-                state.picks.Add(heroId == "cho" ? "gall" : "cho");
+                State.picks.Add(heroId == "cho" ? "gall" : "cho");
             }
             
-            if(state.picks.Count >= 14)
+            if(State.picks.Count >= 14)
             {
-                state.phase = DraftStatePhase.FINISHED;
-                stop();
+                State.phase = DraftStatePhase.FINISHED;
             }
             else
             {
-                if(config.bankTime && state.pickTime > 0)
+                if(Config.bankTime && State.pickTime > 0)
                 {
-                    if((team == 0 && config.firstPick == 1) || (team == 1 && config.firstPick == 2))
+                    if (!IsBan && (heroId == "cho" || heroId == "gall"))
                     {
-                        state.team1BonusTime += state.pickTime;
+                        // bank sencond pick time
+                        State.pickTime += Config.pickTime;
+                    }
+                    if (team == 0)
+                    {
+                        State.team1BonusTime += State.pickTime;
                     }
                     else
                     {
-                        state.team2BonusTime += state.pickTime;
+                        State.team2BonusTime += State.pickTime;
                     }
                 }
-                state.pickTime = config.pickTime;
+                State.pickTime = Config.pickTime;
             }
-
             return true;
         }
 
-        private void pickRandom()
+        private void PickRandomHero()
         {
             string heroId = null;
-            var heroes = HeroDataService.getHeroes();
+            var heroes = HeroDataService.GetHeroes();
             var max = heroes.Count - 1;
             while(heroId == null)
             {
                 var rng = rnd.Next(0, max);
                 var hero = heroes[rng];
-                if(hero.id != "cho" && hero.id != "gall" && canPickHero(hero.id))
+                if(hero.id != "cho" && hero.id != "gall" && CanPickHero(hero.id))
                 {
                     heroId = hero.id;
                 }
-                pickHero(heroId, null, true);
+                PickHero(heroId, null, true);
             }
         }
     }

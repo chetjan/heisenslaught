@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Heisenslaught.Infrastructure
+namespace Heisenslaught.Models
 {
-
     public enum DraftStatePhase
     {
         WAITING,
@@ -13,7 +12,7 @@ namespace Heisenslaught.Infrastructure
         FINISHED
     }
 
-    public class DraftState
+    public class DraftStateModel
     {
         public DraftStatePhase phase = DraftStatePhase.WAITING;
         public bool team1Ready = false;

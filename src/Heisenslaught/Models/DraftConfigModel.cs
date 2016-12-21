@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-
-namespace Heisenslaught.Infrastructure
+namespace Heisenslaught.Models
 {
-    public class DraftConfig
+    public class DraftConfigModel
     {
         public int firstPick;
         public int pickTime;
@@ -16,6 +15,6 @@ namespace Heisenslaught.Infrastructure
         public string team2Name;
         public string map;
         public List<string> disabledHeroes;
-        public DraftState state;
+
     }
 }

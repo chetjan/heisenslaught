@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DraftService, IDraftConfig, IDraftState, DraftPhase } from '../services/draft.service';
+import { DraftService, IDraftConfigDTO, IDraftState, DraftPhase, IDraftConfigDrafterDTO } from '../services/draft.service';
 import { HeroesService, HeroData, IMapData } from '../services/heroes.service';
 
 @Component({
@@ -28,7 +28,7 @@ export class DraftComponent {
 
   public teamPickSlots: Array<number[]> = [];
   public selectedHero: any;
-  public draftConfig: IDraftConfig;
+  public draftConfig: IDraftConfigDTO;
   public draftState: IDraftState;
   public team1Status: string;
   public team2Status: string;
@@ -52,7 +52,7 @@ export class DraftComponent {
 
     this.draftService.connectToDraft(this.draftToken, this.teamToken).then((config) => {
       this.draftConfig = config;
-      this.team = config.team;
+      this.team = (<IDraftConfigDrafterDTO>config).team;
       this.configSlots();
       this.updateState(config.state);
       this.draftService.getDraftConfig(this.draftToken).subscribe((cfg) => {
@@ -100,7 +100,7 @@ export class DraftComponent {
       } else {
         this.team2Status = null;
       }
-    } else if (draftState.phase !== DraftPhase.FINISHED) {
+    } else {
       this.team1Status = Math.max(draftState.team1BonusTime, 0).toString();
       this.team2Status = Math.max(draftState.team2BonusTime, 0).toString();
     }
@@ -139,7 +139,7 @@ export class DraftComponent {
     pickedHeroId = picks[banSlots[pickId]];
     return this.getHeroById(pickedHeroId);
   }
-  
+
 
   private getHeroById(heroId: string): HeroData {
     if (!this.heroes) {

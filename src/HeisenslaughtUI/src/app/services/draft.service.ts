@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subscriber } from 'rxjs/Rx';
 
-import { ICreateDraftResult, IDraftConfig, ICreateDraftData } from './draft-config';
+import { IDraftConfigAdminDTO, IDraftConfigDTO, ICreateDraftDTO } from './draft-config';
 import { IDraftState } from './draft-state';
 import { IDraftHubProxy } from './draft-hub-proxy';
 
 
-export { ICreateDraftData, ICreateDraftResult, IDraftConfig } from './draft-config';
+export { ICreateDraftDTO, IDraftConfigAdminDTO, IDraftConfigDTO, IDraftConfigDrafterDTO } from './draft-config';
 export { IDraftState, DraftPhase } from './draft-state';
 
 
@@ -14,21 +14,21 @@ export { IDraftState, DraftPhase } from './draft-state';
 export class DraftService {
     private hub: IDraftHubProxy;
     private connectPromise: Promise<any>;
-    private _draftConfig: Observable<IDraftConfig>;
-    private _draftConfigSub: Subscriber<IDraftConfig>;
+    private _draftConfig: Observable<IDraftConfigDTO>;
+    private _draftConfigSub: Subscriber<IDraftConfigDTO>;
     private _draftState: Observable<IDraftState>;
     private _draftStateSub: Subscriber<IDraftState>;
 
 
     constructor() {
         this.hub = $.connection['draftHub'];
-        this.hub.client.updateConfig = (config: IDraftConfig) => {
+        this.hub.client.updateConfig = (config: IDraftConfigDTO) => {
             if (this._draftConfigSub) {
                 this._draftConfigSub.next(config);
             }
         };
 
-        this._draftConfig = new Observable<IDraftConfig>((sub: Subscriber<IDraftConfig>) => {
+        this._draftConfig = new Observable<IDraftConfigDTO>((sub: Subscriber<IDraftConfigDTO>) => {
             this._draftConfigSub = sub;
         });
 
@@ -64,10 +64,10 @@ export class DraftService {
         return this.connectPromise;
     }
 
-    public createDraft(createCfg: ICreateDraftData): Promise<ICreateDraftResult> {
+    public createDraft(createCfg: ICreateDraftDTO): Promise<IDraftConfigAdminDTO> {
         return new Promise((resolve, reject) => {
             this.connect().then(() => {
-                this.hub.server.configDraft(createCfg).then((config) => {
+                this.hub.server.createDraft(createCfg).then((config) => {
                     resolve(config);
                 }, (err) => {
                     reject(err);
@@ -78,10 +78,10 @@ export class DraftService {
         });
     }
 
-    public resetDraft(): Promise<ICreateDraftResult> {
+    public resetDraft(draftToken: string, adminToken: string): Promise<IDraftConfigAdminDTO> {
         return new Promise((resolve, reject) => {
             this.connect().then(() => {
-                this.hub.server.resetDraft().then((config) => {
+                this.hub.server.restartDraft(draftToken, adminToken).then((config) => {
                     resolve(config);
                 }, (err) => {
                     reject(err);
@@ -92,11 +92,11 @@ export class DraftService {
         });
     }
 
-    public closeDraft(): Promise<ICreateDraftResult> {
+    public closeDraft(draftToken: string, adminToken: string): Promise<IDraftConfigAdminDTO> {
         return new Promise((resolve, reject) => {
             this.connect().then(() => {
-                this.hub.server.closeDraft().then((config) => {
-                    resolve(config);
+                this.hub.server.closeDraft(draftToken, adminToken).then(() => {
+                    resolve();
                 }, (err) => {
                     reject(err);
                 });
@@ -106,21 +106,7 @@ export class DraftService {
         });
     }
 
-    public getCurrentAdminConfig(): Promise<ICreateDraftResult> {
-        return new Promise((resolve, reject) => {
-            this.connect().then(() => {
-                this.hub.server.getCurrentAdminConfig().then((config) => {
-                    resolve(config);
-                }, (err) => {
-                    reject(err);
-                });
-            }, (err) => {
-                reject(err);
-            });
-        });
-    }
-
-    public connectToDraft(draftToken: string, teamToken?: string): Promise<IDraftConfig> {
+    public connectToDraft(draftToken: string, teamToken?: string): Promise<IDraftConfigDTO> {
         return new Promise((resolve, reject) => {
             this.connect().then(() => {
                 this.hub.server.connectToDraft(draftToken, teamToken).then((config) => {
@@ -148,7 +134,7 @@ export class DraftService {
         });
     }
 
-    public getDraftConfig(draftToken: string): Observable<IDraftConfig> {
+    public getDraftConfig(draftToken: string): Observable<IDraftConfigDTO> {
         return this._draftConfig;
     }
 

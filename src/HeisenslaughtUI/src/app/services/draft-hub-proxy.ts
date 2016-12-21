@@ -1,12 +1,11 @@
-import { ICreateDraftData, ICreateDraftResult, IDraftConfig } from './draft-config';
+import { ICreateDraftDTO, IDraftConfigAdminDTO, IDraftConfigDTO } from './draft-config';
 
 
 export interface IDraftHubServerProxy {
-    configDraft(config: ICreateDraftData): JQueryPromise<ICreateDraftResult>;
-    getCurrentAdminConfig(): JQueryPromise<ICreateDraftResult>;
-    resetDraft(): JQueryPromise<ICreateDraftResult>;
-    closeDraft(): JQueryPromise<ICreateDraftResult>;
-    connectToDraft(draftToken: string, teamToken?: string): JQueryPromise<IDraftConfig>;
+    createDraft(config: ICreateDraftDTO): JQueryPromise<IDraftConfigAdminDTO>;
+    restartDraft(draftToken: string, adminToken: string): JQueryPromise<IDraftConfigAdminDTO>;
+    closeDraft(draftToken: string, adminToken: string): JQueryPromise<void>;
+    connectToDraft(draftToken: string, teamToken?: string): JQueryPromise<IDraftConfigDTO>;
     setReady(draftToken: string, teamToken: string): JQueryPromise<boolean>;
     pickHero(heroId: string, draftToken: string, teamToken: string): JQueryPromise<boolean>;
 }

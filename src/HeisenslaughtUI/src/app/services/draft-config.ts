@@ -1,7 +1,7 @@
 import { IDraftState } from './draft-state';
 
 
-export interface ICreateDraftData {
+export interface ICreateDraftDTO {
     firstPick: number;
     pickTime: number;
     bonusTime: number;
@@ -12,14 +12,18 @@ export interface ICreateDraftData {
     disabledHeroes?: string[];
 }
 
-export interface IDraftConfig extends ICreateDraftData {
+export interface IDraftConfigDTO extends ICreateDraftDTO {
     state: IDraftState;
-    team?: number;
 }
 
-export interface ICreateDraftResult extends IDraftConfig {
-    randomFirstPick: boolean;
+export interface IDraftConfigDrafterDTO extends IDraftConfigDTO {
+    team: number;
+}
+
+export interface IDraftConfigAdminDTO extends IDraftConfigDTO {
+    wasFirstPickRandom: boolean;
     draftToken: string;
+    adminToken: string;
     team1DrafterToken: string;
     team2DrafterToken: string;
 }

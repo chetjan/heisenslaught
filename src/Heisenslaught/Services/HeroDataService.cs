@@ -28,43 +28,43 @@ namespace Heisenslaught.Infrastructure
         public static List<HeroData> heroesData;
         public static List<MapData> mapsData;
 
-        public static List<HeroData> getHeroes()
+        public static List<HeroData> GetHeroes()
         {
             if(heroesData == null)
             {
-                heroesData = readJsonFile<List<HeroData>>(Directory.GetCurrentDirectory() + "/wwwroot/data/heroes.json");
+                heroesData = ReadJsonFile<List<HeroData>>(Directory.GetCurrentDirectory() + "/wwwroot/data/heroes.json");
             }
             return heroesData;
         }
 
-        public static List<MapData> getMaps()
+        public static List<MapData> GetMaps()
         {
             if (heroesData == null)
             {
-                mapsData = readJsonFile<List<MapData>>(Directory.GetCurrentDirectory() + "/wwwroot/data/maps.json");
+                mapsData = ReadJsonFile<List<MapData>>(Directory.GetCurrentDirectory() + "/wwwroot/data/maps.json");
             }
             return mapsData;
         }
 
-        public static HeroData getHeroById(string heroId)
+        public static HeroData GetHeroById(string heroId)
         {
-            var heroes = getHeroes();
+            var heroes = GetHeroes();
             return heroes.Find(hero =>
             {
                 return hero.id == heroId;
             });
         }
 
-        public static MapData getMapById(string mapId)
+        public static MapData GetMapById(string mapId)
         {
-            var maps = getMaps();
+            var maps = GetMaps();
             return maps.Find(map =>
             {
                 return map.id == mapId;
             });
         }
 
-        public static T readJsonFile<T>(string path)
+        public static T ReadJsonFile<T>(string path)
         {
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
             StreamReader r = new StreamReader(fs);

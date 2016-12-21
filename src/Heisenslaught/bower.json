@@ -1,8 +1,0 @@
-{
-  "name": "heisenslaught",
-  "private": true,
-  "dependencies": {
-    "bootstrap": "^4.0.0",
-    "fontawesome": "^4.7.0"
-  }
-}
