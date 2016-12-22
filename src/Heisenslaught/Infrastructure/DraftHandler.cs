@@ -31,6 +31,8 @@ namespace Heisenslaught.Infrastructure
             {
                 State.picks = new List<string>();
             }
+            teamTokens.Add(model.team1DrafterToken);
+            teamTokens.Add(model.team2DrafterToken);
             if(Config.firstPick == 1)
             {
                 teamSlots.Add(firstSlots);
@@ -39,8 +41,6 @@ namespace Heisenslaught.Infrastructure
                 teamPickSlots.Add(secondPickSlots);
                 teamBanSlots.Add(firstBanSlots);
                 teamBanSlots.Add(secondBanSlots);
-                teamTokens.Add(model.team1DrafterToken);
-                teamTokens.Add(model.team2DrafterToken);
             }
             else
             {
@@ -50,8 +50,6 @@ namespace Heisenslaught.Infrastructure
                 teamPickSlots.Add(firstPickSlots);
                 teamBanSlots.Add(secondBanSlots);
                 teamBanSlots.Add(firstBanSlots);
-                teamTokens.Add(model.team2DrafterToken);
-                teamTokens.Add(model.team1DrafterToken);
             }
         }
 

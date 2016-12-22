@@ -1,6 +1,7 @@
 import { Component, Input, Output, ChangeDetectorRef, EventEmitter } from '@angular/core';
 
 import { HeroesService, HeroData } from '../../../heroes-data-service/heroes-data-service.module';
+import { IDraftState } from '../../../heroes-draft-service/heroes-draft-service.module';
 
 export * from './hero-filter.pipe';
 
@@ -12,6 +13,7 @@ export * from './hero-filter.pipe';
         *ngFor="let hero of heroes | heroSearch:searchField.value; let i = index;" [hero]="hero" 
         (click)="selectedHero = hero"
         [ngClass]="{selected: selectedHero === hero}"
+        [class.picked]="isHeroPicked(hero.id)"
       ></hero-icon>
     </div>
    
@@ -19,11 +21,13 @@ export * from './hero-filter.pipe';
       <div class="filters">
       </div>
       <div class="txtsearch">
-        <input #searchField (keyup)="search()"/>
+        <input #searchField placeholder="Search..." (keyup)="search()" (focus)="searchFocus=true" (blur)="searchFocus=false"/>
+        <button [class.focused]="searchFocus" [disabled]="!searchField.value" 
+          (click)="searchField.value = ''; searchField.focus()"></button>
       </div>
     </div>
   `,
-  styleUrls: ['./hero-search.component.css']
+  styleUrls: ['./hero-search.component.scss']
 })
 export class HeroSearchComponent {
   private heroes: HeroData[];
@@ -31,6 +35,9 @@ export class HeroSearchComponent {
 
   @Output()
   public selectedHeroChange: EventEmitter<HeroData> = new EventEmitter<HeroData>();
+
+  @Input()
+  public state: IDraftState;
 
   constructor(
     private heroesService: HeroesService,
@@ -55,4 +62,17 @@ export class HeroSearchComponent {
   }
 
   public search() { }
+
+  public isHeroPicked(heroId: string) {
+    if (this.state && this.state.picks) {
+      if (this.state.picks.lastIndexOf(heroId) !== -1) {
+        return true;
+      }
+      if (heroId === 'cho' || heroId === 'gall') {
+        return this.state.picks.lastIndexOf(heroId === 'cho' ? 'gall' : 'cho') !== -1;
+      }
+
+    }
+    return false;
+  }
 }
