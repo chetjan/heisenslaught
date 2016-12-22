@@ -1,0 +1,90 @@
+$spinSpeed: 1000ms;
+:host {
+    .connection-status {
+        float: right;
+        md-icon {
+            cursor: default;
+            text-shadow: 0 0 1px black, 0 0 1px black, 0 0 1px black;
+            &.connected {
+                color: green;
+            }
+            &.connected_slow {
+                color: yellow;
+            }
+            &.connecting,
+            &.reconnecting {
+                -webkit-animation-name: spin;
+                -webkit-animation-duration: $spinSpeed;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-timing-function: linear;
+                -moz-animation-name: spin;
+                -moz-animation-duration: $spinSpeed;
+                -moz-animation-iteration-count: infinite;
+                -moz-animation-timing-function: linear;
+                -ms-animation-name: spin;
+                -ms-animation-duration: $spinSpeed;
+                -ms-animation-iteration-count: infinite;
+                -ms-animation-timing-function: linear;
+                animation-name: spin;
+                animation-duration: $spinSpeed;
+                animation-iteration-count: infinite;
+                animation-timing-function: linear;
+            }
+            &.connecting {
+                color: orange;
+            }
+            &.disconnected {
+                color: red;
+            }
+            &.reconnecting {
+                color: orange;
+            }
+        }
+    }
+    .connected-clients {
+        display: none;
+        margin-right: 10px;
+        float: right;
+        .count {
+            top: -6px;
+            padding-left: 3px;
+        }
+    }
+    clear: both;
+}
+
+@-ms-keyframes spin {
+    from {
+        -ms-transform: rotate(0deg);
+    }
+    to {
+        -ms-transform: rotate(360deg);
+    }
+}
+
+@-moz-keyframes spin {
+    from {
+        -moz-transform: rotate(0deg);
+    }
+    to {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

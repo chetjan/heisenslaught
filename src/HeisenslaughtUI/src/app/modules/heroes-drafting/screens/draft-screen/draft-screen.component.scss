@@ -7,6 +7,11 @@ $sideOffset:60px;
     height: 100%;
     color: white;
     overflow: hidden;
+    draft-connection-status{
+        position: absolute;
+        top:20px;
+        right:20px;
+    }
     .draft-container {
         width: $sideWidth * 2 + $centerWidth;
         height: 100%;

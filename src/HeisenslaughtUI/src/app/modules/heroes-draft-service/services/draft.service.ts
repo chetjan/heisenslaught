@@ -8,14 +8,14 @@ import { HubConnectionState } from './types/hub-connection-sate';
 
 export { ICreateDraftDTO, IDraftConfigAdminDTO, IDraftConfigDTO, IDraftConfigDrafterDTO } from './types/draft-config';
 export { IDraftState, DraftPhase } from './types/draft-state';
-
+export { HubConnectionState } from './types/hub-connection-sate';
 
 @Injectable()
-export class DraftService{
+export class DraftService {
     private hub: IDraftHubProxy;
     private connectPromise: Promise<any>;
 
-    private _connectionSate: Observable<HubConnectionState>;
+    private _connectionState: Observable<HubConnectionState>;
     private _connectionStateSub: Subscriber<HubConnectionState>;
 
     private _draftConfig: Observable<IDraftConfigDTO>;
@@ -81,10 +81,14 @@ export class DraftService{
                 } else if (state.newState === 4) {
                     this.reconnect(true);
                 }
+                if (this._connectionStateSub) {
+                    this._connectionStateSub.next(this.connectionState);
+                }
             });
 
-            this._connectionSate = new Observable<HubConnectionState>((sub: Subscriber<HubConnectionState>) => {
+            this._connectionState = new Observable<HubConnectionState>((sub: Subscriber<HubConnectionState>) => {
                 this._connectionStateSub = sub;
+                this._connectionStateSub.next(this.connectionState);
             });
         } catch (e) {
             console.error(e);
@@ -107,7 +111,7 @@ export class DraftService{
                     console.log('error reconnecting', err);
                     this.reconnect(true);
                 });
-            }, delayed ? 5000 : 0);
+            }, delayed ? 10000 : 0);
         }
     }
 
@@ -125,9 +129,9 @@ export class DraftService{
     }
 
     public disconnect(): void {
-       this.connectionArguments = null;
-       this.connectPromise = null;
-       this.hub.connection.stop(false, true);
+        this.connectionArguments = null;
+        this.connectPromise = null;
+        this.hub.connection.stop(false, true);
     }
 
     public createDraft(createCfg: ICreateDraftDTO): Promise<IDraftConfigAdminDTO> {
@@ -203,6 +207,10 @@ export class DraftService{
 
     public getDraftConfig(draftToken: string): Observable<IDraftConfigDTO> {
         return this._draftConfig;
+    }
+
+    public getConnectionState(): Observable<HubConnectionState> {
+        return this._connectionState;
     }
 
     public getDraftState(draftToken: string): Observable<IDraftState> {
