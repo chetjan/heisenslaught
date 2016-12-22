@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { Subscription } from 'rxjs';
 import { DraftService, ICreateDraftDTO, IDraftConfigAdminDTO, DraftPhase } from '../../../heroes-draft-service/services/draft.service';
 import { HeroesService, IMapData, HeroData } from '../../../heroes-data-service/services/heroes.service';
 
@@ -10,12 +10,14 @@ import { HeroesService, IMapData, HeroData } from '../../../heroes-data-service/
   templateUrl: './draft-config-screen.component.html',
   styleUrls: ['./draft-config-screen.component.scss']
 })
-export class DraftConfigScreenComponent {
+export class DraftConfigScreenComponent implements OnDestroy {
   private draftToken: string;
   private adminToken: string;
   private loadedHeroes: boolean;
   private loadedMaps: boolean;
   private loadedConfig: boolean;
+
+  private stateSubscription: Subscription;
 
   public config: ICreateDraftDTO = <ICreateDraftDTO>{};
   public currentConfig: IDraftConfigAdminDTO;
@@ -56,6 +58,10 @@ export class DraftConfigScreenComponent {
     }
   }
 
+  public ngOnDestroy() {
+    this.stateSubscription.unsubscribe();
+    this.draftService.disconnect();
+  }
   public get loaded(): boolean {
     return this.loadedConfig && this.loadedHeroes && this.loadedMaps;
   }
@@ -76,7 +82,7 @@ export class DraftConfigScreenComponent {
     this.draftService.connectToDraft(this.draftToken, this.adminToken).then((config) => {
       this.currentConfig = <IDraftConfigAdminDTO>config;
       console.log('connected to draft', config);
-      this.draftService.getDraftState(this.draftToken).subscribe((state) => {
+      this.stateSubscription = this.draftService.getDraftState(this.draftToken).subscribe((state) => {
         this.currentConfig.state = state;
       });
       this.loadedConfig = true;

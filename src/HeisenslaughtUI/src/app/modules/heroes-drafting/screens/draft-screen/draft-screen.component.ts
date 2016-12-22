@@ -1,6 +1,6 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
+import { Subscription } from 'rxjs';
 import { DraftService, IDraftConfigDTO, IDraftState, DraftPhase, IDraftConfigDrafterDTO }
   from '../../../heroes-draft-service/services/draft.service';
 import { HeroesService, HeroData, IMapData } from '../../../heroes-data-service/services/heroes.service';
@@ -11,7 +11,7 @@ import { HeroesService, HeroData, IMapData } from '../../../heroes-data-service/
   templateUrl: './draft-screen.component.html',
   styleUrls: ['./draft-screen.component.scss']
 })
-export class DraftScreenComponent {
+export class DraftScreenComponent implements OnDestroy {
 
   private static firstSlots: number[] = [0, 2, 5, 6, 8, 11, 12];
   private static secondSlots: number[] = [1, 2, 3, 7, 9, 10, 13];
@@ -28,6 +28,9 @@ export class DraftScreenComponent {
   private team: number;
   private teamSlots: Array<number[]> = [];
   private teamBanSlots: Array<number[]> = [];
+
+  private configSubscription: Subscription;
+  private stateSubscription: Subscription;
 
   public teamPickSlots: Array<number[]> = [];
   public selectedHero: any;
@@ -58,12 +61,12 @@ export class DraftScreenComponent {
       this.team = (<IDraftConfigDrafterDTO>config).team;
       this.configSlots();
       this.updateState(config.state);
-      this.draftService.getDraftConfig(this.draftToken).subscribe((cfg) => {
+      this.configSubscription = this.draftService.getDraftConfig(this.draftToken).subscribe((cfg) => {
         this.draftConfig = cfg;
         this.configSlots();
         this.updateState(cfg.state);
       });
-      this.draftService.getDraftState(this.draftToken).subscribe((state) => {
+      this.stateSubscription = this.draftService.getDraftState(this.draftToken).subscribe((state) => {
         this.updateState(state);
       });
     }, (err) => {
@@ -71,6 +74,11 @@ export class DraftScreenComponent {
     });
   }
 
+  public ngOnDestroy() {
+    this.stateSubscription.unsubscribe();
+    this.configSubscription.unsubscribe();
+    this.draftService.disconnect();
+  }
   private configSlots(): void {
     if (this.draftConfig.firstPick === 1) {
       this.teamSlots[0] = DraftScreenComponent.firstSlots;

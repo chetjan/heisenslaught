@@ -5,8 +5,6 @@ export * from './services/draft.service';
 
 
 @NgModule({
-  providers: [
-    DraftService
-  ]
+
 })
 export class HeroesDraftServiceModule { }

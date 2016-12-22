@@ -3,8 +3,8 @@
     margin: auto;
     bottom: 50px;
     display: block;
-    width: 1018px;
-    height: 100%;
+    width: 860px;
+    height: 555px;
 }
 
 div.search {
@@ -26,7 +26,7 @@ div.list {
     position: absolute;
     top: 0px;
     bottom: 50px;
-    left: 8px;
+    left: 2px;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;

@@ -4,21 +4,27 @@ import { Observable, Subscriber } from 'rxjs/Rx';
 import { IDraftConfigAdminDTO, IDraftConfigDTO, ICreateDraftDTO } from './types/draft-config';
 import { IDraftState } from './types/draft-state';
 import { IDraftHubProxy } from './types/draft-hub-proxy';
-
+import { HubConnectionState } from './types/hub-connection-sate';
 
 export { ICreateDraftDTO, IDraftConfigAdminDTO, IDraftConfigDTO, IDraftConfigDrafterDTO } from './types/draft-config';
 export { IDraftState, DraftPhase } from './types/draft-state';
 
 
 @Injectable()
-export class DraftService {
+export class DraftService{
     private hub: IDraftHubProxy;
     private connectPromise: Promise<any>;
+
+    private _connectionSate: Observable<HubConnectionState>;
+    private _connectionStateSub: Subscriber<HubConnectionState>;
+
     private _draftConfig: Observable<IDraftConfigDTO>;
     private _draftConfigSub: Subscriber<IDraftConfigDTO>;
     private _draftState: Observable<IDraftState>;
     private _draftStateSub: Subscriber<IDraftState>;
 
+    private connectionArguments: string[];
+    public connectionState: HubConnectionState = HubConnectionState.DISCONNECTED;
 
     constructor() {
         try {
@@ -50,9 +56,58 @@ export class DraftService {
             this.hub.client.getConnectedUsers = (...args: any[]) => {
                 //  console.log('getConnectedUsers ', args);
             };
+            this.hub.connection.connectionSlow(() => {
+                console.log('connection slow.....');
+            });
 
+            this.hub.connection.stateChanged((state: SignalR.StateChanged) => {
+                switch (state.newState) {
+                    case 0:
+                        this.connectionState = HubConnectionState.CONNECTING;
+                        break;
+                    case 1:
+                        this.connectionState = HubConnectionState.CONNECTED;
+                        break;
+                    case 2:
+                        this.connectionState = HubConnectionState.RECONNECTING;
+                        break;
+                    case 4:
+                        this.connectionState = HubConnectionState.DISCONNECTED;
+                        this.connectPromise = null;
+                        break;
+                }
+                if (state.oldState === 2 && state.newState === 1) {
+                    this.reconnect();
+                } else if (state.newState === 4) {
+                    this.reconnect(true);
+                }
+            });
+
+            this._connectionSate = new Observable<HubConnectionState>((sub: Subscriber<HubConnectionState>) => {
+                this._connectionStateSub = sub;
+            });
         } catch (e) {
             console.error(e);
+        }
+    }
+
+    private reconnect(delayed = false): void {
+        if (this.connectionArguments) {
+            console.log('reconnecting...', this.connectionArguments);
+            setTimeout(() => {
+                this.connectToDraft(this.connectionArguments[0], this.connectionArguments[1]).then((config) => {
+                    if (this._draftConfigSub) {
+                        this._draftConfigSub.next(config);
+                    }
+                    if (this._draftStateSub) {
+                        this._draftStateSub.next(config.state);
+                    }
+                    console.log('reconnected.');
+                }).catch((err) => {
+                    console.log('error reconnecting', err);
+                    this.reconnect(true);
+                });
+            }, delayed ? 5000 : 0);
         }
     }
 
@@ -67,6 +122,12 @@ export class DraftService {
             });
         }
         return this.connectPromise;
+    }
+
+    public disconnect(): void {
+       this.connectionArguments = null;
+       this.connectPromise = null;
+       this.hub.connection.stop(false, true);
     }
 
     public createDraft(createCfg: ICreateDraftDTO): Promise<IDraftConfigAdminDTO> {
@@ -113,6 +174,7 @@ export class DraftService {
 
     public connectToDraft(draftToken: string, teamToken?: string): Promise<IDraftConfigDTO> {
         return new Promise((resolve, reject) => {
+            this.connectionArguments = [draftToken, teamToken];
             this.connect().then(() => {
                 this.hub.server.connectToDraft(draftToken, teamToken).then((config) => {
                     resolve(config);

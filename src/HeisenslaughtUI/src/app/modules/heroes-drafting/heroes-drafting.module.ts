@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ValueProvider } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MdCardModule } from '@angular/material/card';
@@ -20,6 +20,7 @@ import { HeroesCommonModule } from '../heroes-common/heroes-common.module';
 import { HeroesDraftingComponent } from './heroes-drafting.component';
 import { DraftConfigScreenComponent } from './screens/draft-config-screen/draft-config-screen.component';
 import { DraftScreenComponent } from './screens/draft-screen/draft-screen.component';
+
 
 @NgModule({
   imports: [
@@ -46,7 +47,7 @@ import { DraftScreenComponent } from './screens/draft-screen/draft-screen.compon
   ],
   providers: [
     HeroesService,
-    DraftService
+    <ValueProvider>{ provide: DraftService, useValue: new DraftService() }
   ]
 })
 export class HeroesDraftingModule { }

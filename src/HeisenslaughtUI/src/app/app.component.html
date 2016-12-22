@@ -4,6 +4,7 @@
             <span>Menu</span>
         </md-toolbar>
         <md-nav-list>
+            <md-list-item [routerLink]="['/']" (click)="mainNav.close()"> Home </md-list-item>
             <md-list-item [routerLink]="['/draft']" (click)="mainNav.close()"> Create Draft </md-list-item>
         </md-nav-list>
     </md-sidenav>

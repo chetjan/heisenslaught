@@ -1,9 +1,144 @@
+$sideWidth: 200px;
+$centerWidth: 1088px;
+$sideOffset:60px;
 :host {
     display: block;
     width: 100%;
     height: 100%;
+    color: white;
+    overflow: hidden;
+    .draft-container {
+        width: $sideWidth * 2 + $centerWidth;
+        height: 100%;
+        margin: auto;
+        .left,
+        .center,
+        .right {
+            position: absolute;
+            top: 0px;
+            height: 100%;
+        }
+        .left {
+            left: $sideOffset;
+            width: $sideWidth;
+            padding-top: 100px;
+            team-hero-picks {
+                float: right;
+            }
+        }
+        .center {
+            left: $sideWidth;
+            width: $centerWidth;
+            text-align: center;
+            .header {
+                width: 100%;
+                height: 250px;
+                background-image: url('assets/storm_ui_glues_draft_headerbar_vs.png');
+                background-repeat: no-repeat;
+                background-position-x: center;
+                .team-name {
+                    position: absolute;
+                    width: 365px;
+                    top: 20px;
+                    font-size: 32px;
+                    font-weight: 700;
+                    letter-spacing: 1px;
+                }
+                .team-name.team1 {
+                    left: 70px;
+                    text-align: right;
+                    text-shadow: 0 0 60px blue, 0 0 60px blue, 0 0 60px blue, 0 0 5px blue, 0 0 5px blue, 0 0 5px blue, 0 0 5px blue, 0 0 5px blue;
+                }
+                .team-name.team2 {
+                    left: 50%;
+                    margin-left: 110px;
+                    text-shadow: 0 0 60px red, 0 0 60px red, 0 0 5px red, 0 0 5px red;
+                }
+                .pick-time {
+                    position: absolute;
+                    left: 50%;
+                    top: 20px;
+                    margin-left: -72px;
+                    font-size: 52px;
+                    font-weight: 900;
+                    width: 150px;
+                    text-align: center;
+                    letter-spacing: 2px;
+                }
+                .bonus-time {
+                    position: absolute;
+                    width: 144px;
+                    height: 40px;
+                    left: 50%;
+                    top: 70px;
+                    text-align: center;
+                    padding: 8px;
+                    font-weight: 700;
+                    font-size: 18px;
+                    letter-spacing: 1px;
+                }
+                .bonus-time.team1 {
+                    background-image: url('assets/storm_ui_glues_draft_rankbackground_blue.png');
+                    margin-left: -210px;
+                }
+                .bonus-time.team2 {
+                    background-image: url('assets/storm_ui_glues_draft_rankbackground_red.png');
+                    margin-left: 70px;
+                }
+                .map {
+                    position: absolute;
+                    width: 512px;
+                    height: 92px;
+                    top: 92px;
+                    left: 50%;
+                    margin-left: -256px;
+                    background-image: url('assets/storm_ui_glues_draft_headerbar_mapbg.png');
+                    text-align: center;
+                    font-weight: 700;
+                    font-size: 24px;
+                    padding-top: 24px;
+                    letter-spacing: 1px;
+                }
+                .draft-status {
+                    position: absolute;
+                    top: 178px;
+                    width: 450px;
+                    margin-left: -225px;
+                    left: 50%;
+                    z-index: 20;
+                    text-align: center;
+                    font-weight: 700;
+                    font-size: 22px;
+                    letter-spacing: 1px;
+                    text-transform: uppercase;
+                }
+                team-hero-picks {
+                    position: absolute;
+                    top: 115px;
+                    &[team="0"] {
+                        left: 100px;
+                    }
+                    &[team="1"] {
+                        left: 767px;
+                    }
+                }
+            }
+        }
+        .right {
+            position: absolute;
+            right: $sideOffset;
+            width: $sideWidth;
+            height: 100%;
+            padding-top: 100px;
+            team-hero-picks {
+                float: left;
+            }
+        }
+    }
 }
 
+
+/*
 section.left {
     top: 0px;
     width: 20vw;
@@ -227,3 +362,5 @@ section.center div.select-area {
 .team-name.team2 {
     text-shadow: 0 0 60px red, 0 0 60px red, 0 0 5px red, 0 0 5px red;
 }
+
+*/
