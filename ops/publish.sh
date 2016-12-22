@@ -12,7 +12,7 @@ $gulp clean
 $gulp
 cd ../HeisenslaughtUI
 npm install
-./node_modules/.bin/ng build
+./node_modules/.bin/ng build --prod
 cd ../..
 dotnet restore
 dotnet publish
