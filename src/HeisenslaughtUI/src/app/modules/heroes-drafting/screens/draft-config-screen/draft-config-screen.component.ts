@@ -59,7 +59,9 @@ export class DraftConfigScreenComponent implements OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.stateSubscription.unsubscribe();
+    if (this.stateSubscription) {
+      this.stateSubscription.unsubscribe();
+    }
     this.draftService.disconnect();
   }
   public get loaded(): boolean {
