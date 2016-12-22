@@ -27,43 +27,6 @@
 		<team-hero-picks [team]="1" [slots]="teamPickSlots[1]"  [config]="draftConfig" [state]="draftState"></team-hero-picks>
 	</div>
 </section>
-
-<!--
-<section class="left">
-	<team-hero-picks [team]="0" [slots]="teamPickSlots[0]" [config]="draftConfig" [state]="draftState"></team-hero-picks>
-</section>
-<section class="center">
-	<div class="top">
-		<div class="header">
-			<div class="map">{{mapName}}</div>
-			
-			<div class="pick-time">{{pickTime}}</div>
-			<div class="bonus-time team1">{{team1Status || 'Waiting...'}}</div>
-			<div class="bonus-time team2">{{team2Status || 'Waiting...'}}</div>
-			
-			<div class="team-name team1">{{draftConfig?.team1Name || 'Blue Team'}}</div>
-			<div class="team-name team2">{{draftConfig?.team2Name || 'Red Team'}}</div>
-			
-			<div class="draft-status">{{draftStatus}}</div>
-
-			<team-hero-picks class="bans" [team]="0" [slots]="teamBanSlots[0]"  [config]="draftConfig" [state]="draftState"></team-hero-picks>
-			<team-hero-picks class="bans" [team]="1" [slots]="teamBanSlots[1]"  [config]="draftConfig" [state]="draftState"></team-hero-picks>
-		</div>
-	</div>
-	<div class="bottom">
-		<div class="search-area">
-			<hero-search [(selectedHero)]="selectedHero"></hero-search>
-		</div>
-		<div class="select-area">
-			<heroes-button label="SELECT"  *ngIf="!!team" 
-			[disabled]="!selectedHero  || !draftState?.team1Ready || !draftState?.team2Ready" 
-			(click)="pick()"></heroes-button>
-		</div>
-	</div>
-</section>
-<section class="right">
-	<team-hero-picks [team]="1" [slots]="teamPickSlots[1]"  [config]="draftConfig" [state]="draftState"></team-hero-picks>
-</section>
 <section class="ready-window" *ngIf="showReady">
 	<div class="modal"></div>
 	<div class="popup">
@@ -76,4 +39,3 @@
 		<heroes-button (click)="setReady()" label="Ready!"></heroes-button>
 	</div>
 </section>
--->
