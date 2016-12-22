@@ -124,33 +124,33 @@ export class DraftScreenComponent implements OnDestroy {
     }
     return '';
   }
-
-  public getPick(team: number, pickId: number): HeroData {
-    if (!this.heroes || !this.draftConfig || !this.draftState) {
-      return null;
+  /*
+    public getPick(team: number, pickId: number): HeroData {
+      if (!this.heroes || !this.draftConfig || !this.draftState) {
+        return null;
+      }
+      let picks = this.draftState.picks || [];
+      let pickedHeroId: string;
+  
+      let pickSlots: number[] = this.teamPickSlots[team];
+  
+      pickedHeroId = picks[pickSlots[pickId]];
+      return this.getHeroById(pickedHeroId);
     }
-    let picks = this.draftState.picks || [];
-    let pickedHeroId: string;
-
-    let pickSlots: number[] = this.teamPickSlots[team];
-
-    pickedHeroId = picks[pickSlots[pickId]];
-    return this.getHeroById(pickedHeroId);
-  }
-
-  public getBan(team: number, pickId: number): HeroData {
-    if (!this.heroes || !this.draftConfig || !this.draftState) {
-      return null;
+  
+    public getBan(team: number, pickId: number): HeroData {
+      if (!this.heroes || !this.draftConfig || !this.draftState) {
+        return null;
+      }
+      let picks = this.draftState.picks || [];
+      let pickedHeroId: string;
+  
+      let banSlots: number[] = this.teamBanSlots[team];
+  
+      pickedHeroId = picks[banSlots[pickId]];
+      return this.getHeroById(pickedHeroId);
     }
-    let picks = this.draftState.picks || [];
-    let pickedHeroId: string;
-
-    let banSlots: number[] = this.teamBanSlots[team];
-
-    pickedHeroId = picks[banSlots[pickId]];
-    return this.getHeroById(pickedHeroId);
-  }
-
+  */
 
   private getHeroById(heroId: string): HeroData {
     if (!this.heroes) {
@@ -198,6 +198,7 @@ export class DraftScreenComponent implements OnDestroy {
 
   public pick() {
     this.draftService.pickHero(this.selectedHero.id, this.draftToken, this.teamToken);
+    this.selectedHero = null;
   }
 
   public get currentPick(): number {
@@ -242,6 +243,37 @@ export class DraftScreenComponent implements OnDestroy {
       }
     }
     return '';
+  }
+
+  public get shouldShowSelect(): boolean {
+    if (this.draftState && this.draftState.phase === DraftPhase.PICKING) {
+      if (this.team) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public isHeroPicked(heroId: string) {
+    if (this.draftState && this.draftState.picks) {
+      if (this.draftState.picks.lastIndexOf(heroId) !== -1) {
+        return true;
+      }
+      if (heroId === 'cho' || heroId === 'gall') {
+        return this.draftState.picks.lastIndexOf(heroId === 'cho' ? 'gall' : 'cho') !== -1;
+      }
+
+    }
+    return false;
+  }
+
+  public get canPick(): boolean {
+    if (this.draftState && this.draftState.phase === DraftPhase.PICKING) {
+      if (this.team === (this.currentTeam + 1) && this.selectedHero) {
+        return !this.isHeroPicked(this.selectedHero.id);
+      }
+    }
+    return false;
   }
 
 }

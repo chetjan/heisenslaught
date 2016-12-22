@@ -1,0 +1,97 @@
+:host {
+    top: 0px;
+    margin: auto;
+    bottom: 50px;
+    display: block;
+    width: 860px;
+    height: 560px;
+}
+
+div.search {
+    display: block;
+    margin: auto;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    height: 60px;
+}
+
+div.txtsearch {
+    input {
+        position: absolute;
+        right: 39px;
+        top: 20px;
+        height: 60px;
+        width: 340px;
+        background-image: url('assets/storm_ui_glues_store_note_box.png');
+        border: none;
+        background-color: transparent;
+        color: white;
+        opacity: 0.5;
+        padding-left: 20px;
+        font-size: 14px;
+        &:focus {
+            outline: none;
+            opacity: 1;
+        }
+    }
+    button {
+        position: absolute;
+        right: 0px;
+        top: 24px;
+        width: 52px;
+        height: 52px;
+        background-image: url('assets/storm_ui_glues_button_close_normal.png'), url('assets/storm_ui_glues_button_close_hover.png'), url('assets/storm_ui_glues_button_close_down.png'), url('assets/storm_ui_glues_button_close_disabled.png');
+        background-position: 0px 0px, 110px 0px, 110px 0px, 110px 0px;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        border: none;
+        opacity: 0.5;
+        background-color: transparent;
+        &:focus {
+            outline: none;
+        }
+        &:hover {
+            // background-image: url('assets/storm_ui_glues_button_close_hover.png');
+            background-position: 110px 0px, 0px 0px, 110px 0px, 110px 0px;
+        }
+        &:active {
+            // background-image: url('assets/storm_ui_glues_button_close_down.png');
+            background-position: 110px 0px, 110px 0px, 0px 0px, 110px 0px;
+        }
+        &:disabled {
+            // background-image: url('assets/storm_ui_glues_button_close_disabled.png');
+            background-position: 110px 0px, 110px 0px, 110px 0px, 0px 0px;
+        }
+        &.focused {
+            opacity: 1;
+        }
+    }
+}
+
+div.list {
+    position: absolute;
+    top: 0px;
+    bottom: 50px;
+    left: 2px;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+div.filters {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    padding: 20px;
+}
+
+div.txtsearch {
+    position: absolute;
+    width: 50%;
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    text-align: center;
+    padding: 10px;
+}

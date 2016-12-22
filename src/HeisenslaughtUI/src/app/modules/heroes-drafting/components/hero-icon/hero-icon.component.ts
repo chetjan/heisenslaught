@@ -10,10 +10,11 @@ import { HeroData } from '../../../heroes-data-service/heroes-data-service.modul
       <svg viewBox="0 0 100 100">
         <image [attr.xlink:href]="hero.iconSmall" width="100" height="100"></image>
       </svg>
+      <div class="picked-icon"></div>
     </div>
     <img src="http://us.battle.net/heroes/static/images/heroes/skin_hover.png"/>
   `,
-  styleUrls: ['./hero-icon.component.css']
+  styleUrls: ['./hero-icon.component.scss']
 })
 export class HeroIconComponent implements OnInit {
 
