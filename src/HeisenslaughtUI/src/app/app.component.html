@@ -1,1 +1,25 @@
-<router-outlet></router-outlet>
+<md-sidenav-layout>
+    <md-sidenav #mainNav mode="over" class="hs-dark-theme">
+        <md-toolbar class="md-primary">
+            <span>Menu</span>
+        </md-toolbar>
+        <md-nav-list>
+            <md-list-item [routerLink]="['/']" (click)="mainNav.close()"> Home </md-list-item>
+            <md-list-item [routerLink]="['/draft']" (click)="mainNav.close()"> Create Draft </md-list-item>
+        </md-nav-list>
+    </md-sidenav>
+    <div class="nav-btn">
+        <button md-raised-button (click)="mainNav.open()" class="md-primary">
+            <md-icon>menu</md-icon>
+        </button>
+        <!--<button md-button md-icon-button (click)="mainNav.open()" class="md-raised">
+            <md-icon>menu</md-icon>Menu
+        </button>-->
+    </div>
+    <div class="content">
+        <router-outlet></router-outlet>
+    </div>
+    <div class="footer">
+        ©2014 Blizzard Entertainment, Inc. All rights reserved. Heroes of the Storm is a trademark of Blizzard Entertainment, Inc.
+    </div>
+</md-sidenav-layout>

@@ -1,0 +1,41 @@
+$footHeight: 30px;
+$navWidth: 300px;
+:host {
+    display: block;
+    &,
+    md-sidenav-layout {
+        height: 100%;
+    }
+    md-sidenav {
+        width: $navWidth;
+        background-color: #0C051D;
+    }
+    .nav-btn{
+        position: absolute;
+        top:0px;
+        left:0px;
+        padding-left:10px;
+        padding-top:15px;
+        z-index:1000;
+    }
+    .content {
+        position: absolute;
+        width: 100%;
+        top: 0px;
+        bottom: $footHeight;
+        overflow-y: auto;
+        background-color: #0d0119
+    }
+    .footer {
+        position: absolute;
+        width: 100%;
+        height: $footHeight;
+        bottom: 0px;
+        border-top: 1px solid rgba(255, 255, 255, .07);
+        background-color: #0C051D;
+        text-align: center;
+        padding-top:6px;
+        color:rgba(255, 255, 255, .28);
+        font-size:12px;
+    }
+}

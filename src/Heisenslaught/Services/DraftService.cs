@@ -31,8 +31,11 @@ namespace Heisenslaught.Services
             var room = GetDraftRoom(draftToken, true);
             var connection = room.Connect(hub, authToken);
             // TODO: if user is connecected to another room disconnect from that room or support multi room connections;
-            if(!connectionsRoom.ContainsKey(hub.Context.ConnectionId))
-                connectionsRoom.Add(hub.Context.ConnectionId, room);
+            lock (connectionsRoom)
+            {
+                if (!connectionsRoom.ContainsKey(hub.Context.ConnectionId))
+                    connectionsRoom.Add(hub.Context.ConnectionId, room);
+            }
 
             TryActivateDraftRoom(room);
 
@@ -65,13 +68,16 @@ namespace Heisenslaught.Services
         public void ClientDisconnected(DraftHub hub)
         {
             var id = hub.Context.ConnectionId;
-            if (connectionsRoom.ContainsKey(id))
+            lock (connectionsRoom)
             {
-                var room = connectionsRoom[id];
-                if (room.Disconnect(hub))
+                if (connectionsRoom.ContainsKey(id))
                 {
-                    connectionsRoom.Remove(id);
-                    TryDeactivateDraftRoom(room);
+                    var room = connectionsRoom[id];
+                    if (room.Disconnect(hub))
+                    {
+                        connectionsRoom.Remove(id);
+                        TryDeactivateDraftRoom(room);
+                    }
                 }
             }
         }
@@ -82,20 +88,29 @@ namespace Heisenslaught.Services
             TryDeactivateDraftRoom(room);
         }
 
+
         private void TryActivateDraftRoom(DraftRoom room)
         {
-            if(!activeRooms.ContainsKey(room.DraftModel.draftToken) && room.IsActive)
+            lock (activeRooms)
             {
-                activeRooms.Add(room.DraftModel.draftToken, room);
+                if(!activeRooms.ContainsKey(room.DraftModel.draftToken) && room.IsActive)
+                {
+               
+                    activeRooms.Add(room.DraftModel.draftToken, room);
+                
+                }
             }
         }
 
         private void TryDeactivateDraftRoom(DraftRoom room)
         {
-            if (activeRooms.ContainsKey(room.DraftModel.draftToken) && !room.IsActive)
+            lock (activeRooms)
             {
-                activeRooms.Remove(room.DraftModel.draftToken);
-                room.Dispose();
+                if (activeRooms.ContainsKey(room.DraftModel.draftToken) && !room.IsActive)
+                {
+                    activeRooms.Remove(room.DraftModel.draftToken);
+                    room.Dispose();
+                }
             }
         }
 
