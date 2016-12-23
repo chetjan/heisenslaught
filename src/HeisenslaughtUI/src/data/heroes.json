@@ -2,7 +2,7 @@
     {
         "id":"abathur",
         "name": "Abathur",
-        "roles": [],
+        "roles": ["melee", "specialist", "global"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/abathur_evolutionMaster.jpg?v=58-84",
         "iconLarge": ""
@@ -10,7 +10,7 @@
     {
         "id":"alarak",
         "name": "Alarak",
-        "roles": [],
+        "roles": ["melee", "assassin", "burst", "ambusher"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/alarak_highlordOfTaldarim.jpg?v=58-84",
         "iconLarge": ""
@@ -18,7 +18,7 @@
         {
         "id":"anubarak",
         "name": "Anub'arak",
-        "roles": [],
+        "roles": ["melee", "warrior", "tank", "bruiser"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/anubarak_traitorKing.jpg?v=58-84",
         "iconLarge": ""
@@ -26,7 +26,7 @@
     {
         "id":"artanis",
         "name": "Artanis",
-        "roles": [],
+        "roles": ["melee", "warrior", "assassin", "sustain", "bruiser"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/artanis_hierarchOfTheDaelaam.jpg?v=58-84",
         "iconLarge": ""
@@ -34,7 +34,7 @@
     {
         "id":"arthas",
         "name": "Arthas",
-        "roles": [],
+        "roles": ["melee", "warrior", "tank", "bruiser"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/arthas_theLichKing.jpg?v=58-84",
         "iconLarge": ""
@@ -42,7 +42,7 @@
     {
         "id":"auriel",
         "name": "Auriel",
-        "roles": [],
+        "roles": ["ranged", "support", "healer"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/auriel_archangelOfHope.jpg?v=58-84",
         "iconLarge": ""
@@ -50,7 +50,7 @@
     {
         "id":"azmodan",
         "name": "Azmodan",
-        "roles": [],
+        "roles": ["ranged", "specialist", "assassin", "sustain", "seige"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/azmodan_lordOfSin.jpg?v=58-84",
         "iconLarge": ""
@@ -58,7 +58,7 @@
     {
         "id":"brightwing",
         "name": "Brightwing",
-        "roles": [],
+        "roles": ["ranged", "support", "healer", "global"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/brightwing_faerieDragon.jpg?v=58-84",
         "iconLarge": ""
@@ -66,7 +66,7 @@
     {
         "id":"chen",
         "name": "Chen",
-        "roles": [],
+        "roles": ["melee", "warrior", "tank"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/chen_legendaryBrewmaster.jpg?v=58-84",
         "iconLarge": ""
@@ -74,7 +74,7 @@
     {
         "id":"cho",
         "name": "Cho",
-        "roles": [],
+        "roles": ["melee", "warrior", "tank"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/cho_twilightsHammerChieftainCho.jpg?v=58-84",
         "iconLarge": ""
@@ -82,7 +82,7 @@
     {
         "id":"chromie",
         "name": "Chromie",
-        "roles": [],
+        "roles": ["ranged", "assassin", "burst"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/chromie_keeperOfTime.jpg?v=58-84",
         "iconLarge": ""
@@ -90,7 +90,7 @@
     {
         "id":"dehaka",
         "name": "Dehaka",
-        "roles": [],
+        "roles": ["melee", "warrior", "tank", "global"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/dehaka_primalPackLeader.jpg?v=58-84",
         "iconLarge": ""
@@ -98,7 +98,7 @@
     {
         "id":"diablo",
         "name": "Diablo",
-        "roles": [],
+        "roles": ["melee", "warrior", "tank"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/diablo_lordOfTerror.jpg?v=58-84",
         "iconLarge": ""
@@ -106,7 +106,7 @@
     {
         "id":"etc",
         "name": "E.T.C",
-        "roles": [],
+        "roles": ["melee", "warrior", "tank"],
         "keywords":["etc"],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/etc_rockGod.jpg?v=58-84",
         "iconLarge": ""
@@ -114,15 +114,15 @@
     {
         "id":"falstad",
         "name": "Falstad",
-        "roles": [],
-        "keywords":[],
+        "roles": ["ranged", "assassin", "global", "burst", "sustain"],
+        "keywords":["chicken"],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/falstad_wildhammerThane.jpg?v=58-84",
         "iconLarge": ""
     },
     {
         "id":"gall",
         "name": "Gall",
-        "roles": [],
+        "roles": ["melee", "assassin", "sustain"],
         "keywords":["chogall", "cho"],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/gall_twilightsHammerChieftainGall.jpg?v=58-84",
         "iconLarge": ""
@@ -130,7 +130,7 @@
     {
         "id":"gazlowe",
         "name": "Gazlowe",
-        "roles": [],
+        "roles": ["melee", "specialist", "seige"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/gazlowe_bossOfRatchet.jpg?v=58-84",
         "iconLarge": ""
@@ -138,7 +138,7 @@
     {
         "id":"greymane",
         "name": "Greymane",
-        "roles": [],
+        "roles": ["melee", "ranged", "assassin", "burst", "sustain"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/greymane-human_lordOfTheWorgenHuman.jpg?v=58-84",
         "iconLarge": ""
@@ -146,7 +146,7 @@
     {
         "id":"guldan",
         "name": "Gul'dan",
-        "roles": [],
+        "roles": ["ranged", "assassin", "sustain"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/guldan_darknessIncarnate.jpg?v=58-84",
         "iconLarge": ""
@@ -154,7 +154,7 @@
     {
         "id":"illidan",
         "name": "Illidan",
-        "roles": [],
+        "roles": ["melee", "assassin", "sustain", "global"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/illidan_theBetrayer.jpg?v=58-84",
         "iconLarge": ""
@@ -162,7 +162,7 @@
     {
         "id":"jaina",
         "name": "Jaina",
-        "roles": [],
+        "roles": ["ranged", "assassin", "burst"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/jaina_archmage.jpg?v=58-84",
         "iconLarge": ""
@@ -170,7 +170,7 @@
     {
         "id":"johanna",
         "name": "Johanna",
-        "roles": [],
+        "roles": ["melee", "warrior", "tank"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/johanna_crusaderOfZakarum.jpg?v=58-84",
         "iconLarge": ""
@@ -178,7 +178,7 @@
     {
         "id":"kaelthas",
         "name": "Kael'thas",
-        "roles": [],
+        "roles": ["ranged", "assassin", "burst", "sustain"],
         "keywords":["kt"],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/kaelthas_theSunKing.jpg?v=58-84",
         "iconLarge": ""
@@ -186,7 +186,7 @@
     {
         "id":"kerrigan",
         "name": "Kerrigan",
-        "roles": [],
+        "roles": ["melee", "assassin", "burst", "ambusher"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/kerrigan_queenOfBlades.jpg?v=58-84",
         "iconLarge": ""
@@ -194,7 +194,7 @@
     {
         "id":"kharazim",
         "name": "Kharazim",
-        "roles": [],
+        "roles": ["melee", "support", "healer", "assassin", "sustain"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/kharazim_veradaniMonk.jpg?v=58-84",
         "iconLarge": ""
@@ -202,7 +202,7 @@
     {
         "id":"leoric",
         "name": "Leoric",
-        "roles": [],
+        "roles": ["melee", "warrior", "tank", "bruiser"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/leoric_theSkeletonKing.jpg?v=58-84",
         "iconLarge": ""
@@ -210,7 +210,7 @@
     {
         "id":"lili",
         "name": "Li Li",
-        "roles": [],
+        "roles": ["ranged", "support", "healer"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/lili_worldWanderer.jpg?v=58-84",
         "iconLarge": ""
@@ -218,7 +218,7 @@
     {
         "id":"liming",
         "name": "Li-Ming",
-        "roles": [],
+        "roles": ["ranged", "assassin", "burst", "sustain"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/li-ming_rebelliousWizard.jpg?v=58-84",
         "iconLarge": ""
@@ -226,15 +226,15 @@
     {
         "id":"morales",
         "name": "Lt. Morales",
-        "roles": ["support", "healer"],
-        "keywords":["medic"],
+        "roles": ["ranged", "support", "healer"],
+        "keywords":["lieutenant", "medic"],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/lt-morales_combatMedic.jpg?v=58-84",
         "iconLarge": ""
     },
     {
         "id":"lunara",
         "name": "Lunara",
-        "roles": [],
+        "roles": ["ranged", "assassin", "sustain"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/lunara_firstDaughterOfCenarius.jpg?v=58-84",
         "iconLarge": ""
@@ -242,7 +242,7 @@
     {
         "id":"malfurion",
         "name": "Malfurion",
-        "roles": [],
+        "roles": ["ranged", "support", "healer"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/malfurion_archdruid.jpg?v=58-84",
         "iconLarge": ""
@@ -250,7 +250,7 @@
     {
         "id":"medivh",
         "name": "Medivh",
-        "roles": [],
+        "roles": ["ranged", "specialist", "support"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/medivh_theLastGuardian.jpg?v=58-84",
         "iconLarge": ""
@@ -258,7 +258,7 @@
     {
         "id":"muradin",
         "name": "Muradin",
-        "roles": [],
+        "roles": ["melee", "warrior", "tank"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/muradin_mountainKing.jpg?v=58-84",
         "iconLarge": ""
@@ -266,7 +266,7 @@
     {
         "id":"murky",
         "name": "Murky",
-        "roles": [],
+        "roles": ["melee", "specialist"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/murky_babyMurloc.jpg?v=58-84",
         "iconLarge": ""
@@ -274,7 +274,7 @@
     {
         "id":"nazeebo",
         "name": "Nazeebo",
-        "roles": [],
+        "roles": ["ranged", "specialist", "assassin", "sustain"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/nazeebo_hereticWitchDoctor.jpg?v=58-84",
         "iconLarge": ""
@@ -283,14 +283,14 @@
         "id":"nova",
         "name": "Nova",
         "roles": [],
-        "keywords":[],
+        "keywords":["ranged", "assassin", "burst", "ambusher"],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/nova_dominionGhost.jpg?v=58-84",
         "iconLarge": ""
     },
     {
         "id":"ragnaros",
         "name": "Ragnaros",
-        "roles": [],
+        "roles": ["melee", "assassin", "burst", "sustain"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/ragnaros_theFirelord.jpg?v=58-84",
         "iconLarge": ""
@@ -298,7 +298,7 @@
     {
         "id":"raynor",
         "name": "Raynor",
-        "roles": [],
+        "roles": ["ranged", "assassin", "sustain"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/raynor_renegadeCommander.jpg?v=58-84",
         "iconLarge": ""
@@ -306,7 +306,7 @@
     {
         "id":"rehgar",
         "name": "Rehgar",
-        "roles": [],
+        "roles": ["melee", "support", "healer"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/rehgar_shamanOfTheEarthenRing.jpg?v=58-84",
         "iconLarge": ""
@@ -314,7 +314,7 @@
     {
         "id":"rexxar",
         "name": "Misha",
-        "roles": [],
+        "roles": ["melee", "ranged", "warrior"],
         "keywords":["rexxar", "misha"],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/rexxar_championOfTheHorde.jpg?v=58-84",
         "iconLarge": ""
@@ -322,7 +322,7 @@
     {
         "id":"samuro",
         "name": "Samuro",
-        "roles": [],
+        "roles": ["melee", "assassin", "burst", "ambusher"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/samuro_theBlademaster.jpg?v=58-84",
         "iconLarge": ""
@@ -330,7 +330,7 @@
     {
         "id":"sgthammer",
         "name": "Sgt. Hammer",
-        "roles": [],
+        "roles": ["ranged", "specialist", "assassin", "sustain", "seige"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/sgt-hammer_siegeTankOperator.jpg?v=58-84",
         "iconLarge": ""
@@ -338,7 +338,7 @@
     {
         "id":"sonya",
         "name": "Sonya",
-        "roles": [],
+        "roles": ["melee", "warrior", "bruiser"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/sonya_wanderingBarbarian.jpg?v=58-84",
         "iconLarge": ""
@@ -346,7 +346,7 @@
     {
         "id":"stitches",
         "name": "Stitches",
-        "roles": [],
+        "roles": ["melee", "warrior", "tank"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/stitches_terrorOfDarkshire.jpg?v=58-84",
         "iconLarge": ""
@@ -354,7 +354,7 @@
     {
         "id":"sylvanas",
         "name": "Sylvanas",
-        "roles": [],
+        "roles": ["ranged", "specialist", "assassin", "sustain", "seige"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/sylvanas_theBansheeQueen.jpg?v=58-84",
         "iconLarge": ""
@@ -362,7 +362,7 @@
     {
         "id":"tassadar",
         "name": "Tassadar",
-        "roles": [],
+        "roles": ["ranged", "support"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/tassadar_saviorOfTheTemplar.jpg?v=58-84",
         "iconLarge": ""
@@ -370,7 +370,7 @@
     {
         "id":"butcher",
         "name": "The Butcher",
-        "roles": [],
+        "roles": ["melee", "assassin", "burst", "ambusher"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/the-butcher_fleshCarver.jpg?v=58-84",
         "iconLarge": ""
@@ -379,7 +379,7 @@
         "id":"tlv",
         "name": "The Lost Vikings",
         "nameShort": "Lost Vikings",
-        "roles": [],
+        "roles": ["melee", "ranged", "specialist", "global"],
         "keywords":["tlv"],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/the-lost-vikings_tripleTrouble.jpg?v=58-84",
         "iconLarge": ""
@@ -387,7 +387,7 @@
     {
         "id":"thrall",
         "name": "Thrall",
-        "roles": [],
+        "roles": ["melee", "assassin", "burst", "sustain"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/thrall_warchiefOfTheHorde.jpg?v=58-84",
         "iconLarge": ""
@@ -395,7 +395,7 @@
     {
         "id":"tracer",
         "name": "Tracer",
-        "roles": [],
+        "roles": ["ranged", "assassin", "burst"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/tracer_agentOfOverwatch.jpg?v=58-84",
         "iconLarge": ""
@@ -403,7 +403,7 @@
     {
         "id":"tychus",
         "name": "Tychus",
-        "roles": [],
+        "roles": ["ranged", "assassin", "burst", "sustain"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/tychus_notoriousOutlaw.jpg?v=58-84",
         "iconLarge": ""
@@ -411,7 +411,7 @@
     {
         "id":"tyreal",
         "name": "Tyreal",
-        "roles": [],
+        "roles": ["melee", "warrior", "tank", "bruiser"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/tyrael_archangelOfJustice.jpg?v=58-84",
         "iconLarge": ""
@@ -419,7 +419,7 @@
     {
         "id":"tyrande",
         "name": "Tyrande",
-        "roles": [],
+        "roles": ["ranged", "support", "healer"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/tyrande_highPriestessOfElune.jpg?v=58-84",
         "iconLarge": ""
@@ -427,7 +427,7 @@
     {
         "id":"uther",
         "name": "Uther",
-        "roles": [],
+        "roles": ["melee", "support", "healer"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/uther_theLightbringer.jpg?v=58-84",
         "iconLarge": ""
@@ -435,7 +435,7 @@
     {
         "id":"valla",
         "name": "Valla",
-        "roles": [],
+        "roles": ["ranged", "assassin", "burst", "sustain"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/valla_demonHunter.jpg?v=58-84",
         "iconLarge": ""
@@ -443,7 +443,7 @@
     {
         "id":"varian",
         "name": "Varian",
-        "roles": [],
+        "roles": ["melee", "assassin", "warrior", "tank", "bruiser", "burst", "sustain", "multi-class"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/varian-warrior_highKingOfTheAllianceWarrior.jpg?v=58-84",
         "iconLarge": ""
@@ -451,7 +451,7 @@
     {
         "id":"xul",
         "name": "Xul",
-        "roles": [],
+        "roles": ["melee", "specialist", "seige"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/xul_crypticNecromancer.jpg?v=58-84",
         "iconLarge": ""
@@ -459,7 +459,7 @@
     {
         "id":"zagara",
         "name": "Zagara",
-        "roles": [],
+        "roles": ["ranged", "specialist", "assassin", "sustain", "seige"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/zagara_broodmotherOfTheSwarm.jpg?v=58-84",
         "iconLarge": ""
@@ -467,7 +467,7 @@
     {
         "id":"zarya",
         "name": "Zarya",
-        "roles": [],
+        "roles": ["ranged", "warrior"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/zarya_defenderOfRussia.jpg?v=58-84",
         "iconLarge": ""
@@ -475,9 +475,17 @@
     {
         "id":"zeratul",
         "name": "Zeratul",
-        "roles": [],
+        "roles": ["melee", "assassin", "burst", "ambusher"],
         "keywords":[],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/zeratul_darkPrelate.jpg?v=58-84",
+        "iconLarge": ""
+    },
+    {
+        "id":"zuljin",
+        "name": "Zul'jin",
+        "roles": ["ranged", "assassin", "sustain"],
+        "keywords":[],
+        "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/zuljin_warlordOfTheAmani.jpg?v=58-84",
         "iconLarge": ""
     }
 ]

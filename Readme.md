@@ -5,9 +5,11 @@ A custom drafting tool for (On|Off)slaught.
 ## Local Setup
 
 1. Install [node](https://nodejs.org)
+1. Install [mongodb](https://www.mongodb.com/)
 	
 ### UI
 1. In `src/HeisenslaughtUI` run `npm install`
+    1. Note there is currently a bug in the version of node-sass used by angular-cli. After `npm install` you need to run `npm rebuild node-sass` to generate the vendor folder needed.
 1. In `src/HeisenslaughtUI` run `./node_modules/bin/ng.cmd build` (Windows) or `./node_modules/.bin/ng build` (OS X / Linux)
     1. Alternatively you can install [angular cli](https://github.com/angular/angular-cli/) globally and just run `ng build`
 
