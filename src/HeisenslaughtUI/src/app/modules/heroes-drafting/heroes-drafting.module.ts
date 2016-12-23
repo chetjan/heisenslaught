@@ -7,7 +7,7 @@ import { MdInputModule } from '@angular/material/input';
 import { MdSelectModule } from '@angular/material/select';
 import { MdRadioModule } from '@angular/material/radio';
 import { MdListModule } from '@angular/material/list';
-
+import { MdIconModule } from '@angular/material/icon';
 
 import { HeroesDraftingRoutingModule } from './heroes-drafting-routing.module';
 
@@ -20,6 +20,7 @@ import { HeroesCommonModule } from '../heroes-common/heroes-common.module';
 import { HeroesDraftingComponent } from './heroes-drafting.component';
 import { DraftConfigScreenComponent } from './screens/draft-config-screen/draft-config-screen.component';
 import { DraftScreenComponent } from './screens/draft-screen/draft-screen.component';
+import { DraftConnectionStatusComponent } from './components/draft-connection-status/draft-connection-status.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { DraftScreenComponent } from './screens/draft-screen/draft-screen.compon
     MdSelectModule,
     MdRadioModule,
     MdListModule,
+    MdIconModule,
     HeroesCommonModule,
     HeroesDraftingRoutingModule
   ],
@@ -43,7 +45,8 @@ import { DraftScreenComponent } from './screens/draft-screen/draft-screen.compon
     TeamHeroPicksComponent,
     HeroesDraftingComponent,
     DraftConfigScreenComponent,
-    DraftScreenComponent
+    DraftScreenComponent,
+    DraftConnectionStatusComponent
   ],
   providers: [
     HeroesService,
