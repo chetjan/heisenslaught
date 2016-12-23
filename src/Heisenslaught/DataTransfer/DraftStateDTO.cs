@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Heisenslaught.Models;
+using Heisenslaught.Infrastructure;
+
+
 namespace Heisenslaught.DataTransfer
 {
     public class DraftStateDTO
@@ -14,6 +14,7 @@ namespace Heisenslaught.DataTransfer
         public int team1BonusTime;
         public int team2BonusTime;
         public List<string> picks;
+        public int connectionCount;
 
         public DraftStateDTO(DraftStateModel model)
         {
@@ -24,6 +25,11 @@ namespace Heisenslaught.DataTransfer
             team1BonusTime = model.team1BonusTime;
             team2BonusTime = model.team2BonusTime;
             picks = model.picks;
+        }
+
+        public DraftStateDTO(DraftRoom room) : this(room.DraftModel.state)
+        {
+            connectionCount = room.ConnectionCount;
         }
 
     }

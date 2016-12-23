@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Heisenslaught.Models;
+﻿using Heisenslaught.Models;
+using Heisenslaught.Infrastructure;
+
 
 namespace Heisenslaught.DataTransfer
 {
@@ -13,10 +11,21 @@ namespace Heisenslaught.DataTransfer
 
         public DraftConfigDrafterDTO(DraftModel model, string teamToken) : base(model)
         {
-            if(teamToken == model.team1DrafterToken)
+            Initialize(model, teamToken);
+        }
+
+        public DraftConfigDrafterDTO(DraftRoom room, string teamToken) : base(room) 
+        {
+            Initialize(room.DraftModel, teamToken);
+        }
+
+        private void Initialize(DraftModel model, string teamToken)
+        {
+            if (teamToken == model.team1DrafterToken)
             {
                 team = 1;
-            }else if(teamToken == model.team2DrafterToken)
+            }
+            else if (teamToken == model.team2DrafterToken)
             {
                 team = 2;
             }

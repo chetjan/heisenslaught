@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Heisenslaught.Models;
+﻿using Heisenslaught.Models;
+using Heisenslaught.Infrastructure;
+
 
 namespace Heisenslaught.DataTransfer
 {
@@ -14,6 +12,11 @@ namespace Heisenslaught.DataTransfer
         {
             state = new DraftStateDTO(model.state);
         }
-        
+
+        public DraftConfigDTO(DraftRoom room) : base(room.DraftModel)
+        {
+            state = new DraftStateDTO(room);
+        }
+
     }
 }

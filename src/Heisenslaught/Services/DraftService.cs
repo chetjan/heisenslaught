@@ -42,13 +42,13 @@ namespace Heisenslaught.Services
             switch (connection.Type)
             {
                 case DraftConnectionType.ADMIN:
-                    config = new DraftConfigAdminDTO(room.DraftModel);
+                    config = new DraftConfigAdminDTO(room);
                     break;
                 case DraftConnectionType.DRAFTER:
-                    config = new DraftConfigDrafterDTO(room.DraftModel, authToken);
+                    config = new DraftConfigDrafterDTO(room, authToken);
                     break;
                 case DraftConnectionType.OBSERVER:
-                    config = new DraftConfigDTO(room.DraftModel);
+                    config = new DraftConfigDTO(room);
                     break;
             }
             return config;

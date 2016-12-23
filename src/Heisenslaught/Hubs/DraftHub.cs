@@ -35,7 +35,7 @@ namespace Heisenslaught
             try
             {
                 Draft.GetDraftRoom(draftToken).ResetDraft(this, adminToken);
-                return new DraftConfigAdminDTO(Draft.GetDraftRoom(draftToken).DraftModel);
+                return new DraftConfigAdminDTO(Draft.GetDraftRoom(draftToken));
             }
             catch (NullReferenceException)
             {

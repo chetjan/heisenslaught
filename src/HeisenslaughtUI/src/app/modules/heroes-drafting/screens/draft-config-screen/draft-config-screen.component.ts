@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+
 import { DraftService, ICreateDraftDTO, IDraftConfigAdminDTO, DraftPhase } from '../../../heroes-draft-service/services/draft.service';
 import { HeroesService, IMapData, HeroData } from '../../../heroes-data-service/services/heroes.service';
 
@@ -81,7 +82,7 @@ export class DraftConfigScreenComponent implements OnDestroy {
   private initConfigDraft() {
     this.draftService.connectToDraft(this.draftToken, this.adminToken).then((config) => {
       this.currentConfig = <IDraftConfigAdminDTO>config;
-      this.stateSubscription = this.draftService.getDraftState(this.draftToken).subscribe((state) => {
+      this.stateSubscription = this.draftService.draftStateObservable.subscribe((state) => {
         this.currentConfig.state = state;
       });
       this.loadedConfig = true;
