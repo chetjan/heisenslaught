@@ -117,11 +117,13 @@
     </table>
   </md-card-content> 
   <md-card-actions align="start">
-    <button md-raised-button class="md-primary" (click)="resetDraft()">Restart Draft</button>
-    <button md-raised-button class="md-warn" (click)="closeDraft()">Close Draft</button>
+    <button md-raised-button class="md-accent" (click)="resetDraft()" *ngIf="!isDraftComplete">Restart Draft</button>
+    <button md-raised-button class="md-warn" (click)="closeDraft()" *ngIf="!isDraftComplete">Close Draft</button>
+    <button md-raised-button class="md-primary" [routerLink]="['../../../']" *ngIf="isDraftComplete">Create New Draft</button>
+    
   </md-card-actions>
 </md-card>
-
+<draft-connection-status *ngIf="loaded && currentConfig"></draft-connection-status>
   <!--
 <section>
   <form novalidate name="draftConfig" *ngIf="loaded && !currentConfig">

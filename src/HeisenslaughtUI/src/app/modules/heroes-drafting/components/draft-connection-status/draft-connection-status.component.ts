@@ -1,14 +1,16 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { DraftService, HubConnectionState } from '../../../heroes-draft-service/heroes-draft-service.module';
 @Component({
   selector: 'draft-connection-status',
   templateUrl: './draft-connection-status.component.html',
   styleUrls: ['./draft-connection-status.component.scss']
 })
-export class DraftConnectionStatusComponent implements OnInit {
+export class DraftConnectionStatusComponent implements OnInit, OnDestroy {
 
   public connectionIcon: string = 'warning';
   public connectionStatus: string = 'disconnected';
+  private connectionStateSub: Subscription;
   constructor(
     private draftService: DraftService,
     private changeRef: ChangeDetectorRef
@@ -37,9 +39,13 @@ export class DraftConnectionStatusComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.draftService.getConnectionState().subscribe((state) => {
+    this.connectionStateSub = this.draftService.getConnectionState().subscribe((state) => {
       this.updateConnectionState(state);
     });
+  }
+
+  ngOnDestroy() {
+    this.connectionStateSub.unsubscribe();
   }
 
 }

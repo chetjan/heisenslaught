@@ -25,8 +25,6 @@ export class DraftConfigScreenComponent implements OnDestroy {
   public heroes: HeroData[];
   public createError: string;
 
-
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -83,7 +81,6 @@ export class DraftConfigScreenComponent implements OnDestroy {
   private initConfigDraft() {
     this.draftService.connectToDraft(this.draftToken, this.adminToken).then((config) => {
       this.currentConfig = <IDraftConfigAdminDTO>config;
-      console.log('connected to draft', config);
       this.stateSubscription = this.draftService.getDraftState(this.draftToken).subscribe((state) => {
         this.currentConfig.state = state;
       });
@@ -91,6 +88,20 @@ export class DraftConfigScreenComponent implements OnDestroy {
     }, (err) => {
       console.log('connect error', err);
     });
+  }
+
+  public get isDraftComplete(): boolean {
+    if (this.currentConfig && this.currentConfig.state) {
+      return this.currentConfig.state.phase === DraftPhase.FINISHED;
+    }
+    return false;
+  }
+
+  public get isDraftWaiting(): boolean {
+    if (this.currentConfig && this.currentConfig.state) {
+      return this.currentConfig.state.phase === DraftPhase.WAITING;
+    }
+    return false;
   }
 
   public createDraft() {
