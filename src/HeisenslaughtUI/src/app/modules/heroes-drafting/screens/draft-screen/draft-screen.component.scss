@@ -1,16 +1,19 @@
 $sideWidth: 200px;
 $centerWidth: 1088px;
 $sideOffset:60px;
+$sideWidthSmall: $sideWidth * 0.5;
+$centerWidthSmall: 1088px;
+$sideOffsetSmall: 90px;
 :host {
     display: block;
     width: 100%;
     height: 100%;
     color: white;
     overflow: hidden;
-    draft-connection-status{
+    draft-connection-status {
         position: absolute;
-        top:20px;
-        right:20px;
+        top: 20px;
+        right: 20px;
     }
     .draft-container {
         width: $sideWidth * 2 + $centerWidth;
@@ -128,8 +131,8 @@ $sideOffset:60px;
                     }
                 }
             }
-            heroes-button{
-                margin-top:15px;
+            heroes-button {
+                margin-top: 15px;
             }
         }
         .right {
@@ -180,6 +183,32 @@ $sideOffset:60px;
         }
         &.team2 {
             text-shadow: 0 0 60px red, 0 0 60px red, 0 0 5px red, 0 0 5px red;
+        }
+    }
+}
+
+@media (max-width: 1510px),
+(max-height: 960px) {
+     :host {
+        .draft-container {
+            width: $sideWidthSmall * 2 + $centerWidth;
+            .left {
+                left: $sideOffsetSmall;
+                width: $sideWidthSmall;
+            }
+            .center {
+                .header{
+                    height: 245px;
+                }
+                left: $sideWidthSmall;
+                heroes-button {
+                    margin-top: -5px;
+                }
+            }
+            .right {
+                right: $sideOffsetSmall;
+                width: $sideWidthSmall;
+            }
         }
     }
 }

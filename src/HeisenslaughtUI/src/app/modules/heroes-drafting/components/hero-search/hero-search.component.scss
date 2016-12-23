@@ -4,7 +4,7 @@
     bottom: 50px;
     display: block;
     width: 860px;
-    height: 560px;
+    height: 552px;
 }
 
 div.search {
@@ -94,4 +94,15 @@ div.txtsearch {
     height: 100%;
     text-align: center;
     padding: 10px;
+}
+
+
+@media (max-width: 1510px),
+(max-height: 960px) {
+     :host {
+        height: 385px;
+        div.search{
+            bottom:5px;
+        }
+    }
 }
