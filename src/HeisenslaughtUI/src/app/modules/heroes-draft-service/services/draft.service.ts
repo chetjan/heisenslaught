@@ -137,6 +137,8 @@ export class DraftService {
                 this.hub.server.connectToDraft(draftToken, teamToken).then((config) => {
                     this.draftConfig = config;
                     this.draftState = config.state;
+                    this._draftConfigSubject.next(config);
+                    this._draftStateSubject.next(config.state);
                     resolve(config);
                 }, (err) => {
                     reject(err);
