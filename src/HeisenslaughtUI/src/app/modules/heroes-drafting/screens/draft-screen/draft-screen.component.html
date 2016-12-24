@@ -1,6 +1,6 @@
 <section class="draft-container">
 	<div class="left">
-		<team-hero-picks [team]="0" [slots]="teamPickSlots[0]" [config]="draftConfig" [state]="draftState"></team-hero-picks>
+		<team-hero-picks [team]="0" [slots]="teamPickSlots[0]" [teamSlots]="teamSlots[0]" [config]="draftConfig" [state]="draftState" [selectedHero]="selectedHero"></team-hero-picks>
 	</div>
 	<div class="center">
 		<div class="header">
@@ -15,8 +15,8 @@
 			
 			<div class="draft-status">{{draftStatus}}</div>
 
-			<team-hero-picks class="bans" [team]="0" [slots]="teamBanSlots[0]"  [config]="draftConfig" [state]="draftState"></team-hero-picks>
-			<team-hero-picks class="bans" [team]="1" [slots]="teamBanSlots[1]"  [config]="draftConfig" [state]="draftState"></team-hero-picks>
+			<team-hero-picks class="bans" [team]="0" [slots]="teamBanSlots[0]" [teamSlots]="teamSlots[0]" [config]="draftConfig" [state]="draftState" [selectedHero]="selectedHero"></team-hero-picks>
+			<team-hero-picks class="bans" [team]="1" [slots]="teamBanSlots[1]" [teamSlots]="teamSlots[1]" [config]="draftConfig" [state]="draftState" [selectedHero]="selectedHero"></team-hero-picks>
 		</div>
 		<hero-search [(selectedHero)]="selectedHero" [state]="draftState"></hero-search>
 		<heroes-button label="SELECT"  *ngIf="shouldShowSelect" 
@@ -24,7 +24,7 @@
 			(click)="pick()"></heroes-button>
 	</div>
 	<div class="right">
-		<team-hero-picks [team]="1" [slots]="teamPickSlots[1]"  [config]="draftConfig" [state]="draftState"></team-hero-picks>
+		<team-hero-picks [team]="1" [slots]="teamPickSlots[1]" [teamSlots]="teamSlots[1]"  [config]="draftConfig" [state]="draftState" [selectedHero]="selectedHero"></team-hero-picks>
 	</div>
 </section>
 <section class="ready-window" *ngIf="showReady">
