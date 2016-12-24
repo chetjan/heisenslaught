@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Heisenslaught.Models;
+﻿using Heisenslaught.Models;
+using Heisenslaught.Infrastructure;
+
 
 namespace Heisenslaught.DataTransfer
 {
@@ -15,7 +13,17 @@ namespace Heisenslaught.DataTransfer
         public string adminToken;
         public bool wasFirstPickRandom;
 
-        public DraftConfigAdminDTO(DraftModel model): base(model)
+        public DraftConfigAdminDTO(DraftModel model) : base(model)
+        {
+            Initialize(model);
+        }
+
+        public DraftConfigAdminDTO(DraftRoom room) : base(room)
+        {
+            Initialize(room.DraftModel);
+        }
+
+        private void Initialize(DraftModel model)
         {
             id = model._id.ToString();
             draftToken = model.draftToken;

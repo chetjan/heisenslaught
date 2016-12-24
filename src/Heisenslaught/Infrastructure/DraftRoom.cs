@@ -41,12 +41,18 @@ namespace Heisenslaught.Infrastructure
                 connections.Add(hub.Context.ConnectionId, connection);
                 hub.Groups.Add(hub.Context.ConnectionId, roomName);
             }
+            UpdateDraftState(hub);
             return connection;
         }
 
         public bool Disconnect(DraftHub hub)
         {
-            return connections.Remove(hub.Context.ConnectionId);
+            if (connections.Remove(hub.Context.ConnectionId))
+            {
+                UpdateDraftState(hub);
+                return true;
+            }
+            return false;
         }
 
         public int ConnectionCount
@@ -178,7 +184,7 @@ namespace Heisenslaught.Infrastructure
 
         private void UpdateDraftState(DraftHub hub)
         {
-            hub.Clients.Group(roomName).updateDraftState(new DraftStateDTO(DraftState));
+            hub.Clients.Group(roomName).updateDraftState(new DraftStateDTO(this));
         }
 
         public void StartTimer(DraftHub hub)

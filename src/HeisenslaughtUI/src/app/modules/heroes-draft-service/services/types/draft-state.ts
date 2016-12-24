@@ -12,6 +12,7 @@ export interface IDraftState {
     team2BonusTime: number;
     picks: string[];
     phase: DraftPhase;
+    connectionCount?: number;
 }
 
 

@@ -1,6 +1,7 @@
 import { Component, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+
 import { DraftService, IDraftConfigDTO, IDraftState, DraftPhase, IDraftConfigDrafterDTO }
   from '../../../heroes-draft-service/services/draft.service';
 import { HeroesService, HeroData, IMapData } from '../../../heroes-data-service/services/heroes.service';
@@ -61,12 +62,12 @@ export class DraftScreenComponent implements OnDestroy {
       this.team = (<IDraftConfigDrafterDTO>config).team;
       this.configSlots();
       this.updateState(config.state);
-      this.configSubscription = this.draftService.getDraftConfig(this.draftToken).subscribe((cfg) => {
+      this.configSubscription = this.draftService.draftConfigObservable.subscribe((cfg) => {
         this.draftConfig = cfg;
         this.configSlots();
         this.updateState(cfg.state);
       });
-      this.stateSubscription = this.draftService.getDraftState(this.draftToken).subscribe((state) => {
+      this.stateSubscription = this.draftService.draftStateObservable.subscribe((state) => {
         this.updateState(state);
       });
     }, (err) => {

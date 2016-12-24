@@ -42,12 +42,12 @@ $spinSpeed: 1000ms;
         }
     }
     .connected-clients {
-        display: none;
+        color: white;
         margin-right: 10px;
         float: right;
         .count {
             top: -6px;
-            padding-left: 3px;
+            padding-right: 5px;
         }
     }
     clear: both;
