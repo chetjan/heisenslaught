@@ -28,7 +28,7 @@ svg {
     box-sizing: border-box;
 }
 
-img {
+img.select-border {
     top: -10%;
     left: -10%;
     width: 120%;
@@ -37,7 +37,7 @@ img {
     display: none;
 }
 
-:host.selected img {
+:host.selected img.select-border {
     display: inline-block;
 }
 
