@@ -12,7 +12,7 @@ import { HeroData } from '../../../heroes-data-service/heroes-data-service.modul
       </svg>
       <div class="picked-icon"></div>
     </div>
-    <img src="http://us.battle.net/heroes/static/images/heroes/skin_hover.png"/>
+    <img class="select-border" src="http://us.battle.net/heroes/static/images/heroes/skin_hover.png"/>
   `,
   styleUrls: ['./hero-icon.component.scss']
 })
