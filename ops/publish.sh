@@ -4,6 +4,7 @@ set -ex
 
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+cd "${dir}/.."
 git pull
 cd "${dir}/../src/HeisenslaughtUI"
 npm install
