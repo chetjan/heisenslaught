@@ -66,8 +66,10 @@ $iconSizeSmall: $iconSize * 0.80;
     }
 }
 
+
+
 @media (max-width: 1510px),
-(max-height: 960px) {
+(max-height: 860px) {
      :host:not(.bans) {
         width: round($iconSizeSmall * 1.55);
         height: round($iconSizeSmall * 0.822 * 5);

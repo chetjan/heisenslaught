@@ -132,7 +132,7 @@ $sideOffsetSmall: 90px;
                 }
             }
             heroes-button {
-                margin-top: 15px;
+                margin-top: -5px;
             }
         }
         .right {
@@ -188,7 +188,7 @@ $sideOffsetSmall: 90px;
 }
 
 @media (max-width: 1510px),
-(max-height: 960px) {
+(max-height: 860px) {
      :host {
         .draft-container {
             width: $sideWidthSmall * 2 + $centerWidth;
@@ -201,9 +201,6 @@ $sideOffsetSmall: 90px;
                     height: 245px;
                 }
                 left: $sideWidthSmall;
-                heroes-button {
-                    margin-top: -5px;
-                }
             }
             .right {
                 right: $sideOffsetSmall;

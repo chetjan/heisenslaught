@@ -8,6 +8,7 @@ import { MdSelectModule } from '@angular/material/select';
 import { MdRadioModule } from '@angular/material/radio';
 import { MdListModule } from '@angular/material/list';
 import { MdIconModule } from '@angular/material/icon';
+import { MdButtonToggleModule } from '@angular/material/button-toggle';
 
 import { HeroesDraftingRoutingModule } from './heroes-drafting-routing.module';
 
@@ -34,6 +35,7 @@ import { DraftConnectionStatusComponent } from './components/draft-connection-st
     MdRadioModule,
     MdListModule,
     MdIconModule,
+    MdButtonToggleModule,
     HeroesCommonModule,
     HeroesDraftingRoutingModule
   ],

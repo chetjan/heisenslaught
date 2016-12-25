@@ -1,0 +1,18 @@
+<div class="list">
+    <hero-icon *ngFor="let hero of heroes | heroSearch:searchField.value:currentRoleFilter; let i = index;" [hero]="hero" (click)="selectedHero = hero"
+        [ngClass]="{selected: selectedHero === hero}" [class.picked]="isHeroPicked(hero.id)"></hero-icon>
+</div>
+
+<div class="search">
+    <div class="filters">
+        <form>
+            <md-button-toggle-group multiple >
+                <md-button-toggle *ngFor="let role of roleFilters" [value]="role.values" (change)="onFilterChanged()">{{role.label}}</md-button-toggle>
+            </md-button-toggle-group>
+        </form>
+    </div>
+    <div class="txtsearch">
+        <input #searchField placeholder="Search..." (keyup)="search()" (focus)="searchFocus=true" (blur)="searchFocus=false" />
+        <button [class.focused]="searchFocus" [disabled]="!searchField.value" (click)="searchField.value = ''; searchField.focus()"></button>
+    </div>
+</div>

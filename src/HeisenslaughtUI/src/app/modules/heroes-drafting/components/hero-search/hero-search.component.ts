@@ -1,5 +1,5 @@
-import { Component, Input, Output, ChangeDetectorRef, EventEmitter } from '@angular/core';
-
+import { Component, Input, Output, ChangeDetectorRef, EventEmitter, ViewChildren, QueryList } from '@angular/core';
+import { MdButtonToggle } from '@angular/material/button-toggle';
 import { HeroesService, HeroData } from '../../../heroes-data-service/heroes-data-service.module';
 import { IDraftState } from '../../../heroes-draft-service/heroes-draft-service.module';
 
@@ -7,26 +7,7 @@ export * from './hero-filter.pipe';
 
 @Component({
   selector: 'hero-search',
-  template: `
-    <div class="list">
-      <hero-icon 
-        *ngFor="let hero of heroes | heroSearch:searchField.value; let i = index;" [hero]="hero" 
-        (click)="selectedHero = hero"
-        [ngClass]="{selected: selectedHero === hero}"
-        [class.picked]="isHeroPicked(hero.id)"
-      ></hero-icon>
-    </div>
-   
-     <div class="search">
-      <div class="filters">
-      </div>
-      <div class="txtsearch">
-        <input #searchField placeholder="Search..." (keyup)="search()" (focus)="searchFocus=true" (blur)="searchFocus=false"/>
-        <button [class.focused]="searchFocus" [disabled]="!searchField.value" 
-          (click)="searchField.value = ''; searchField.focus()"></button>
-      </div>
-    </div>
-  `,
+  templateUrl: './hero-search.component.html',
   styleUrls: ['./hero-search.component.scss']
 })
 export class HeroSearchComponent {
@@ -38,6 +19,43 @@ export class HeroSearchComponent {
 
   @Input()
   public state: IDraftState;
+
+  @ViewChildren(MdButtonToggle)
+  private filterGroup: QueryList<MdButtonToggle>;
+
+  public roleFilters: any[] = [
+    {
+      label: 'Tank',
+      values: ['tank']
+    },
+    {
+      label: 'Bruiser',
+      values: ['bruiser']
+    },
+    {
+      label: 'Burst',
+      values: ['burst']
+    },
+    {
+      label: 'Sustain',
+      values: ['sustain']
+    },
+    {
+      label: 'Healer',
+      values: ['healer']
+    },
+    {
+      label: 'Support',
+      values: ['support']
+    },
+    {
+      label: 'Siege',
+      values: ['siege']
+    }
+
+  ];
+
+  public currentRoleFilter: string[];
 
   constructor(
     private heroesService: HeroesService,
@@ -75,4 +93,15 @@ export class HeroSearchComponent {
     }
     return false;
   }
+
+  public onFilterChanged() {
+    let filter = [];
+    this.filterGroup.forEach((button, index) => {
+      if (button.checked) {
+        filter = filter.concat(button.value);
+      }
+    });
+    this.currentRoleFilter = filter;
+  }
+
 }
