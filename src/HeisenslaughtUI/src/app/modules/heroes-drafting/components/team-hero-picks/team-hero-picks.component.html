@@ -6,6 +6,8 @@
     [class.current-pick]="currentPickIndex === i"
     [class.next-pick]="nextPickIndex === i"
     [class.picked]="currentPick > getSlot(i)"
+    [class.pick-preview]="isPreviewPick(i)"
+    [class.pick-taken]="isHeroTaken(getPick(i)?.id)"
     [hero]="getPick(i)"
   >
   </hero-pick>

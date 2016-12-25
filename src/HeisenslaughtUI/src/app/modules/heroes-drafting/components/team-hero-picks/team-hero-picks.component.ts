@@ -1,6 +1,6 @@
 import { Component, Input, HostBinding } from '@angular/core';
 
-import { IDraftConfigDTO, IDraftState, DraftPhase } from '../../../heroes-draft-service/heroes-draft-service.module';
+import { IDraftConfigDTO, IDraftState, DraftPhase, IDraftConfigDrafterDTO } from '../../../heroes-draft-service/heroes-draft-service.module';
 import { HeroesService, HeroData } from '../../../heroes-data-service/heroes-data-service.module';
 
 
@@ -10,7 +10,7 @@ import { HeroesService, HeroData } from '../../../heroes-data-service/heroes-dat
   styleUrls: ['./team-hero-picks.component.scss']
 })
 export class TeamHeroPicksComponent {
-
+  private heroes: HeroData[];
 
   @Input()
   @HostBinding('attr.team')
@@ -20,12 +20,17 @@ export class TeamHeroPicksComponent {
   public slots: number[];
 
   @Input()
+  public teamSlots: number[];
+
+  @Input()
   public state: IDraftState;
 
   @Input()
   public config: IDraftConfigDTO;
 
-  private heroes: HeroData[];
+  @Input()
+  public selectedHero: HeroData;
+
 
 
   constructor(private heroesService: HeroesService) {
@@ -62,6 +67,16 @@ export class TeamHeroPicksComponent {
     return this.slots ? this.slots[index] : -1;
   }
 
+  public get teamsNextPick(): number {
+    let currPick = this.currentPick;
+    for (let i = 0; i < this.teamSlots.length; i++) {
+      if (currPick <= this.teamSlots[i]) {
+        return this.teamSlots[i];
+      }
+    }
+    return -1;
+  }
+
   private getHeroById(heroId: string): HeroData {
     if (this.heroes) {
       return this.heroes.find((value) => {
@@ -70,7 +85,20 @@ export class TeamHeroPicksComponent {
     }
     return null;
   }
-  getPick(index) {
+
+  public isPreviewPick(index): boolean {
+    let ntPick = this.teamsNextPick;
+    if ((<IDraftConfigDrafterDTO>this.config).team === this.team + 1) {
+      return this.slots.indexOf(ntPick) === index;
+    }
+    return false;
+  }
+
+  public isHeroTaken(heroId: string): boolean {
+    return this.state && this.state.picks.indexOf(heroId) !== -1;
+  }
+
+  public getPick(index) {
     if (this.slots && this.heroes && this.state && this.state.picks) {
       let pickedHeroId = this.state.picks[this.slots[index]];
       if (pickedHeroId === 'failed_ban') {
@@ -81,6 +109,9 @@ export class TeamHeroPicksComponent {
           roles: [],
           name: 'Failed Ban'
         };
+      }
+      if (!pickedHeroId && this.selectedHero && this.isPreviewPick(index)) {
+        return this.selectedHero;
       }
       return this.getHeroById(pickedHeroId);
     }

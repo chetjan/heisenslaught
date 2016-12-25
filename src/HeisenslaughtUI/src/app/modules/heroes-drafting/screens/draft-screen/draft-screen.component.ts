@@ -15,7 +15,7 @@ import { HeroesService, HeroData, IMapData } from '../../../heroes-data-service/
 export class DraftScreenComponent implements OnDestroy {
 
   private static firstSlots: number[] = [0, 2, 5, 6, 8, 11, 12];
-  private static secondSlots: number[] = [1, 2, 3, 7, 9, 10, 13];
+  private static secondSlots: number[] = [1, 3, 4, 7, 9, 10, 13];
   private static firstPickSlots: number[] = [2, 5, 6, 11, 12];
   private static secondPickSlots: number[] = [3, 4, 9, 10, 13];
   private static firstBanSlots: number[] = [0, 8];
