@@ -1,3 +1,5 @@
+@import '~@angular/material/core/theming/theming';
+@import 'src/heisenslaught.theme.include';
 :host {
     top: 0px;
     margin: auto;
@@ -12,15 +14,22 @@ div.search {
     margin: auto;
     width: 100%;
     position: absolute;
-    bottom: 0px;
+    bottom: -10px;
     height: 60px;
 }
 
 div.txtsearch {
+    position: absolute;
+    width: 860px - 487px;
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    text-align: center;
+    padding: 00px;
     input {
         position: absolute;
-        right: 39px;
-        top: 20px;
+        left: 0px;
+        top: 0px;
         height: 60px;
         width: 340px;
         background-image: url('assets/storm_ui_glues_store_note_box.png');
@@ -37,8 +46,8 @@ div.txtsearch {
     }
     button {
         position: absolute;
-        right: 0px;
-        top: 24px;
+        right: -8px;
+        top: 4px;
         width: 52px;
         height: 52px;
         background-image: url('assets/storm_ui_glues_button_close_normal.png'), url('assets/storm_ui_glues_button_close_hover.png'), url('assets/storm_ui_glues_button_close_down.png'), url('assets/storm_ui_glues_button_close_disabled.png');
@@ -81,28 +90,59 @@ div.list {
 
 div.filters {
     position: absolute;
-    width: 50%;
+    width: 487px;
     height: 100%;
-    padding: 20px;
+    padding: 0px;
+    md-button-toggle-group {
+        box-shadow: none;
+        left: 6px;
+        top: 11px;
+        md-button-toggle {
+            margin-right: 5px;
+            color: white;
+            opacity: 0.5;
+            border: 1px solid white;
+            border-radius: 4px;
+            /deep/ {
+                .md-button-toggle-label-content {
+                    padding: 0 8px;
+                    font-weight: 400;
+                }
+            }
+            &.md-button-toggle-checked /deep/ .md-button-toggle-label-content {
+                color: md-color($heisenslaught-accent);
+                background-color: transparent;
+            }
+            &.md-button-toggle-checked {
+                opacity: 0.65;
+                border: 1px solid md-color($heisenslaught-accent);
+                -webkit-box-shadow: inset 0px 0px 10px -1px md-color($heisenslaught-accent);
+                -moz-box-shadow: inset 0px 0px 10px -1px md-color($heisenslaught-accent);
+                box-shadow: inset 0px 0px 10px -1px md-color($heisenslaught-accent);
+            }
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
 }
 
-div.txtsearch {
-    position: absolute;
-    width: 50%;
-    top: 0px;
-    right: 0px;
-    height: 100%;
-    text-align: center;
-    padding: 10px;
-}
 
-
-@media (max-width: 1510px),
-(max-height: 960px) {
+@media  (min-height: 861px) and (max-height: 940px) {
      :host {
-        height: 385px;
-        div.search{
-            bottom:5px;
+        height: 468px;
+        div.search {
+            bottom: -10px;
+        }
+    }
+}
+
+
+@media (max-height: 860px) {
+     :host {
+        height: 384px;
+        div.search {
+            bottom: -10px;
         }
     }
 }
