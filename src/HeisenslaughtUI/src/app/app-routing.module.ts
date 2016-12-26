@@ -6,19 +6,9 @@ import { NotFoundScreenComponent } from './screens/not-found-screen/not-found-sc
 
 const appRoutes: Routes = [
     { path: '', component: HomeScreenComponent },
-    { path: 'draft', loadChildren: 'app/modules/heroes-drafting/heroes-drafting.module#HeroesDraftingModule'},
-
-
-    /*{ path: 'admin', component: DraftConfigScreenComponent },
-    // specific draft management screen
-    { path: 'draft/config/:id/:adminToken', component: DraftConfigScreenComponent },
-    // team drafter screen
-    { path: 'draft/:id/:team', component: DraftComponent },
-    // draft observer screen
-    { path: 'draft/:id', component: DraftComponent },
-    // Draft creation screen
-    { path: 'draft', component: DraftConfigScreenComponent }*/
-    {path: '**', component: NotFoundScreenComponent}
+    { path: 'draft', loadChildren: 'app/modules/heroes-drafting/heroes-drafting.module#HeroesDraftingModule' },
+    { path: '404/**', component: NotFoundScreenComponent },
+    { path: '**', component: NotFoundScreenComponent }
 ];
 
 @NgModule({
