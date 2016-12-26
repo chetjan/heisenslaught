@@ -6,15 +6,14 @@
         <md-nav-list>
             <md-list-item [routerLink]="['/']" (click)="mainNav.close()"> Home </md-list-item>
             <md-list-item [routerLink]="['/draft']" (click)="mainNav.close()"> Create Draft </md-list-item>
+            <md-list-item [routerLink]="['/dasd']" (click)="mainNav.close()"> Broken Link </md-list-item>
+            <md-list-item [routerLink]="['/ext/test']" (click)="mainNav.close()"> External Page </md-list-item>
         </md-nav-list>
     </md-sidenav>
     <div class="nav-btn">
         <button md-raised-button (click)="mainNav.open()" class="md-primary">
             <md-icon>menu</md-icon>
         </button>
-        <!--<button md-button md-icon-button (click)="mainNav.open()" class="md-raised">
-            <md-icon>menu</md-icon>Menu
-        </button>-->
     </div>
     <div class="content">
         <router-outlet></router-outlet>

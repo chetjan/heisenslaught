@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-not-found-screen',
+  selector: 'not-found-screen',
   templateUrl: './not-found-screen.component.html',
   styleUrls: ['./not-found-screen.component.scss']
 })
-export class NotFoundScreenComponent implements OnInit {
+export class NotFoundScreenComponent {
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private router: Router, private route: ActivatedRoute) {
+    route.url.subscribe((urlSeg) => {
+      let url = router.url;
+      // if link begins with '/ext/' let the server handle it
+      if (url.indexOf('/ext/') === 0) {
+        window.location.replace(url.substr(4));
+      }
+    });
   }
-
 }
