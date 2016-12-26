@@ -9,20 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Heisenslaught.Controllers
 {
-    public class DraftController : Controller
+    public class TestController : Controller
     {
-        /*
         // GET: /<controller>/
         public IActionResult Index()
         {
             return View();
-        }
-        */
-
-        // GET: /<controller>/
-        public FileResult Index()
-        {
-            return new PhysicalFileResult(Directory.GetCurrentDirectory() + "/wwwroot/index.html", "text/html");
         }
     }
 }

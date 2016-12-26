@@ -35,20 +35,6 @@ namespace Heisenslaught
             });
             app.UseStaticFiles();
            
-            app.UseMvc(routes =>
-            {
-                
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action}",
-                    defaults: new { controller = "Home", action = "Index" }
-                );
-                routes.MapRoute(
-                   name: "draft",
-                   template: "draft/{cfg?}/{id?}/{team?}",
-                   defaults: new { controller = "Draft", action = "Index" }
-               );
-            });
             
             app.UseWebSockets();
             app.UseSignalR();
@@ -57,6 +43,22 @@ namespace Heisenslaught
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseMvc(routes =>
+            {
+                
+                routes.MapRoute(
+                    name: "test",
+                    template: "test/{action}",
+                    defaults: new { controller = "Test", action = "Index" }
+                );
+
+                // If not other route matches serve angular. NOTE: This needs to always be the last route
+                routes.MapRoute(
+                    name: "angular",
+                    template: "{*any}",
+                    defaults: new { controller = "Angular", action = "Index" }
+                );
+            });
         }
     }
 }

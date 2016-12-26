@@ -9,9 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Heisenslaught.Controllers
 {
-    public class AdminController : Controller
+    public class AngularController : Controller
     {
-        // GET: /<controller>/
         public FileResult Index()
         {
             return new PhysicalFileResult(Directory.GetCurrentDirectory() + "/wwwroot/index.html", "text/html");

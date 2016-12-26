@@ -1,20 +1,20 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-not-found-screen',
-  template: ''
+  selector: 'not-found-screen',
+  templateUrl: './not-found-screen.component.html',
+  styleUrls: ['./not-found-screen.component.scss']
 })
 export class NotFoundScreenComponent {
 
-  constructor(private router: Router) {
-    let url: string = router.url;
-    if (router.url.indexOf('/404') !== 0) {
-      router.navigate(['/404' + router.url], { replaceUrl: true });
-    } else {
-      url = url.substr(3);
-    }
-    window.location.replace(url);
+  constructor(private router: Router, private route: ActivatedRoute) {
+    route.url.subscribe((urlSeg) => {
+      let url = router.url;
+      // if link begins with '/ext/' let the server handle it
+      if (url.indexOf('/ext/') === 0) {
+        window.location.replace(url.substr(4));
+      }
+    });
   }
-
 }
