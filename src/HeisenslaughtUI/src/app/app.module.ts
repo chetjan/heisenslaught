@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { HomeScreenComponent } from './screens/home-screen/home-screen.component';
 import { NotFoundScreenComponent } from './screens/not-found-screen/not-found-screen.component';
+import { AppCommonModule } from './modules/app-common/app-common.module';
 
 
 
@@ -29,6 +30,7 @@ import { NotFoundScreenComponent } from './screens/not-found-screen/not-found-sc
     MaterialModule.forRoot(),
     MdSidenavModule.forRoot(),
     CovalentCoreModule.forRoot(),
+    AppCommonModule,
     AppRoutingModule
   ],
   providers: [],

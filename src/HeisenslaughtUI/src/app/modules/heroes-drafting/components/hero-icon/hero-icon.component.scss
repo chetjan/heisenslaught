@@ -72,3 +72,25 @@ img.select-border {
         background-size: 100% 100%;
     }
 }
+
+hero-info-card {
+    .show-more-info {
+        font-size: 10px;
+        padding-left: 8px;
+        padding-right: 8px;
+        top: -5px;
+        text-align: right;
+        color: rgba(255, 255, 255, 0.7);
+        .bracket {
+            color: cyan;
+        }
+    }
+    .more-info {
+        font-size: 13px;
+        padding-left: 8px;
+        padding-right: 8px;
+        top: -5px;
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: capitalize;
+    }
+}

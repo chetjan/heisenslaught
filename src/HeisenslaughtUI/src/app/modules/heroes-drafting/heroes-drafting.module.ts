@@ -17,7 +17,7 @@ import { DraftService } from '../heroes-draft-service/heroes-draft-service.modul
 
 import { HeroIconComponent, HeroPickComponent, HeroSearchComponent, TeamHeroPicksComponent, HeroFilter } from './components/components';
 import { HeroesCommonModule } from '../heroes-common/heroes-common.module';
-
+import { AppCommonModule } from '../app-common/app-common.module';
 import { HeroesDraftingComponent } from './heroes-drafting.component';
 import { DraftConfigScreenComponent } from './screens/draft-config-screen/draft-config-screen.component';
 import { DraftScreenComponent } from './screens/draft-screen/draft-screen.component';
@@ -37,6 +37,7 @@ import { DraftConnectionStatusComponent } from './components/draft-connection-st
     MdIconModule,
     MdButtonToggleModule,
     HeroesCommonModule,
+    AppCommonModule,
     HeroesDraftingRoutingModule
   ],
   declarations: [

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeroesButtonComponent } from './components/heroes-button/heroes-button.component';
+import { HeroInfoCardComponent } from './components/hero-info-card/hero-info-card.component';
 
 
 @NgModule({
@@ -8,10 +9,12 @@ import { HeroesButtonComponent } from './components/heroes-button/heroes-button.
     CommonModule
   ],
   declarations: [
-    HeroesButtonComponent
+    HeroesButtonComponent,
+    HeroInfoCardComponent
   ],
   exports: [
-    HeroesButtonComponent
+    HeroesButtonComponent,
+    HeroInfoCardComponent
   ]
 })
 export class HeroesCommonModule { }

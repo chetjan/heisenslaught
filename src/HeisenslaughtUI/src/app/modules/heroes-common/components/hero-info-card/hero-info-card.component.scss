@@ -1,0 +1,50 @@
+:host {
+    display: block;
+    border: 2px solid darkcyan;
+    background-color: black;
+    color: white;
+    margin-left: 5px;
+    table {
+        border-spacing: none;
+        border: none;
+        td {
+            &.hero-franchise {
+                width: 64px * 0.75;
+                height: 68px * 0.75;
+                background-size: 100% 100%;
+                &.warcraft {
+                    background-image: url('assets/storm_ui_glues_store_bundle_listicon_wow.png');
+                }
+                &.starcraft {
+                    background-image: url('assets/storm_ui_glues_store_bundle_listicon_sc2.png');
+                }
+                &.diablo {
+                    background-image: url('assets/storm_ui_glues_store_bundle_listicon_d3.png');
+                }
+                &.overwatch {
+                    background-image: url('assets/storm_ui_glues_store_bundle_listicon_ow.png');
+                }
+                &.retro {
+                    background-image: url('assets/storm_ui_glues_store_bundle_listicon_retro.png');
+                }
+            }
+            &.hero-name {
+                font-weight: 900;
+                letter-spacing: 1px;
+                font-size: 18px;
+                text-transform: uppercase;
+                vertical-align: bottom;
+                height: 30px;
+                padding-right: 8px;
+            }
+            &.hero-title {
+                font-weight: 400;
+                font-size: 10px;
+                text-transform: uppercase;
+                vertical-align: top;
+                top: -6px;
+                padding-right: 8px;
+            }
+        }
+    }
+}
