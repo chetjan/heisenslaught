@@ -98,12 +98,14 @@ export class TeamHeroPicksComponent {
     return this.state && this.state.picks.indexOf(heroId) !== -1;
   }
 
-  public getPick(index) {
+  public getPick(index): HeroData {
     if (this.slots && this.heroes && this.state && this.state.picks) {
       let pickedHeroId = this.state.picks[this.slots[index]];
       if (pickedHeroId === 'failed_ban') {
         return {
           id: 'failed_ban',
+          franchise: 'none',
+          title: '',
           iconSmall: null,
           keywords: [],
           roles: [],
