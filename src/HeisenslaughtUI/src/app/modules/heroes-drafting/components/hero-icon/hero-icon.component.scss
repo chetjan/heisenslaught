@@ -72,3 +72,16 @@ img.select-border {
         background-size: 100% 100%;
     }
 }
+
+hero-info-card{
+    .show-more-info{
+        font-size: 10px;
+        padding-left:8px;
+        padding-right: 8px;
+        top:-5px;
+        text-align: right;
+        .bracket{
+            color: cyan;
+        }
+    }
+}

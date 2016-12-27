@@ -1,0 +1,12 @@
+<table>
+  <tr>
+    <td rowspan="2" class="hero-franchise" [ngClass]="hero?.franchise?.toLowerCase()"></td>
+    <td class="hero-name">{{hero?.name}}</td>
+  </tr>
+  <tr>
+    <td class="hero-title">{{hero?.title}}</td>
+  </tr>
+  <tr>
+    <td colspan="2" class="extra-info"><ng-content></ng-content></td>
+  </tr>
+</table>
