@@ -12,6 +12,7 @@ export * from './hero-filter.pipe';
 })
 export class HeroSearchComponent {
   private heroes: HeroData[];
+  private _allRoles: string[];
   private _selectedHero: HeroData;
 
   @Output()
@@ -79,6 +80,22 @@ export class HeroSearchComponent {
     }
   }
 
+  public get allRoles(): string[] {
+    if (!this._allRoles && this.heroes) {
+      this._allRoles = [];
+      this.heroes.forEach((hero) => {
+        hero.roles.forEach((role) => {
+          if (this._allRoles.indexOf(role) === -1) {
+            this._allRoles.push(role);
+          }
+        });
+      });
+      this._allRoles = this._allRoles.sort((a, b) => {
+        return a.localeCompare(b);
+      });
+    }
+    return this._allRoles;
+  }
   public search() { }
 
   public isHeroPicked(heroId: string) {

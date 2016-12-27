@@ -16,6 +16,15 @@ export class HtmlTooltipComponent implements OnInit, OnDestroy {
   private _overlayRef: OverlayRef;
   private _eventBindings: { type: string, listener: EventListener }[] = [];
 
+
+  @Input()
+  public position: OverlayConnectionPosition;
+
+  @Input()
+  public origin: OriginConnectionPosition;
+
+
+
   @Input()
   public get attachement(): Element {
     return this._attachement ? this._attachement : (<Element>this._elementRef.nativeElement).parentElement;
@@ -56,15 +65,15 @@ export class HtmlTooltipComponent implements OnInit, OnDestroy {
   }
 
   private _getOrigin(): OriginConnectionPosition {
-    return {
-      originX: 'end',
-      originY: 'top'
+    return this.origin || {
+      originX: 'center',
+      originY: 'bottom'
     };
   }
 
   private _getPosition(): OverlayConnectionPosition {
-    return {
-      overlayX: 'start',
+    return this.position || {
+      overlayX: 'center',
       overlayY: 'top'
     };
   }

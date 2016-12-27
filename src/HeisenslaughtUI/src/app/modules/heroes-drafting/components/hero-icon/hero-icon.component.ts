@@ -13,13 +13,14 @@ import { HeroData } from '../../../heroes-data-service/heroes-data-service.modul
       <div class="picked-icon"></div>
     </div>
     <img class="select-border" src="http://us.battle.net/heroes/static/images/heroes/skin_hover.png"/>
-    <app-tooltip>
+    <app-tooltip [origin]="{originX:'end', originY:'top'}" [position]="{overlayX:'start', overlayY:'top'}">
       <hero-info-card [hero]="hero">
         <div class="show-more-info" *ngIf="!isAltDown">
           <span class="bracket">[ </span><span class="key">Alt</span><span class="bracket"> ]</span> for more info.
         </div>
         <div class="more-info" *ngIf="isAltDown">
-          <div><label>Roles: </label>{{hero?.roles.join(', ')}}</div>
+          <div><label>Roles: </label>{{getWordList(hero?.roles)}}</div>
+          <div><label>Keywords: </label>{{getWordList(hero?.keywords)}}</div>
         </div>
       </hero-info-card>
     </app-tooltip>
@@ -81,6 +82,12 @@ export class HeroIconComponent implements OnInit, OnDestroy {
     }
   }
 
+  public getWordList(list: string[]): string {
+    list = list.sort((a, b) => {
+      return a.localeCompare(b);
+    });
+    return list.join(', ');
+  }
 
 
 }

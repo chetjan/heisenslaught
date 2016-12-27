@@ -13,6 +13,22 @@
     </div>
     <div class="txtsearch">
         <input #searchField placeholder="Search..." (keyup)="search()" (focus)="searchFocus=true" (blur)="searchFocus=false" />
+        <div class="search-tip-icon">
+            <app-tooltip [origin]="{originX:'end', originY:'top'}" [position]="{overlayX:'end', overlayY:'bottom'}">
+                <div class="search-help">
+                    To search for heroes, use the role filter buttons to the left, or type in the search box.
+                    <br/>
+                    <br/>
+                    You can search by the hero's name, roles or keywords, as listed in their tooltips.
+                    <br/>
+                    <br/>
+                    Availible Roles:
+                    <ul>
+                        <li *ngFor="let role of allRoles">{{role}}</li>
+                    </ul>
+                </div>
+            </app-tooltip>
+        </div>
         <button [class.focused]="searchFocus" [disabled]="!searchField.value" (click)="searchField.value = ''; searchField.focus()"></button>
     </div>
 </div>
