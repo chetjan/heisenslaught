@@ -98,7 +98,7 @@
             "specialist",
             "assassin",
             "sustain",
-            "seige"
+            "siege"
         ],
         "keywords": [],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/azmodan_lordOfSin.jpg?v=58-84",
@@ -250,7 +250,7 @@
         "roles": [
             "melee",
             "specialist",
-            "seige"
+            "siege"
         ],
         "keywords": [],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/gazlowe_bossOfRatchet.jpg?v=58-84",
@@ -623,7 +623,7 @@
             "specialist",
             "assassin",
             "sustain",
-            "seige"
+            "siege"
         ],
         "keywords": [],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/sgt-hammer_siegeTankOperator.jpg?v=58-84",
@@ -667,7 +667,7 @@
             "specialist",
             "assassin",
             "sustain",
-            "seige"
+            "siege"
         ],
         "keywords": [],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/sylvanas_theBansheeQueen.jpg?v=58-84",
@@ -848,7 +848,7 @@
         "roles": [
             "melee",
             "specialist",
-            "seige"
+            "siege"
         ],
         "keywords": [],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/xul_crypticNecromancer.jpg?v=58-84",
@@ -865,7 +865,7 @@
             "global",
             "assassin",
             "sustain",
-            "seige"
+            "siege"
         ],
         "keywords": [],
         "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/zagara_broodmotherOfTheSwarm.jpg?v=58-84",
