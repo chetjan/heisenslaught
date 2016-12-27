@@ -198,7 +198,8 @@
         "roles": [
             "melee",
             "warrior",
-            "tank"
+            "tank",
+            "global"
         ],
         "keywords": [
             "etc"
@@ -428,7 +429,8 @@
         "roles": [
             "ranged",
             "support",
-            "healer"
+            "healer",
+            "global"
         ],
         "keywords": [
             "lieutenant",
@@ -860,6 +862,7 @@
         "roles": [
             "ranged",
             "specialist",
+            "global",
             "assassin",
             "sustain",
             "seige"
