@@ -6,8 +6,8 @@
 <div class="search">
     <div class="filters">
         <form>
-            <md-button-toggle-group multiple >
-                <md-button-toggle *ngFor="let role of roleFilters" [value]="role.values" (change)="onFilterChanged()">{{role.label}}</md-button-toggle>
+            <md-button-toggle-group multiple>
+                <md-button-toggle *ngFor="let role of roleFilters; let i = index" [value]="role.values" (change)="onFilterChanged()">{{role.label}}</md-button-toggle>
             </md-button-toggle-group>
         </form>
     </div>
@@ -16,19 +16,36 @@
         <div class="search-tip-icon">
             <app-tooltip [origin]="{originX:'end', originY:'top'}" [position]="{overlayX:'end', overlayY:'bottom'}">
                 <div class="search-help">
-                    To search for heroes, use the role filter buttons to the left, or type in the search box.
-                    <br/>
-                    <br/>
-                    You can search by the hero's name, roles or keywords, as listed in their tooltips.
-                    <br/>
-                    <br/>
-                    Availible Roles:
-                    <ul>
-                        <li *ngFor="let role of allRoles">{{role}}</li>
-                    </ul>
+                    <table>
+                        <tr>
+                            <td class="left">
+                                To search for heroes, use the role filter buttons to the left, or type in the search box.
+                                <br/>
+                                <br/>You can search by the hero's name, title, franchise, roles or keywords, as listed in
+                                their tooltips.
+                                <br/>
+                                <br/>You can prefix your search terms to refine your search futher:
+                                <br/><i>+</i> means the term must match
+                                <br/><i>-</i> means the term must not match
+                                <br/>
+                                <br/>Example: <i>+warrior -burst warcraft diablo</i>
+                                <br/>Will return non burst warriors from either the warcraft or diablo franchises.
+                                <br/>
+                                <br/>You can also add quotations around multiple words to treat them as a single term.
+                                <br/>
+                                <br/>Example: <i>"the sun king"</i>
+                            </td>
+                            <td class="right">
+                                Availible Roles:
+                                <ul>
+                                    <li *ngFor="let role of allRoles">{{role}}</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </app-tooltip>
         </div>
-        <button [class.focused]="searchFocus" [disabled]="!searchField.value" (click)="searchField.value = ''; searchField.focus()"></button>
+        <button [class.focused]="searchFocus" [disabled]="!searchField.value && !currentRoleFilter?.length" (click)="clearFilters(); searchField.value = ''; searchField.focus();"></button>
     </div>
 </div>

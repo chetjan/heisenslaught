@@ -2,7 +2,7 @@
     {
         "id": "abathur",
         "name": "Abathur",
-        "title": "",
+        "title": "EVOLUTION MASTER",
         "franchise": "starcraft",
         "roles": [
             "melee",
@@ -16,7 +16,7 @@
     {
         "id": "alarak",
         "name": "Alarak",
-        "title": "",
+        "title": "HIGHLORD OF THE TAL'DARIM",
         "franchise": "starcraft",
         "roles": [
             "melee",
@@ -31,7 +31,7 @@
     {
         "id": "anubarak",
         "name": "Anub'arak",
-        "title": "",
+        "title": "TRAITOR KING",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -46,7 +46,7 @@
     {
         "id": "artanis",
         "name": "Artanis",
-        "title": "",
+        "title": "HIERARCH OF THE DAELAAM",
         "franchise": "starcraft",
         "roles": [
             "melee",
@@ -62,7 +62,7 @@
     {
         "id": "arthas",
         "name": "Arthas",
-        "title": "",
+        "title": "THE LICH KING",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -77,7 +77,7 @@
     {
         "id": "auriel",
         "name": "Auriel",
-        "title": "",
+        "title": "ARCHANGEL OF HOPE",
         "franchise": "diablo",
         "roles": [
             "ranged",
@@ -91,7 +91,7 @@
     {
         "id": "azmodan",
         "name": "Azmodan",
-        "title": "",
+        "title": "LORD OF SIN",
         "franchise": "diablo",
         "roles": [
             "ranged",
@@ -107,7 +107,7 @@
     {
         "id": "brightwing",
         "name": "Brightwing",
-        "title": "",
+        "title": "FAERIE DRAGON",
         "franchise": "warcraft",
         "roles": [
             "ranged",
@@ -122,7 +122,7 @@
     {
         "id": "chen",
         "name": "Chen",
-        "title": "",
+        "title": "LEGENDARY BREWMASTER",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -136,7 +136,7 @@
     {
         "id": "cho",
         "name": "Cho",
-        "title": "Twilight's Hammer Chieftain",
+        "title": "TWILIGHT'S HAMMER CHIEFTAIN",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -150,7 +150,7 @@
     {
         "id": "chromie",
         "name": "Chromie",
-        "title": "",
+        "title": "KEEPER OF TIME",
         "franchise": "warcraft",
         "roles": [
             "ranged",
@@ -164,7 +164,7 @@
     {
         "id": "dehaka",
         "name": "Dehaka",
-        "title": "",
+        "title": "PRIMAL PACK LEADER",
         "franchise": "starcraft",
         "roles": [
             "melee",
@@ -179,7 +179,7 @@
     {
         "id": "diablo",
         "name": "Diablo",
-        "title": "",
+        "title": "LORD OF TERROR",
         "franchise": "diablo",
         "roles": [
             "melee",
@@ -193,7 +193,7 @@
     {
         "id": "etc",
         "name": "E.T.C",
-        "title": "",
+        "title": "ROCK GOD",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -210,7 +210,7 @@
     {
         "id": "falstad",
         "name": "Falstad",
-        "title": "",
+        "title": "WILDHAMMER THANE",
         "franchise": "warcraft",
         "roles": [
             "ranged",
@@ -228,7 +228,7 @@
     {
         "id": "gall",
         "name": "Gall",
-        "title": "",
+        "title": "TWILIGHT'S HAMMER CHIEFTAIN",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -245,7 +245,7 @@
     {
         "id": "gazlowe",
         "name": "Gazlowe",
-        "title": "",
+        "title": "BOSS OF RATCHET",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -259,7 +259,7 @@
     {
         "id": "greymane",
         "name": "Greymane",
-        "title": "",
+        "title": "LORD OF THE WORGEN",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -275,7 +275,7 @@
     {
         "id": "guldan",
         "name": "Gul'dan",
-        "title": "",
+        "title": "DARKNESS INCARNATE",
         "franchise": "warcraft",
         "roles": [
             "ranged",
@@ -289,7 +289,7 @@
     {
         "id": "illidan",
         "name": "Illidan",
-        "title": "",
+        "title": "THE BETRAYER",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -304,7 +304,7 @@
     {
         "id": "jaina",
         "name": "Jaina",
-        "title": "",
+        "title": "ARCHMAGE",
         "franchise": "warcraft",
         "roles": [
             "ranged",
@@ -318,7 +318,7 @@
     {
         "id": "johanna",
         "name": "Johanna",
-        "title": "",
+        "title": "CRUSADER OF ZAKARUM",
         "franchise": "diablo",
         "roles": [
             "melee",
@@ -332,7 +332,7 @@
     {
         "id": "kaelthas",
         "name": "Kael'thas",
-        "title": "",
+        "title": "THE SUN KING",
         "franchise": "warcraft",
         "roles": [
             "ranged",
@@ -349,7 +349,7 @@
     {
         "id": "kerrigan",
         "name": "Kerrigan",
-        "title": "",
+        "title": "QUEEN OF BLADES",
         "franchise": "starcraft",
         "roles": [
             "melee",
@@ -364,7 +364,7 @@
     {
         "id": "kharazim",
         "name": "Kharazim",
-        "title": "",
+        "title": "VERADANI MONK",
         "franchise": "diablo",
         "roles": [
             "melee",
@@ -380,7 +380,7 @@
     {
         "id": "leoric",
         "name": "Leoric",
-        "title": "",
+        "title": "THE SKELETON KING",
         "franchise": "diablo",
         "roles": [
             "melee",
@@ -395,7 +395,7 @@
     {
         "id": "lili",
         "name": "Li Li",
-        "title": "",
+        "title": "WORLD WANDERER",
         "franchise": "warcraft",
         "roles": [
             "ranged",
@@ -409,7 +409,7 @@
     {
         "id": "liming",
         "name": "Li-Ming",
-        "title": "",
+        "title": "REBELLIOUS WIZARD",
         "franchise": "diablo",
         "roles": [
             "ranged",
@@ -424,7 +424,7 @@
     {
         "id": "morales",
         "name": "Lt. Morales",
-        "title": "",
+        "title": "COMBAT MEDIC",
         "franchise": "starcraft",
         "roles": [
             "ranged",
@@ -442,7 +442,7 @@
     {
         "id": "lunara",
         "name": "Lunara",
-        "title": "",
+        "title": "FIRST DAUGHTER OF CENARIUS",
         "franchise": "warcraft",
         "roles": [
             "ranged",
@@ -456,7 +456,7 @@
     {
         "id": "malfurion",
         "name": "Malfurion",
-        "title": "",
+        "title": "ARCHDRUID",
         "franchise": "warcraft",
         "roles": [
             "ranged",
@@ -470,7 +470,7 @@
     {
         "id": "medivh",
         "name": "Medivh",
-        "title": "",
+        "title": "THE LAST GUARDIAN",
         "franchise": "warcraft",
         "roles": [
             "ranged",
@@ -484,7 +484,7 @@
     {
         "id": "muradin",
         "name": "Muradin",
-        "title": "",
+        "title": "MOUNTAIN KING",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -498,7 +498,7 @@
     {
         "id": "murky",
         "name": "Murky",
-        "title": "",
+        "title": "BABY MURLOC",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -511,7 +511,7 @@
     {
         "id": "nazeebo",
         "name": "Nazeebo",
-        "title": "",
+        "title": "HERETIC WITCH DOCTOR",
         "franchise": "diablo",
         "roles": [
             "ranged",
@@ -526,7 +526,7 @@
     {
         "id": "nova",
         "name": "Nova",
-        "title": "",
+        "title": "DOMINION GHOST",
         "franchise": "starcraft",
         "roles": [
             "ranged",
@@ -541,7 +541,7 @@
     {
         "id": "ragnaros",
         "name": "Ragnaros",
-        "title": "",
+        "title": "THE FIRELORD",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -556,7 +556,7 @@
     {
         "id": "raynor",
         "name": "Raynor",
-        "title": "",
+        "title": "RENEGADE COMMANDER",
         "franchise": "starcraft",
         "roles": [
             "ranged",
@@ -570,7 +570,7 @@
     {
         "id": "rehgar",
         "name": "Rehgar",
-        "title": "",
+        "title": "SHAMAN OF THE EARTHEN RING",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -584,7 +584,7 @@
     {
         "id": "rexxar",
         "name": "Misha",
-        "title": "",
+        "title": "CHAMPION OF THE HORDE",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -601,7 +601,7 @@
     {
         "id": "samuro",
         "name": "Samuro",
-        "title": "",
+        "title": "THE BLADEMASTER",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -616,7 +616,7 @@
     {
         "id": "sgthammer",
         "name": "Sgt. Hammer",
-        "title": "",
+        "title": "SIEGE TANK OPERATOR",
         "franchise": "starcraft",
         "roles": [
             "ranged",
@@ -632,7 +632,7 @@
     {
         "id": "sonya",
         "name": "Sonya",
-        "title": "",
+        "title": "WANDERING BARBARIAN",
         "franchise": "diablo",
         "roles": [
             "melee",
@@ -646,7 +646,7 @@
     {
         "id": "stitches",
         "name": "Stitches",
-        "title": "",
+        "title": "TERROR OF DARKSHIRE",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -660,7 +660,7 @@
     {
         "id": "sylvanas",
         "name": "Sylvanas",
-        "title": "",
+        "title": "THE BANSHEE QUEEN",
         "franchise": "warcraft",
         "roles": [
             "ranged",
@@ -676,7 +676,7 @@
     {
         "id": "tassadar",
         "name": "Tassadar",
-        "title": "",
+        "title": "SAVIOR OF THE TEMPLAR",
         "franchise": "starcraft",
         "roles": [
             "ranged",
@@ -689,7 +689,7 @@
     {
         "id": "butcher",
         "name": "The Butcher",
-        "title": "",
+        "title": "FLESH CARVER",
         "franchise": "diablo",
         "roles": [
             "melee",
@@ -703,7 +703,7 @@
     },
     {
         "id": "tlv",
-        "title": "",
+        "title": "TRIPLE TROUBLE",
         "franchise": "retro",
         "name": "The Lost Vikings",
         "nameShort": "Lost Vikings",
@@ -722,7 +722,7 @@
     {
         "id": "thrall",
         "name": "Thrall",
-        "title": "",
+        "title": "WARCHIEF OF THE HORDE",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -737,7 +737,7 @@
     {
         "id": "tracer",
         "name": "Tracer",
-        "title": "",
+        "title": "AGENT OF OVERWATCH",
         "franchise": "overwatch",
         "roles": [
             "ranged",
@@ -751,7 +751,7 @@
     {
         "id": "tychus",
         "name": "Tychus",
-        "title": "",
+        "title": "NOTORIOUS OUTLAW",
         "franchise": "starcraft",
         "roles": [
             "ranged",
@@ -766,7 +766,7 @@
     {
         "id": "tyreal",
         "name": "Tyreal",
-        "title": "",
+        "title": "ARCHANGEL OF JUSTICE",
         "franchise": "diablo",
         "roles": [
             "melee",
@@ -781,7 +781,7 @@
     {
         "id": "tyrande",
         "name": "Tyrande",
-        "title": "",
+        "title": "HIGH PRIESTESS OF ELUNE",
         "franchise": "warcraft",
         "roles": [
             "ranged",
@@ -795,7 +795,7 @@
     {
         "id": "uther",
         "name": "Uther",
-        "title": "",
+        "title": "THE LIGHTBRINGER",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -809,7 +809,7 @@
     {
         "id": "valla",
         "name": "Valla",
-        "title": "",
+        "title": "DEMON HUNTER",
         "franchise": "diablo",
         "roles": [
             "ranged",
@@ -824,7 +824,7 @@
     {
         "id": "varian",
         "name": "Varian",
-        "title": "",
+        "title": "HIGH KING OF THE ALLIANCE",
         "franchise": "warcraft",
         "roles": [
             "melee",
@@ -843,7 +843,7 @@
     {
         "id": "xul",
         "name": "Xul",
-        "title": "",
+        "title": "CRYPTIC NECROMANCER",
         "franchise": "diablo",
         "roles": [
             "melee",
@@ -857,7 +857,7 @@
     {
         "id": "zagara",
         "name": "Zagara",
-        "title": "",
+        "title": "BROODMOTHER OF THE SWARM",
         "franchise": "starcraft",
         "roles": [
             "ranged",
@@ -874,7 +874,7 @@
     {
         "id": "zarya",
         "name": "Zarya",
-        "title": "",
+        "title": "DEFENDER OF RUSSIA",
         "franchise": "overwatch",
         "roles": [
             "ranged",
@@ -887,7 +887,7 @@
     {
         "id": "zeratul",
         "name": "Zeratul",
-        "title": "",
+        "title": "DARK PRELATE",
         "franchise": "starcraft",
         "roles": [
             "melee",
@@ -902,7 +902,7 @@
     {
         "id": "zuljin",
         "name": "Zul'jin",
-        "title": "",
+        "title": "WARLORD OF THE AMANI",
         "franchise": "warcraft",
         "roles": [
             "ranged",
