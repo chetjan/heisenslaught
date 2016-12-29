@@ -58,6 +58,7 @@ export class HeroSearchComponent {
 
   public currentRoleFilter: string[];
 
+
   constructor(
     private heroesService: HeroesService,
     private ref: ChangeDetectorRef
@@ -119,6 +120,13 @@ export class HeroSearchComponent {
       }
     });
     this.currentRoleFilter = filter;
+  }
+
+  public clearFilters() {
+    this.filterGroup.forEach((button, index) => {
+      button.checked = false;
+    });
+    this.currentRoleFilter = null;
   }
 
 }

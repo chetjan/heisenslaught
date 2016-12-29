@@ -7,7 +7,7 @@
     <div class="filters">
         <form>
             <md-button-toggle-group multiple >
-                <md-button-toggle *ngFor="let role of roleFilters" [value]="role.values" (change)="onFilterChanged()">{{role.label}}</md-button-toggle>
+                <md-button-toggle *ngFor="let role of roleFilters; let i = index" [value]="role.values" (change)="onFilterChanged()">{{role.label}}</md-button-toggle>
             </md-button-toggle-group>
         </form>
     </div>
@@ -29,6 +29,6 @@
                 </div>
             </app-tooltip>
         </div>
-        <button [class.focused]="searchFocus" [disabled]="!searchField.value" (click)="searchField.value = ''; searchField.focus()"></button>
+        <button [class.focused]="searchFocus" [disabled]="!searchField.value && !currentRoleFilter?.length" (click)="clearFilters(); searchField.value = ''; searchField.focus();"></button>
     </div>
 </div>
