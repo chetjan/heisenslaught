@@ -68,7 +68,10 @@ namespace Heisenslaught.Infrastructure
         {
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
             StreamReader r = new StreamReader(fs);
-            return JsonConvert.DeserializeObject<T>(r.ReadToEnd());
+            var result = JsonConvert.DeserializeObject<T>(r.ReadToEnd());
+            r.Dispose();
+            fs.Dispose();
+            return result; 
         }
     }
 }
