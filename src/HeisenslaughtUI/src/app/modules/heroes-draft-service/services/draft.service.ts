@@ -18,7 +18,7 @@ export class DraftService {
     private _connectionSubject: Subject<HubConnectionState> = new Subject<HubConnectionState>();
     private _draftConfigSubject: Subject<IDraftConfigDTO> = new Subject<IDraftConfigDTO>();
     private _draftStateSubject: Subject<IDraftState> = new Subject<IDraftState>();
-
+    private _reconnecting: boolean = false;
     public connectionState: HubConnectionState = HubConnectionState.DISCONNECTED;
     public draftState: IDraftState;
     public draftConfig: IDraftConfigDTO;
@@ -47,6 +47,7 @@ export class DraftService {
                         break;
                     case 2:
                         this.connectionState = HubConnectionState.RECONNECTING;
+                        this.connectPromise = null;
                         break;
                     case 4:
                         this.connectionState = HubConnectionState.DISCONNECTED;
@@ -92,19 +93,35 @@ export class DraftService {
 
     private reconnect(delayed = false): void {
         if (this.connectionArguments) {
-            console.log('reconnecting...', this.connectionArguments);
-            setTimeout(() => {
-                this.connectToDraft(this.connectionArguments[0], this.connectionArguments[1]).then((config) => {
-                    this.draftConfig = config;
-                    this.draftState = config.state;
-                    this._draftConfigSubject.next(config);
-                    this._draftStateSubject.next(config.state);
-                    console.log('reconnected.');
-                }).catch((err) => {
-                    console.log('error reconnecting', err);
-                    this.reconnect(true);
-                });
-            }, delayed ? 10000 : 0);
+            if (!this.connectPromise && !this._reconnecting) {
+                this._reconnecting = true;
+                if (delayed) {
+                    console.log('Attemping Reconnect in 10s...');
+                }
+                setTimeout(() => {
+                    console.log('Reconnecting...');
+                    this.connect().then(() => {
+                        this.connectToDraft(this.connectionArguments[0], this.connectionArguments[1]).then((config) => {
+                            this.draftConfig = config;
+                            this.draftState = config.state;
+                            this._draftConfigSubject.next(config);
+                            this._draftStateSubject.next(config.state);
+                            this._reconnecting = false;
+                            console.log('Reconnected.');
+                        }).catch((err) => {
+                            console.log('Reconnect fialed', err);
+                            this._reconnecting = false;
+                            this.connectPromise = null;
+                            this.reconnect(true);
+                        });
+                    }, (err) => {
+                        console.log('Reconnect fialed', err);
+                        this._reconnecting = false;
+                        this.connectPromise = null;
+                        this.reconnect(true);
+                    });
+                }, delayed ? 10000 : 0);
+            }
         }
     }
 
