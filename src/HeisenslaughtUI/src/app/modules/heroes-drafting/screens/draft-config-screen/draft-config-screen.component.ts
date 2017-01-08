@@ -6,6 +6,11 @@ import { DraftService, ICreateDraftDTO, IDraftConfigAdminDTO, DraftPhase } from 
 import { HeroesService, IMapData, HeroData } from '../../../heroes-data-service/services/heroes.service';
 
 
+interface ConfigPreset {
+  name: string;
+  config: ICreateDraftDTO;
+}
+
 @Component({
   selector: 'draft-config-screen',
   templateUrl: './draft-config-screen.component.html',
@@ -17,14 +22,78 @@ export class DraftConfigScreenComponent implements OnDestroy {
   private loadedHeroes: boolean;
   private loadedMaps: boolean;
   private loadedConfig: boolean;
-
   private stateSubscription: Subscription;
+
+  private baseConfig: ICreateDraftDTO = {
+    firstPick: 0,
+    bankTime: true,
+    team1Name: 'Blue Team',
+    team2Name: 'Red Team',
+    pickTime: 45,
+    bonusTime: 90,
+    disabledHeroes: undefined,
+    map: undefined
+  };
 
   public config: ICreateDraftDTO = <ICreateDraftDTO>{};
   public currentConfig: IDraftConfigAdminDTO;
   public maps: IMapData[];
   public heroes: HeroData[];
   public createError: string;
+  public selectedPreset: ConfigPreset;
+
+  public presets: ConfigPreset[] = [
+    {
+      name: 'Default',
+      config: this.baseConfig
+    },
+    {
+      name: 'Extended',
+      config: <ICreateDraftDTO>{
+        firstPick: 0,
+        bankTime: true,
+        pickTime: 60,
+        bonusTime: 180
+      }
+    },
+    {
+      name: 'Blizzard',
+      config: <ICreateDraftDTO>{
+        firstPick: 0,
+        bankTime: false,
+        pickTime: 45,
+        bonusTime: 0
+      }
+    }, {
+      name: 'Blizzard Tournament',
+      config: <ICreateDraftDTO>{
+        firstPick: 0,
+        bankTime: false,
+        pickTime: 60,
+        bonusTime: 0
+      }
+    },
+    {
+      name: 'Tournament',
+      config: <ICreateDraftDTO>{
+        firstPick: 0,
+        bankTime: false,
+        pickTime: 30,
+        bonusTime: 60
+      }
+    },
+
+    {
+      name: 'ARAM',
+      config: <ICreateDraftDTO>{
+        firstPick: 0,
+        bankTime: false,
+        pickTime: -1,
+        bonusTime: -1
+      }
+    }
+  ];
+
 
   constructor(
     private router: Router,
@@ -63,20 +132,30 @@ export class DraftConfigScreenComponent implements OnDestroy {
     }
     this.draftService.disconnect();
   }
+
   public get loaded(): boolean {
     return this.loadedConfig && this.loadedHeroes && this.loadedMaps;
   }
 
   private initCreateDraft(): void {
-    this.config = <ICreateDraftDTO>{
-      firstPick: 0,
-      bankTime: true,
-      team1Name: 'Blue Team',
-      team2Name: 'Red Team',
-      pickTime: 60,
-      bonusTime: 180
-    };
+    this.selectedPreset = this.presets[0];
+    this.loadPreset(this.selectedPreset);
+    this.config.disabledHeroes = [];
     this.loadedConfig = true;
+  }
+
+  private composeConfig(base: ICreateDraftDTO, add: ICreateDraftDTO): ICreateDraftDTO {
+    base = Object.assign({}, base);
+    for (let prop in add) {
+      if (add[prop] !== undefined) {
+        base[prop] = add[prop];
+      }
+    }
+    return base;
+  }
+
+  public loadPreset(preset: ConfigPreset) {
+    this.config = this.composeConfig(this.config, preset.config);
   }
 
   private initConfigDraft() {
