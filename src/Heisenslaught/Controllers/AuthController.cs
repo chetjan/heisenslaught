@@ -101,16 +101,14 @@ namespace Heisenslaught.Controllers
         }
 
 
-        private IActionResult RedirectToLocal(string returnUrl)
+        [HttpGet]
+        [AllowAnonymous]
+        //https://localhost:44301/
+        public async Task<IActionResult> Logout(string returnUrl = null, string remoteError = null)
         {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return View("Login");
-            }
+            await _signInManager.SignOutAsync();
+            ViewData["loginResult"] = new LoginResultDTO<string>(true, null);
+            return View("LoginEvent");
         }
 
     }

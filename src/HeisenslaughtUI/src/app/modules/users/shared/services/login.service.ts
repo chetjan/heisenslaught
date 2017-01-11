@@ -13,7 +13,10 @@ export class LoginService {
 
   constructor() {
     window.addEventListener('loginEvent', (evt: CustomEvent) => {
-      console.log(evt);
+      if (evt.detail['success']) {
+        this.setAuthenticatedUser(evt.detail['data']);
+        this._battlenetLoginWindow.close();
+      }
     });
   }
 
@@ -53,4 +56,7 @@ export class LoginService {
     return this._authenticatedUserObservable;
   }
 
+  public logOut(): void {
+    this.setAuthenticatedUser(null);
+  }
 }
