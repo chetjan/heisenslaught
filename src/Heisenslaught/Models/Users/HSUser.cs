@@ -40,6 +40,11 @@ namespace Heisenslaught.Models.Users
             BattleTagDisplay = parts[0];
         }
 
+        public void SetBattleTagNormaized(string battleTagNormailzed)
+        {
+            BattleTagNormaized = battleTagNormailzed;
+        }
+
         public IEnumerable<HSUserLogin> Logins
         {
             get
@@ -54,6 +59,30 @@ namespace Heisenslaught.Models.Users
                     _logins.AddRange(value);
                 }
             }
+        }
+
+        public void AddLogin(HSUserLogin login)
+        {
+            this._logins.Add(login);
+        }
+
+        public bool RemoveLogin(HSUserLogin login)
+        {
+            return this._logins.Remove(login);
+        }
+
+        public bool RequiresSetup()
+        {
+            return PrimaryEmail == null || PasswordHash == null;
+        }
+
+        public bool RequiresEmailValidation()
+        {
+            if (RequiresSetup())
+            {
+                return true;
+            }
+            return !PrimaryEmail.IsConfirmed();
         }
 
     }

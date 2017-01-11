@@ -112,7 +112,7 @@ namespace Heisenslaught.Persistence.User
                 throw new ArgumentNullException(nameof(normalizedName));
             }
 
-            user.BattleTagNormaized = normalizedName;
+            user.SetBattleTagNormaized(normalizedName);
 
             return Task.FromResult(0);
         }
@@ -154,11 +154,11 @@ namespace Heisenslaught.Persistence.User
                 throw new ArgumentNullException(nameof(login));
             }
 
-            if (user._logins.Any(x => x.Equals(login)))
+            if (user.Logins.Any(x => x.Equals(login)))
             {
                 throw new InvalidOperationException("Login already exists.");
             }
-            user._logins.Add(new HSUserLogin(login));
+            user.AddLogin(new HSUserLogin(login));
 
             return Task.FromResult(0);
 
@@ -182,11 +182,11 @@ namespace Heisenslaught.Persistence.User
             }
 
             var login = new UserLoginInfo(loginProvider, providerKey, string.Empty);
-            var loginToRemove = user._logins.FirstOrDefault(x => x.Equals(login));
+            var loginToRemove = user.Logins.FirstOrDefault(x => x.Equals(login));
 
             if (loginToRemove != null)
             {
-                user._logins.Remove(loginToRemove);
+                user.RemoveLogin(loginToRemove);
             }
             return Task.FromResult(0);
         }
@@ -198,7 +198,7 @@ namespace Heisenslaught.Persistence.User
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var logins = user._logins.Select(login =>
+            var logins = user.Logins.Select(login =>
                new UserLoginInfo(login.LoginProvider, login.ProviderKey, null));
             return Task.FromResult<IList<UserLoginInfo>>(logins.ToList());
         }

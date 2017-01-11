@@ -6,6 +6,7 @@
         <md-nav-list>
             <md-list-item [routerLink]="['/']" (click)="mainNav.close()"> Home </md-list-item>
             <md-list-item [routerLink]="['/draft']" (click)="mainNav.close()"> Create Draft </md-list-item>
+            <md-list-item (click)="mainNav.close(); login()"> Login </md-list-item>
         </md-nav-list>
     </md-sidenav>
     <div class="nav-btn">

@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Heisenslaught.Models.Users;
+using Newtonsoft.Json;
+using Heisenslaught.DataTransfer.Users;
+
+
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Heisenslaught.Controllers
@@ -23,17 +27,14 @@ namespace Heisenslaught.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            
         }
 
         [HttpGet]
         [AllowAnonymous]
-        //https://localhost:44301/auth?provider=BattleNet
-        //https://localhost:44301/auth?provider=bnet
-        // https://localhost:44301/auth?provider=google
+   
         public IActionResult Index(string provider, string returnUrl = null)
         {
-            returnUrl = "https://localhost:44301/";
-
             // Request a redirect to the external login provider.
             var redirectUrl = Url.Action("Callback", "Auth", new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
@@ -42,18 +43,25 @@ namespace Heisenslaught.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        //https://localhost:44301/
         public async Task<IActionResult> Callback(string returnUrl = null, string remoteError = null)
         {
             if (remoteError != null)
             {
                 ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
-                return View("Login");
+                ViewData["loginResult"] = new LoginResultDTO<string>(true, remoteError);
+                return View("LoginEvent");
             }
 
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null) // failed for some reson
             {
-                return View("Login");
+                if(this.User != null)
+                {
+                    HSUser user = await _userManager.GetUserAsync(this.User);
+                     ViewData["loginResult"] = new LoginResultDTO<AuthenticatedUserDTO>(true, new AuthenticatedUserDTO(user));
+                }
+                return View("LoginEvent");
             }
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
             if (result.Succeeded) // logged in
@@ -61,8 +69,14 @@ namespace Heisenslaught.Controllers
                 // Update any authentication tokens if login succeeded
                 await _signInManager.UpdateExternalAuthenticationTokensAsync(info);
 
-                //_logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
-                return RedirectToLocal(returnUrl);
+                if (this.User != null)
+                {
+                    HSUser user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+                    ViewData["loginResult"] = new LoginResultDTO<AuthenticatedUserDTO>(true, new AuthenticatedUserDTO(user));
+                }
+
+                // ViewData['loginEvent'] = new LoginResultDTO<AuthenticatedUserDTO>(true, new AuthenticatedUserDTO());
+                return View("LoginEvent");
             }
             else // new account
             {
@@ -77,11 +91,12 @@ namespace Heisenslaught.Controllers
                         {
                             await _signInManager.SignInAsync(user, isPersistent: false);
                             await _signInManager.UpdateExternalAuthenticationTokensAsync(info);
-                            return RedirectToLocal(returnUrl);
+                            ViewData["loginResult"] = new LoginResultDTO<AuthenticatedUserDTO>(true, new AuthenticatedUserDTO(user));
+                            return View("LoginEvent");
                         }
                     }
                 }
-                return View("Login");
+                return View("LoginEvent");
             }
         }
 

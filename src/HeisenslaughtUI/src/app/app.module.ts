@@ -15,7 +15,7 @@ import { HomeScreenComponent } from './screens/home-screen/home-screen.component
 import { NotFoundScreenComponent } from './screens/not-found-screen/not-found-screen.component';
 import { AppCommonModule } from './modules/app-common/app-common.module';
 
-
+import { LoginService } from './modules/users/shared/services/login.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +33,7 @@ import { AppCommonModule } from './modules/app-common/app-common.module';
     AppCommonModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
