@@ -28,7 +28,8 @@ namespace Heisenslaught
         public void ConfigureServices(IServiceCollection services)
         {
 
-            // mongo strores - not yet used
+            // mongo strores
+            // TODO move to config
             services.AddSingleton<IUserStore<HSUser>>(provider =>
             {
                 var client = new MongoClient("mongodb://localhost:27017");
@@ -36,7 +37,7 @@ namespace Heisenslaught
                 var logger = provider.GetService<ILoggerFactory>();
                 return new HSUserStore(db, logger, "users");
             });
-            
+
             services.AddSingleton<IRoleStore<HSRole>>(provider =>
             {
                 var client = new MongoClient("mongodb://localhost:27017");
@@ -45,22 +46,17 @@ namespace Heisenslaught
                 return new HSRoleStore(db, logger, "roles");
             });
 
-            // not sure if this is needed - same results either way
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            // Identity managers - signin manager doesn't seem to be able to capture the info when you authenticate - see AuthController.callback
-            
+            // Identity managers/validators
             services.AddSingleton<IUserValidator<HSUser>, HSUserValidator>();
             services.AddSingleton<RoleManager<HSRole>, RoleManager<HSRole>>();
             services.AddSingleton<UserManager<HSUser>, UserManager<HSUser>>();
             services.AddScoped<SignInManager<HSUser>, SignInManager<HSUser>>();
 
-            // add identity stuff
+            // initialize Identity
             services.AddIdentity<HSUser, HSRole>()
-              //  .AddUserValidator<HSUserValidator>()
                 .AddDefaultTokenProviders();
-            
-            // not sure what this does
             services.AddOptions();
     
             services.AddMvc();
@@ -88,43 +84,19 @@ namespace Heisenslaught
 
             // set up login providers
             app.UseIdentity();
-            // this passes the code parmater check but login info is null
-            app.UseOAuthAuthentication(new OAuthOptions
-               {
-                    
-                   AuthenticationScheme = "BattleNet22", // esentially the id
-                   DisplayName = "Battle.net",
-                   ClientId = "426fcv27yht4tu9a4a4qn45su9r35ynj",
-                   ClientSecret = "b9C3AkTupPDW6BnRhw6SdJgJRQhtxHtA",
-                   ClaimsIssuer = "BattleNet",
-                   AuthorizationEndpoint = "https://us.battle.net/oauth/authorize",
-                   TokenEndpoint = "https://us.battle.net/oauth/token",
-                   UserInformationEndpoint = "https://us.api.battle.net/account/user",
-                   CallbackPath = "/auth/battlenet/", // this is taken over by the oauth code, its not an endpoint in the controller
-                   AutomaticAuthenticate = true,
-                   SaveTokens = true
-            });
-            // works
+          
             app.UseBattleNetAuthentication(options =>
             {
-                options.Region = BattleNetAuthenticationRegion.Europe;
+                // TODO: make client id and client secret, secret
+                options.Region = BattleNetAuthenticationRegion.America;
                 options.DisplayName = "BattleNet";
                 options.ClientId = "426fcv27yht4tu9a4a4qn45su9r35ynj";
                 options.ClientSecret = "b9C3AkTupPDW6BnRhw6SdJgJRQhtxHtA";
             });
 
-            // works
-            app.UseGoogleAuthentication(new GoogleOptions {
-                AuthenticationScheme = "google",
-                ClientId = "761544041286-i9fb5mbn6i9bt7fct5n6k5jsesbrqfag.apps.googleusercontent.com",
-                ClientSecret = "QY_41N3WjgMqvzpPN85TfVMW"
-            });
-
-
             app.UseWebSockets();
             app.UseSignalR();
 
-            
             app.UseMvc(routes =>
             {
                 
