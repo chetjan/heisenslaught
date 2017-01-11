@@ -1,6 +1,5 @@
 import { Component, ElementRef } from '@angular/core';
 import { LoginService } from './modules/users/shared/services/login.service';
-
 import { Observable } from 'rxjs';
 
 interface IDraftState {

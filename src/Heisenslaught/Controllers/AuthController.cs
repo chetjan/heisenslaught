@@ -32,7 +32,6 @@ namespace Heisenslaught.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-   
         public IActionResult Index(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
@@ -102,13 +101,10 @@ namespace Heisenslaught.Controllers
 
 
         [HttpGet]
-        [AllowAnonymous]
-        //https://localhost:44301/
-        public async Task<IActionResult> Logout(string returnUrl = null, string remoteError = null)
+        public async Task<bool> Logout()
         {
             await _signInManager.SignOutAsync();
-            ViewData["loginResult"] = new LoginResultDTO<string>(true, null);
-            return View("LoginEvent");
+            return true;
         }
 
     }

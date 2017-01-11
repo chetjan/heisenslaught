@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LoginWindow } from './login-window';
 import { Subject, Observable, Subscriber } from 'rxjs';
+import { Http } from '@angular/http';
 
 @Injectable()
 export class LoginService {
@@ -11,7 +12,9 @@ export class LoginService {
   private _authenticatedUserSubject: Subject<any> = new Subject();
   private _authenticatedUserObservable: Observable<any>;
 
-  constructor() {
+  constructor(
+    private http: Http
+  ) {
     window.addEventListener('loginEvent', (evt: CustomEvent) => {
       if (evt.detail['success']) {
         this.setAuthenticatedUser(evt.detail['data']);
@@ -57,6 +60,8 @@ export class LoginService {
   }
 
   public logOut(): void {
-    this.setAuthenticatedUser(null);
+    this.http.get('/auth/logout').toPromise().then(() => {
+      this.setAuthenticatedUser(null);
+    });
   }
 }
