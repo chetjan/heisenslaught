@@ -125,42 +125,6 @@ export class DraftScreenComponent implements OnDestroy {
     }
     return '';
   }
-  /*
-    public getPick(team: number, pickId: number): HeroData {
-      if (!this.heroes || !this.draftConfig || !this.draftState) {
-        return null;
-      }
-      let picks = this.draftState.picks || [];
-      let pickedHeroId: string;
-  
-      let pickSlots: number[] = this.teamPickSlots[team];
-  
-      pickedHeroId = picks[pickSlots[pickId]];
-      return this.getHeroById(pickedHeroId);
-    }
-  
-    public getBan(team: number, pickId: number): HeroData {
-      if (!this.heroes || !this.draftConfig || !this.draftState) {
-        return null;
-      }
-      let picks = this.draftState.picks || [];
-      let pickedHeroId: string;
-  
-      let banSlots: number[] = this.teamBanSlots[team];
-  
-      pickedHeroId = picks[banSlots[pickId]];
-      return this.getHeroById(pickedHeroId);
-    }
-  */
-
-  private getHeroById(heroId: string): HeroData {
-    if (!this.heroes) {
-      return null;
-    }
-    return this.heroes.find((value) => {
-      return value.id === heroId;
-    });
-  }
 
   public get mapName(): string {
     if (this.maps && this.draftConfig) {
@@ -248,6 +212,10 @@ export class DraftScreenComponent implements OnDestroy {
 
   public get shouldShowSelect(): boolean {
     if (this.draftState && this.draftState.phase === DraftPhase.PICKING) {
+      if (this.draftConfig.pickTime === -1) {
+        return false;
+      }
+
       if (this.team) {
         return true;
       }
