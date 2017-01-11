@@ -45,28 +45,43 @@ namespace Heisenslaught
             // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // configs
+            services.Configure<MongoSettings>(Configuration.GetSection("MongoDb"));
+            services.Configure<UserCreationSettings>(Configuration.GetSection("UserCreation"));
+
 
             // mongo strores
-            services.Configure<MongoSettings>(Configuration.GetSection("MongoDb"));
-
-            services.AddSingleton<IUserStore<HSUser>>(provider =>
-            {
-                var options = provider.GetService<IOptions<MongoSettings>>();
-                var client = new MongoClient(options.Value.ConnectionString);
-                var db = client.GetDatabase(options.Value.Database);
-                var logger = provider.GetService<ILoggerFactory>();
-                return new HSUserStore(db, logger, "users");
-            });
-
             services.AddSingleton<IRoleStore<HSRole>>(provider =>
             {
                 var options = provider.GetService<IOptions<MongoSettings>>();
                 var client = new MongoClient(options.Value.ConnectionString);
                 var db = client.GetDatabase(options.Value.Database);
                 var logger = provider.GetService<ILoggerFactory>();
-                return new HSRoleStore(db, logger, "roles");
+                return new HSRoleStore(db, logger);
             });
 
+            services.AddSingleton<IUserStore<HSUser>>(provider =>
+            {
+                var options = provider.GetService<IOptions<MongoSettings>>();
+                var roleManager = provider.GetService<RoleManager<HSRole>>();
+                var client = new MongoClient(options.Value.ConnectionString);
+                var db = client.GetDatabase(options.Value.Database);
+                var logger = provider.GetService<ILoggerFactory>();
+                return new HSUserStore(db, logger, roleManager);
+            });
+
+       
+
+            /*
+            services.AddSingleton<IUserRoleStore<HSUser>>(provider =>
+            {
+                var options = provider.GetService<IOptions<MongoSettings>>();
+                var client = new MongoClient(options.Value.ConnectionString);
+                var db = client.GetDatabase(options.Value.Database);
+                var logger = provider.GetService<ILoggerFactory>();
+                return new HSRoleStore(db, logger);
+            });
+            */
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Identity managers/validators
@@ -74,7 +89,7 @@ namespace Heisenslaught
             services.AddSingleton<RoleManager<HSRole>, RoleManager<HSRole>>();
             services.AddSingleton<UserManager<HSUser>, UserManager<HSUser>>();
             services.AddScoped<SignInManager<HSUser>, SignInManager<HSUser>>();
-
+            
             // initialize Identity
             services.AddIdentity<HSUser, HSRole>()
                 .AddDefaultTokenProviders();

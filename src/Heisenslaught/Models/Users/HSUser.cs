@@ -3,18 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Heisenslaught.Models.Users
 {
     public class HSUser
     {
         private List<HSUserLogin> _logins;
-   
+        private List<string> _roles;
+
+        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; private set; }
+        public string BattleNetId { get; private set; }
         public string BattleTag { get; private set; }
         public string BattleTagNormaized { get; private set; }
         public string BattleTagDisplay { get; private set; }
 
+
+
+        // for later
         public string PasswordHash;
         public List<HSEmailAddress> Emails;
         public HSEmailAddress PrimaryEmail;
@@ -23,11 +31,13 @@ namespace Heisenslaught.Models.Users
         public HSUser()
         {
             _logins = new List<HSUserLogin>();
+            _roles = new List<string>();
         }
 
-        public HSUser(string id, string battleTag) : this()
+        public HSUser(string battleId, string battleTag) : this()
         {
-            Id = id;
+            Id = ObjectId.GenerateNewId().ToString();
+            BattleNetId = battleId;
             BattleTag = battleTag;
             SetBattleTag(battleTag);
         }
@@ -70,6 +80,37 @@ namespace Heisenslaught.Models.Users
             return this._logins.Remove(login);
         }
 
+        public IEnumerable<string> Roles
+        {
+            get
+            {
+                return _roles;
+            }
+
+            private set
+            {
+                if (value != null)
+                {
+                    _roles.AddRange(value);
+                }
+            }
+        }
+
+        public void AddRole(string role)
+        {
+            this._roles.Add(role);
+        }
+
+        public bool RemoveRole(string role)
+        {
+            return this._roles.Remove(role);
+        }
+
+        public bool HasRole(string role)
+        {
+            return this._roles.Contains(role);
+        }
+
         public bool RequiresSetup()
         {
             return PrimaryEmail == null || PasswordHash == null;
@@ -83,6 +124,5 @@ namespace Heisenslaught.Models.Users
             }
             return !PrimaryEmail.IsConfirmed();
         }
-
     }
 }

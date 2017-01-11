@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Heisenslaught.Models.Users;
 using Newtonsoft.Json;
 using Heisenslaught.DataTransfer.Users;
-
+using Heisenslaught.Config;
+using Microsoft.Extensions.Options;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,14 +21,17 @@ namespace Heisenslaught.Controllers
     {
         private readonly UserManager<HSUser> _userManager;
         private readonly SignInManager<HSUser> _signInManager;
+        private readonly UserCreationSettings _userCreationSettings;
 
         public AuthController(
             UserManager<HSUser> userManager,
-            SignInManager<HSUser> signInManager)
+            SignInManager<HSUser> signInManager,
+            IOptions<UserCreationSettings> userCreationSettings
+        )
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            
+            _userCreationSettings = userCreationSettings.Value;
         }
 
         [HttpGet]
@@ -88,6 +92,11 @@ namespace Heisenslaught.Controllers
                         createResult = await _userManager.AddLoginAsync(user, info);
                         if (createResult.Succeeded)
                         {
+                            if (_userCreationSettings.AutoGrantSuperUserToBattleTags.Contains(user.BattleTag))
+                            {
+                                await _userManager.AddToRoleAsync(user, "su");
+                            }
+
                             await _signInManager.SignInAsync(user, isPersistent: false);
                             await _signInManager.UpdateExternalAuthenticationTokensAsync(info);
                             ViewData["loginResult"] = new LoginResultDTO<AuthenticatedUserDTO>(true, new AuthenticatedUserDTO(user));

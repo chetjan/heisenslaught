@@ -11,15 +11,19 @@ using MongoDB.Driver;
 
 namespace Heisenslaught.Persistence.User
 {
-    public class HSUserStore : IUserStore<HSUser>, IUserLoginStore<HSUser>, IUserPasswordStore<HSUser>, IUserEmailStore<HSUser>
+    public class HSUserStore : IUserStore<HSUser>, IUserLoginStore<HSUser>, IUserPasswordStore<HSUser>, IUserEmailStore<HSUser>, IUserRoleStore<HSUser>
     {
         private readonly IMongoCollection<HSUser> _userCollection;
         private readonly ILogger _logger;
+        private readonly RoleManager<HSRole> _roleManager;
 
-        public HSUserStore(IMongoDatabase database, ILoggerFactory loggerFactory, string collectionName)
+        public HSUserStore(IMongoDatabase database, ILoggerFactory loggerFactory, RoleManager<HSRole> roleManager) : this(database, loggerFactory, roleManager, "users") { }
+        public HSUserStore(IMongoDatabase database, ILoggerFactory loggerFactory, RoleManager<HSRole> roleManager, string collectionName)
         {
             _userCollection = database.GetCollection<HSUser>(collectionName);
             _logger = loggerFactory.CreateLogger(GetType().Name);
+            _roleManager = roleManager;
+
             EnsureIndicies();
         }
         
@@ -347,6 +351,73 @@ namespace Heisenslaught.Persistence.User
                 user.PrimaryEmail.ValueNormaized = normalizedEmail;
             }
             return Task.FromResult(0);
+        }
+
+        public async Task AddToRoleAsync(HSUser user, string roleName, CancellationToken cancellationToken)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if (roleName == null)
+            {
+                throw new ArgumentNullException(nameof(roleName));
+            }
+            var role = await _roleManager.FindByNameAsync(roleName);
+            if(role == null)
+            {
+                throw new KeyNotFoundException("The role '" + roleName + "' does not exisit.");
+            }
+            user.AddRole(roleName);
+        }
+
+        public Task RemoveFromRoleAsync(HSUser user, string roleName, CancellationToken cancellationToken)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if (roleName == null)
+            {
+                throw new ArgumentNullException(nameof(roleName));
+            }
+            user.RemoveRole(roleName);
+            return Task.FromResult(0);
+        }
+
+        public Task<IList<string>> GetRolesAsync(HSUser user, CancellationToken cancellationToken)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            return Task.FromResult<IList<string>>(user.Roles.ToList<string>());
+        }
+
+        public Task<bool> IsInRoleAsync(HSUser user, string roleName, CancellationToken cancellationToken)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            if (roleName == null)
+            {
+                throw new ArgumentNullException(nameof(roleName));
+            }
+            return Task.FromResult(user.HasRole(roleName));
+        }
+
+        public async Task<IList<HSUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        {
+            if (roleName == null)
+            {
+                throw new ArgumentNullException(nameof(roleName));
+            }
+
+            var query = Builders<HSUser>.Filter.AnyEq(u => u.Roles, roleName);
+            return await _userCollection.Find(query).ToListAsync(cancellationToken);
         }
     }
 }
