@@ -35,7 +35,7 @@ namespace Heisenslaught.Controllers
         public IActionResult Index(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
-            var redirectUrl = Url.Action("Callback", "Auth", new { ReturnUrl = returnUrl });
+            var redirectUrl = Url.Action("CallbackAsync", "Auth", new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return Challenge(properties, provider);
         }
@@ -43,7 +43,7 @@ namespace Heisenslaught.Controllers
         [HttpGet]
         [AllowAnonymous]
         //https://localhost:44301/
-        public async Task<IActionResult> Callback(string returnUrl = null, string remoteError = null)
+        public async Task<IActionResult> CallbackAsync(string returnUrl = null, string remoteError = null)
         {
             if (remoteError != null)
             {

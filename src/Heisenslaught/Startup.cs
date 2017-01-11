@@ -7,41 +7,62 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.HttpOverrides;
 using Heisenslaught.Models.Users;
 using Heisenslaught.Persistence.User;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using MongoDB.Driver;
-using AspNetCore.Identity.MongoDB;
 using AspNet.Security.OAuth.BattleNet;
+using Heisenslaught.Config;
+using Microsoft.Extensions.Options;
 
 namespace Heisenslaught
 {
     public class Startup
     {
+        public IConfigurationRoot Configuration { get; set; }
+
+        public Startup(IHostingEnvironment env)
+        {
+            var builder =  new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("/opt/Heisenslaught/appsettings.json", optional: true)
+                .AddJsonFile($"/opt/Heisenslaught/appsettings.{env.EnvironmentName}.json", optional: true);
+
+           
+            builder.AddEnvironmentVariables();
+            Configuration = builder.Build();
+        }
 
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+
+            // This method gets called by the runtime. Use this method to add services to the container.
+            // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
 
             // mongo strores
-            // TODO move to config
+            services.Configure<MongoSettings>(Configuration.GetSection("MongoDb"));
+
             services.AddSingleton<IUserStore<HSUser>>(provider =>
             {
-                var client = new MongoClient("mongodb://localhost:27017");
-                var db = client.GetDatabase("Heisenslaught");
+                var options = provider.GetService<IOptions<MongoSettings>>();
+                var client = new MongoClient(options.Value.ConnectionString);
+                var db = client.GetDatabase(options.Value.Database);
                 var logger = provider.GetService<ILoggerFactory>();
                 return new HSUserStore(db, logger, "users");
             });
 
             services.AddSingleton<IRoleStore<HSRole>>(provider =>
             {
-                var client = new MongoClient("mongodb://localhost:27017");
-                var db = client.GetDatabase("Heisenslaught");
+                var options = provider.GetService<IOptions<MongoSettings>>();
+                var client = new MongoClient(options.Value.ConnectionString);
+                var db = client.GetDatabase(options.Value.Database);
                 var logger = provider.GetService<ILoggerFactory>();
                 return new HSRoleStore(db, logger, "roles");
             });
@@ -87,11 +108,10 @@ namespace Heisenslaught
           
             app.UseBattleNetAuthentication(options =>
             {
-                // TODO: make client id and client secret, secret
                 options.Region = BattleNetAuthenticationRegion.America;
                 options.DisplayName = "BattleNet";
-                options.ClientId = "426fcv27yht4tu9a4a4qn45su9r35ynj";
-                options.ClientSecret = "b9C3AkTupPDW6BnRhw6SdJgJRQhtxHtA";
+                options.ClientId = Configuration["Authentication:BattleNet:ClientID"];
+                options.ClientSecret = Configuration["Authentication:BattleNet:ClientSecret"];
             });
 
             app.UseWebSockets();

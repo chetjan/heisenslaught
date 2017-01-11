@@ -261,16 +261,11 @@ namespace Heisenslaught.Persistence.User
                 throw new ArgumentNullException(nameof(user));
             }
 
-            if (email == null)
-            {
-                throw new ArgumentNullException(nameof(email));
-            }
-
             if (user.PrimaryEmail == null)
             {
                 user.PrimaryEmail = new HSEmailAddress();
             }
-            user.PrimaryEmail.Value = email;
+            user.PrimaryEmail.Value = email ?? throw new ArgumentNullException(nameof(email));
 
             return Task.FromResult(0);
         }
@@ -282,7 +277,7 @@ namespace Heisenslaught.Persistence.User
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var primaryEmail = user.PrimaryEmail != null ? user.PrimaryEmail.Value : null;
+            var primaryEmail = user.PrimaryEmail?.Value;
             return Task.FromResult(primaryEmail);
         }
 
@@ -293,8 +288,8 @@ namespace Heisenslaught.Persistence.User
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var confirmed = user.PrimaryEmail != null ? user.PrimaryEmail.IsConfirmed() : false;
-            return Task.FromResult(confirmed);
+            var confirmed = user.PrimaryEmail?.IsConfirmed();
+            return Task.FromResult((bool)confirmed);
         }
 
         public Task SetEmailConfirmedAsync(HSUser user, bool confirmed, CancellationToken cancellationToken)
@@ -336,7 +331,7 @@ namespace Heisenslaught.Persistence.User
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var primaryEmail = user.PrimaryEmail != null ? user.PrimaryEmail.ValueNormaized : null;
+            var primaryEmail = user.PrimaryEmail?.ValueNormaized;
             return Task.FromResult(primaryEmail);
         }
 
