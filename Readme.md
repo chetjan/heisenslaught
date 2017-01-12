@@ -28,7 +28,7 @@ A custom drafting tool for (On|Off|Cole)slaught.
 	  "UserCreation": {
 		"AutoGrantSuperUserToBattleTags": [
 			"John#1234",
-			"SuperAsome#9876"
+			"SuperAwsome#9876"
 		]
 	  }
 	}
