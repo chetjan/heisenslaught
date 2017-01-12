@@ -11,6 +11,7 @@ A custom drafting tool for (On|Off|Cole)slaught.
 1. Copy src/Heisenslaught/appsettings.json to /opt/Heisenslaught/appsettings.json
 1. Changes the values of 'ClientID' and 'ClientSecret' to match your battle.net application - [Create Here](https://dev.battle.net/)
 1. Add any battleTags you wish to make super users to 'AutoGrantSuperUserToBattleTags' - they will be added to the SU role the first time they log in
+
 	Example appsettings.json:
 	```json
 	{
