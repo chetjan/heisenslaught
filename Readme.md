@@ -1,12 +1,39 @@
 # Heisenslaught
 
-A custom drafting tool for (On|Off)slaught.
+A custom drafting tool for (On|Off|Cole)slaught.
 
 ## Local Setup
 
 1. Install [node](https://nodejs.org)
 1. Install [mongodb](https://www.mongodb.com/)
 	
+### App Configuration 
+1. Copy src/Heisenslaught/appsettings.json to /opt/Heisenslaught/appsettings.json
+1. Changes the values of 'ClientID' and 'ClientSecret' to match your battle.net application - [Create Here](https://dev.battle.net/)
+1. Add any battleTags you wish to make super users to 'AutoGrantSuperUserToBattleTags' - they will be added to the SU role the first time they log in
+	Example appsettings.json:
+	`{
+	  "MongoDb": {
+		"ConnectionString": "mongodb://localhost:27017",
+		"Database": "Heisenslaught"
+	  },
+	  "Authentication": {
+		"BattleNet": {
+		  "ClientID": "HAN76GhJ87Jhgs",
+		  "ClientSecret":  "MHHVS8s6b66dhs7dj"
+		}
+	  },
+	  "UserCreation": {
+		"AutoGrantSuperUserToBattleTags": [
+			"John#1234",
+			"SuperAsome#9876"
+		]
+	  }
+	}`
+
+### SSL Configuration
+1. Instructions coming soon(tm)
+
 ### UI
 1. In `src/HeisenslaughtUI` run `npm install`
     1. Note there is currently a bug in the version of node-sass used by angular-cli. After `npm install` you need to run `npm rebuild node-sass` to generate the vendor folder needed.
