@@ -1,0 +1,6 @@
+<div *ngIf="!user">
+  <button class="login-button" (click)="login()"><div class="icon"></div><label>Login</label></button>
+</div>
+<div *ngIf="user">
+  {{user.displayName}} [<a (click)="logout()">Logout</a>]
+</div>

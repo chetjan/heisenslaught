@@ -40,7 +40,7 @@ $sideOffsetSmall: 90px;
             text-align: center;
             .header {
                 width: 100%;
-                height: 250px;
+                height: 230px;
                 background-image: url('assets/storm_ui_glues_draft_headerbar_vs.png');
                 background-repeat: no-repeat;
                 background-position-x: center;
@@ -109,7 +109,7 @@ $sideOffsetSmall: 90px;
                 }
                 .draft-status {
                     position: absolute;
-                    top: 178px;
+                    top: 179px;
                     width: 450px;
                     margin-left: -225px;
                     left: 50%;
@@ -122,12 +122,12 @@ $sideOffsetSmall: 90px;
                 }
                 team-hero-picks {
                     position: absolute;
-                    top: 115px;
+                    top: 100px;
                     &[team="0"] {
                         left: 100px;
                     }
                     &[team="1"] {
-                        left: 767px;
+                        left: 776px;
                     }
                 }
             }

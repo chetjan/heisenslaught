@@ -14,12 +14,14 @@ namespace Heisenslaught
             var host = new WebHostBuilder()
                 .UseKestrel(options =>
                 {
+                    // This section may only be needed in devmode, it should most likely be handled by ngix when deployed
                     options.NoDelay = true;
                     options.UseHttps("testCert.pfx", "testPassword");
-                    
                     options.UseConnectionLogging();
                 })
-                .UseUrls("http://localhost:5000", "https://localhost:44301")
+                // needed?
+                .UseUrls("http://localhost:64808", "https://localhost:44301")
+                
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()

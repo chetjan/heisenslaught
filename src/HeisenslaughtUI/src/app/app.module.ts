@@ -18,6 +18,7 @@ import { AppCommonModule } from './modules/app-common/app-common.module';
 import { LoginService } from './modules/users/shared/services/login.service';
 import { LoginScreenComponent } from './screens/login-screen/login-screen.component';
 import { AuthGuard } from './modules/users/shared/guards/auth-guard.service';
+import { LoginBarComponent } from './components/login-bar/login-bar.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { AuthGuard } from './modules/users/shared/guards/auth-guard.service';
     AppComponent,
     HomeScreenComponent,
     NotFoundScreenComponent,
-    LoginScreenComponent
+    LoginScreenComponent,
+    LoginBarComponent
   ],
   imports: [
     BrowserModule,

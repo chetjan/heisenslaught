@@ -1,8 +1,15 @@
+<table class="header">
+    <tr>
+        <td class="left">
+            <button md-button class="menu-button" (click)="mainNav.toggle()"> <md-icon>menu</md-icon><label>Menu</label></button>
+        </td>
+        <td class="right">
+            <login-bar></login-bar>
+        </td>
+    </tr>    
+</table>
 <md-sidenav-layout>
     <md-sidenav #mainNav mode="over" class="hs-dark-theme">
-        <md-toolbar class="md-primary">
-            <span>Menu</span>
-        </md-toolbar>
         <md-nav-list>
             <md-list-item [routerLink]="['/']" (click)="mainNav.close()"> Home </md-list-item>
             <md-list-item [routerLink]="['/draft']" (click)="mainNav.close()"> Create Draft </md-list-item>
@@ -10,11 +17,6 @@
             <md-list-item *ngIf="(user | async)" (click)="mainNav.close(); logout()"> Logout </md-list-item>
         </md-nav-list>
     </md-sidenav>
-    <div class="nav-btn">
-        <button md-raised-button (click)="mainNav.open()" class="md-primary">
-            <md-icon>menu</md-icon>
-        </button>
-    </div>
     <div class="content">
         <router-outlet></router-outlet>
     </div>

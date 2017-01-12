@@ -1,0 +1,35 @@
+:host{
+    display: inline-block;
+}
+.login-button{
+    border:none;
+    background-color: transparent;
+    color:white;
+    vertical-align: middle;
+    height:37px;
+    cursor: pointer;
+    label{
+        top:1px;
+        margin-left: 25px;
+        cursor: pointer;
+    }
+    .icon{
+        position: absolute;
+        display: inline-block;
+        background-image: url('http://us.battle.net/static/images/nav-client/logo-bnet-compact.png');
+        background-repeat: no-repeat;
+        background-size: 100% 200%;
+        width: 35px;
+        height: 35px;
+        top:1px;
+        left:0px;
+    }
+    &:hover{
+        .icon{
+            background-position: 0px 100%;
+        }
+    }
+    &:focus{
+        outline: none;
+    }
+}
