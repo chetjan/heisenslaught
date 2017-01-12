@@ -12,7 +12,8 @@ A custom drafting tool for (On|Off|Cole)slaught.
 1. Changes the values of 'ClientID' and 'ClientSecret' to match your battle.net application - [Create Here](https://dev.battle.net/)
 1. Add any battleTags you wish to make super users to 'AutoGrantSuperUserToBattleTags' - they will be added to the SU role the first time they log in
 	Example appsettings.json:
-	`{
+	```json
+	{
 	  "MongoDb": {
 		"ConnectionString": "mongodb://localhost:27017",
 		"Database": "Heisenslaught"
@@ -29,7 +30,8 @@ A custom drafting tool for (On|Off|Cole)slaught.
 			"SuperAsome#9876"
 		]
 	  }
-	}`
+	}
+	```
 
 ### SSL Configuration
 1. Instructions coming soon(tm)
