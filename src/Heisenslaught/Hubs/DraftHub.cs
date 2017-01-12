@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Threading.Tasks;
-
 using Heisenslaught.DataTransfer;
 using Heisenslaught.Exceptions;
 using Heisenslaught.Services;
-
 
 namespace Heisenslaught
 {

@@ -14,21 +14,20 @@ namespace Heisenslaught.Persistence.User
     {
 
         private readonly IMongoCollection<HSRole> _roleCollection;
-        private readonly IMongoCollection<HSUserRole> _userRoleCollection;
         private readonly ILogger _logger;
 
 
-        public HSRoleStore(IMongoDatabase database, ILoggerFactory loggerFactory):this(database, loggerFactory, "roles", "user_roles"){}
+        public HSRoleStore(IMongoDatabase database, ILoggerFactory loggerFactory):this(database, loggerFactory, "roles"){}
 
-        public HSRoleStore(IMongoDatabase database, ILoggerFactory loggerFactory, string roleCollectionName, string userRoleCollectionName)
+        public HSRoleStore(IMongoDatabase database, ILoggerFactory loggerFactory, string roleCollectionName)
         {
             _roleCollection = database.GetCollection<HSRole>(roleCollectionName);
-            _userRoleCollection = database.GetCollection<HSUserRole>(userRoleCollectionName);
             _logger = loggerFactory.CreateLogger(GetType().Name);
             EnsureIndiciesAsync();
         }
         private async void EnsureIndiciesAsync()
         {
+            // TODO This should be configured in Startup.cs
             var role = await FindByNameAsync("SU", new CancellationToken());
             if(role == null)
             {
