@@ -10,6 +10,7 @@ namespace Heisenslaught.DataTransfer.Users
     {
         public string username;
         public string usernameNormailzed;
+        public List<string> roles;
         public bool requiresSetup;
         public bool requiresEmailValidation;
 
@@ -17,6 +18,7 @@ namespace Heisenslaught.DataTransfer.Users
         {
             username = user.BattleTag;
             usernameNormailzed = user.BattleTagNormaized;
+            roles = user.Roles.ToList();
             requiresSetup = user.RequiresSetup();
             requiresEmailValidation = user.RequiresEmailValidation();
         }

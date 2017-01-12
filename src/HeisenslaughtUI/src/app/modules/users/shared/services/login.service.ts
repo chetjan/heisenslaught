@@ -1,19 +1,26 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { LoginWindow } from './login-window';
 import { Subject, Observable, Subscriber } from 'rxjs';
 import { Http } from '@angular/http';
+import { AuthenticatedUser } from './types/user';
+
+export * from './types/user';
 
 @Injectable()
 export class LoginService {
 
   private _initialized: boolean = false;
   private _battlenetLoginWindow: LoginWindow = new LoginWindow('/auth?provider=BattleNet', 500, 620);
-  private _authenticatedUser: any;
-  private _authenticatedUserSubject: Subject<any> = new Subject();
-  private _authenticatedUserObservable: Observable<any>;
+  private _authenticatedUser: AuthenticatedUser;
+  private _authenticatedUserSubject: Subject<AuthenticatedUser> = new Subject();
+  private _authenticatedUserObservable: Observable<AuthenticatedUser>;
+
+  public returnUrl: string;
 
   constructor(
-    private http: Http
+    private http: Http,
+    private router: Router
   ) {
     window.addEventListener('loginEvent', (evt: CustomEvent) => {
       if (evt.detail['success']) {
@@ -24,25 +31,37 @@ export class LoginService {
   }
 
 
-  public initialize(authenticatedUser: any): void {
+  public initialize(authenticatedUser: AuthenticatedUser): void {
     if (!this._initialized) {
       this.setAuthenticatedUser(authenticatedUser);
       this._initialized = true;
     }
   }
 
-  private setAuthenticatedUser(authenticatedUser: any): void {
+  private setAuthenticatedUser(authenticatedUser: AuthenticatedUser): void {
     this._authenticatedUser = authenticatedUser;
     this._authenticatedUserSubject.next(authenticatedUser);
   }
 
-  public battleNetLogin(returnUrl = '/') {
-    this._battlenetLoginWindow.open(returnUrl);
+  public battleNetLogin(returnUrl = '/'): Promise<AuthenticatedUser> {
+    return new Promise<AuthenticatedUser>((resolve, reject) => {
+      this._battlenetLoginWindow.open(() => {
+        resolve(this._authenticatedUser);
+      }, returnUrl);
+    });
   }
 
-  public get user(): Observable<any> {
+  public loginRedirect() {
+    this.router.navigate([this.returnUrl || '/'], {
+      preserveFragment: true,
+      preserveQueryParams: true,
+      replaceUrl: true
+    });
+  }
+
+  public get user(): Observable<AuthenticatedUser> {
     if (!this._authenticatedUserObservable) {
-      this._authenticatedUserObservable = new Observable((subscriber: Subscriber<any>) => {
+      this._authenticatedUserObservable = new Observable((subscriber: Subscriber<AuthenticatedUser>) => {
         let sub = this._authenticatedUserSubject.subscribe((next) => {
           subscriber.next(next);
         }, (err) => {

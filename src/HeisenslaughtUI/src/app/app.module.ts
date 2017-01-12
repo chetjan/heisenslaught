@@ -16,12 +16,16 @@ import { NotFoundScreenComponent } from './screens/not-found-screen/not-found-sc
 import { AppCommonModule } from './modules/app-common/app-common.module';
 
 import { LoginService } from './modules/users/shared/services/login.service';
+import { LoginScreenComponent } from './screens/login-screen/login-screen.component';
+import { AuthGuard } from './modules/users/shared/guards/auth-guard.service';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeScreenComponent,
-    NotFoundScreenComponent
+    NotFoundScreenComponent,
+    LoginScreenComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,7 @@ import { LoginService } from './modules/users/shared/services/login.service';
     AppCommonModule,
     AppRoutingModule
   ],
-  providers: [LoginService],
+  providers: [LoginService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
