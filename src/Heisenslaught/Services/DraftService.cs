@@ -14,12 +14,14 @@ namespace Heisenslaught.Services
     public class DraftService : IDraftService
     {
         private readonly IDraftStore _draftStore;
+        private readonly HeroDataService _heroDataService;
         private Dictionary<string, DraftRoom> activeRooms = new Dictionary<string, DraftRoom>();
         private Dictionary<string, DraftRoom> connectionsRoom = new Dictionary<string, DraftRoom>();
 
-        public DraftService(IDraftStore draftStore)
+        public DraftService(IDraftStore draftStore, HeroDataService heroDataService)
         {
             _draftStore = draftStore;
+            _heroDataService = heroDataService;
         }
 
         public DraftConfigAdminDTO CreateDraft(CreateDraftDTO config)
@@ -64,7 +66,7 @@ namespace Heisenslaught.Services
             if (room == null && autoCreate)
             {
                 DraftModel config = _draftStore.FindByDraftToken(draftToken);
-                room = new DraftRoom(this, config);
+                room = new DraftRoom(this, _heroDataService, config);
             }
             return room;
         }
@@ -118,52 +120,5 @@ namespace Heisenslaught.Services
             }
         }
 
-        /*
-        public List<DraftConfigAdminDTO> getActiveDrafts()
-        {
-            List<DraftConfigAdminDTO> list = new List<DraftConfigAdminDTO>();
-            foreach (var pair in activeRooms)
-            {
-                list.Add(new DraftConfigAdminDTO(pair.Value.DraftModel));
-            }
-            return list;
-        }
-
-        public List<DraftConfigAdminDTO> getDrafts(int start = 0, int limit = 0)
-        {
-            return null;
-        }
-
-        public DraftConfigDTO getDraftConfig(string draftToken, string authToken = null)
-        {
-            DraftModel model = null;
-            var room = activeRooms[draftToken];
-            if(room != null)
-            {
-                model = room.DraftModel;
-            }
-            else
-            {
-                model = draftRepo.findByDraftToken(draftToken);
-            }
-            if (model != null)
-            {
-                if(model.adminToken == authToken)
-                {
-                    return new DraftConfigAdminDTO(model);
-                }
-                else if(model.team1DrafterToken == authToken || model.team2DrafterToken == authToken)
-                {
-                    return new DraftConfigDrafterDTO(model, authToken);
-                }
-                else
-                {
-                    return new DraftConfigDTO(model);
-                }
-            }
-            return null;
-        }
-
-    */
     }
 }

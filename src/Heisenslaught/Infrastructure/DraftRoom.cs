@@ -10,6 +10,7 @@ namespace Heisenslaught.Infrastructure
 {
     public class DraftRoom
     {
+        private readonly HeroDataService _heroDataService;
         private Dictionary<string, DraftRoomConnection> connections = new Dictionary<string, DraftRoomConnection>();
         private DraftHandler draftHandler;
         private DraftModel model;
@@ -17,12 +18,13 @@ namespace Heisenslaught.Infrastructure
         private DraftService service;
         private Timer timer;
 
-        public DraftRoom(DraftService service, DraftModel model)
+        public DraftRoom(DraftService service, HeroDataService heroDataService, DraftModel model)
         {
             this.service = service;
+            _heroDataService = heroDataService;
             this.model = model;
             this.roomName = "draftRoom-" + model.draftToken;
-            this.draftHandler = new DraftHandler(this);
+            this.draftHandler = new DraftHandler(this, _heroDataService);
         }
 
         public DraftModel DraftModel

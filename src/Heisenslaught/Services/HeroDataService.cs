@@ -25,10 +25,10 @@ namespace Heisenslaught.Services
 
     public class HeroDataService
     {
-        public static List<HeroData> heroesData;
-        public static List<MapData> mapsData;
+        public List<HeroData> heroesData;
+        public List<MapData> mapsData;
 
-        public static List<HeroData> GetHeroes()
+        public List<HeroData> GetHeroes()
         {
             if(heroesData == null)
             {
@@ -37,7 +37,7 @@ namespace Heisenslaught.Services
             return heroesData;
         }
 
-        public static List<MapData> GetMaps()
+        public List<MapData> GetMaps()
         {
             if (heroesData == null)
             {
@@ -46,7 +46,7 @@ namespace Heisenslaught.Services
             return mapsData;
         }
 
-        public static HeroData GetHeroById(string heroId)
+        public HeroData GetHeroById(string heroId)
         {
             var heroes = GetHeroes();
             return heroes.Find(hero =>
@@ -55,7 +55,7 @@ namespace Heisenslaught.Services
             });
         }
 
-        public static MapData GetMapById(string mapId)
+        public MapData GetMapById(string mapId)
         {
             var maps = GetMaps();
             return maps.Find(map =>
@@ -64,7 +64,7 @@ namespace Heisenslaught.Services
             });
         }
 
-        public static T ReadJsonFile<T>(string path)
+        public T ReadJsonFile<T>(string path)
         {
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
             StreamReader r = new StreamReader(fs);
