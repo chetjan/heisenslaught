@@ -4,11 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using Heisenslaught.Models;
+using Heisenslaught.Services;
 
 namespace Heisenslaught.Infrastructure
 {
     public class DraftHandler
     {
+        private readonly HeroDataService _heroDataService;
+
         private static Random rnd = new Random((int)DateTime.Now.Ticks);
         private static List<int> firstSlots= new List<int>{0,2,5,6,8,11,12};
         private static List<int> secondSlots = new List<int> {1,2,3,7,9,10,13};
@@ -24,8 +27,9 @@ namespace Heisenslaught.Infrastructure
         private DraftModel model;
 
 
-        public DraftHandler(DraftRoom draftRoom)
+        public DraftHandler(DraftRoom draftRoom, HeroDataService heroDataService)
         {
+            _heroDataService = heroDataService;
             this.model = draftRoom.DraftModel;
             if(State.picks == null)
             {
@@ -149,7 +153,7 @@ namespace Heisenslaught.Infrastructure
 
         private bool IsValidHero(string heroId)
         {
-            var hero = HeroDataService.GetHeroById(heroId);
+            var hero = _heroDataService.GetHeroById(heroId);
             return hero != null;
         }
 
@@ -281,7 +285,7 @@ namespace Heisenslaught.Infrastructure
         private void PickRandomHero()
         {
             string heroId = null;
-            var heroes = HeroDataService.GetHeroes();
+            var heroes = _heroDataService.GetHeroes();
             var max = heroes.Count - 1;
             while(heroId == null)
             {

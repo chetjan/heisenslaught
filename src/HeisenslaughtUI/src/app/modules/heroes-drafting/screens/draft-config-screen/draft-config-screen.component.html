@@ -69,7 +69,6 @@
     <button md-raised-button class="md-primary" (click)="createDraft()">Create</button>
   </md-card-actions>
 </md-card>
-<br/>
 <md-card class="active-draft" *ngIf="loaded && currentConfig">
   <md-card-title><span class="team1">{{currentConfig?.team1Name}}</span><span class="vs"> VS </span><span class="team2">{{currentConfig?.team2Name}}</span></md-card-title>
   <md-card-content> 

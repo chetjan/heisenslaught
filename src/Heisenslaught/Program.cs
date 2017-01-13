@@ -11,9 +11,24 @@ namespace Heisenslaught
     {
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
+            var isDev = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+            var builder = new WebHostBuilder()
+                .UseKestrel(options =>
+                {
+                    // This section may only be needed in devmode, it should most likely be handled by ngix when deployed
+                    options.NoDelay = true;
+                    if (isDev)
+                    {
+                        options.UseHttps("testCert.pfx",     "testPassword");
+                        options.UseConnectionLogging();
+                    }
+                });
+            if (isDev) {
+            // needed?
+            builder.UseUrls("http://localhost:64808", "https://localhost:44301");
+            }
+                
+            var host = builder.UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();

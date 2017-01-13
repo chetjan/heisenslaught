@@ -4,15 +4,18 @@
   <meta charset="utf-8">
   <title>Draft</title>
   <base href="/">
-
+  @{
+    var authUser = ViewData["authenticatedUser"];
+  }
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96">
-  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
-  <script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.1.min.js"></script>
+  <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
+  <script src="//ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.1.min.js"></script>
   <script src="/signalr/hubs"></script>
 </head>
 <body>
-  <app-root>Loading...</app-root>
+  <app-root authenticatedUser='@Html.Raw(authUser)'>Loading...</app-root>
 </body>
 </html>
+

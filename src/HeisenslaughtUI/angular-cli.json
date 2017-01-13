@@ -12,7 +12,7 @@
         "favicon.ico",
         "data"
       ],
-      "index": "index.html",
+      "index": "index.cshtml",
       "main": "main.ts",
       "test": "test.ts",
       "tsconfig": "tsconfig.json",

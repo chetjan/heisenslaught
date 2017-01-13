@@ -1,0 +1,14 @@
+﻿@using Newtonsoft.Json
+
+@{
+    ViewBag.Title = "Battle.net Login";
+}
+
+@{
+var eventDetail = JsonConvert.SerializeObject(ViewData["loginResult"]);
+<script>
+    window.opener.dispatchEvent(new CustomEvent('loginEvent', {
+        detail: @Html.Raw(eventDetail)
+    }));
+</script>
+}
