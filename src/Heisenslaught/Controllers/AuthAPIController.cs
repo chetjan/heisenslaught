@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
+using Heisenslaught.Services;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Heisenslaught.Controllers
@@ -11,9 +11,9 @@ namespace Heisenslaught.Controllers
     [Route("api/auth")]
     public class AuthAPIController : Controller
     {
-        public AuthAPIController()
+        public AuthAPIController(IDraftService service)
         {
-
+            var a = service;
         }
 
         // GET: api/values

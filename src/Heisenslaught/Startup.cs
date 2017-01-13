@@ -18,6 +18,8 @@ using MongoDB.Driver;
 using AspNet.Security.OAuth.BattleNet;
 using Heisenslaught.Config;
 using Microsoft.Extensions.Options;
+using Heisenslaught.Persistence.Draft;
+using Heisenslaught.Services;
 
 namespace Heisenslaught
 {
@@ -53,23 +55,33 @@ namespace Heisenslaught
             // mongo strores
             services.AddSingleton<IRoleStore<HSRole>>(provider =>
             {
+                var logger = provider.GetService<ILoggerFactory>();
+
                 var options = provider.GetService<IOptions<MongoSettings>>();
                 var client = new MongoClient(options.Value.ConnectionString);
                 var db = client.GetDatabase(options.Value.Database);
-                var logger = provider.GetService<ILoggerFactory>();
                 return new HSRoleStore(db, logger);
             });
 
             services.AddSingleton<IUserStore<HSUser>>(provider =>
             {
-                var options = provider.GetService<IOptions<MongoSettings>>();
+                var logger = provider.GetService<ILoggerFactory>();
                 var roleManager = provider.GetService<RoleManager<HSRole>>();
+
+                var options = provider.GetService<IOptions<MongoSettings>>();
                 var client = new MongoClient(options.Value.ConnectionString);
                 var db = client.GetDatabase(options.Value.Database);
-                var logger = provider.GetService<ILoggerFactory>();
                 return new HSUserStore(db, logger, roleManager);
             });
 
+            services.AddSingleton<IDraftStore>(provider => {
+                var logger = provider.GetService<ILoggerFactory>();
+
+                var options = provider.GetService<IOptions<MongoSettings>>();
+                var client = new MongoClient(options.Value.ConnectionString);
+                var db = client.GetDatabase(options.Value.Database);
+                return new DraftStore(db, logger);
+            });
        
 
             /*
@@ -82,6 +94,10 @@ namespace Heisenslaught
                 return new HSRoleStore(db, logger);
             });
             */
+            // services
+            services.AddSingleton<IDraftService, DraftService>();
+            services.AddSingleton<HeroDataService, HeroDataService>();
+            
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Identity managers/validators
@@ -94,9 +110,14 @@ namespace Heisenslaught
             services.AddIdentity<HSUser, HSRole>()
                 .AddDefaultTokenProviders();
             services.AddOptions();
-    
+
+
+
+
             services.AddMvc();
-            services.AddSignalR();
+            services.AddSignalR(options=> {
+                options.Hubs.EnableDetailedErrors = true;
+            });
             services.AddRouting(options => {
                 options.LowercaseUrls = true;
             });
@@ -129,6 +150,8 @@ namespace Heisenslaught
                 options.ClientSecret = Configuration["Authentication:BattleNet:ClientSecret"];
             });
 
+
+            
             app.UseWebSockets();
             app.UseSignalR();
 

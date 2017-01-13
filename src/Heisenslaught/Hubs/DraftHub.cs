@@ -4,36 +4,44 @@ using System.Threading.Tasks;
 using Heisenslaught.DataTransfer;
 using Heisenslaught.Exceptions;
 using Heisenslaught.Services;
-
+using Microsoft.AspNetCore.Identity;
+using Heisenslaught.Models.Users;
 namespace Heisenslaught
 {
     public class DraftHub : Hub
     {
-        private static DraftService Draft = new DraftService();
 
+        private readonly IDraftService _draftService;
+        private readonly UserManager<HSUser> _userManager;
         
+        public DraftHub(UserManager<HSUser> userManager, IDraftService draftService)
+        {
+            _userManager = userManager;
+            _draftService = draftService;
+        }
+
         public override Task OnDisconnected(bool stopCalled)
         {
-            Draft.ClientDisconnected(this);
+            _draftService.ClientDisconnected(this);
             return base.OnDisconnected(stopCalled);
         }
 
         public DraftConfigAdminDTO CreateDraft(CreateDraftDTO cfg)
         {
-            return Draft.CreateDraft(cfg);
+            return _draftService.CreateDraft(cfg);
         }
 
         public DraftConfigDTO ConnectToDraft(string draftToken, string teamToken = null)
         {
-            return Draft.ConnectToDraft(this, draftToken, teamToken);
+            return _draftService.ConnectToDraft(this, draftToken, teamToken);
         }
 
         public DraftConfigAdminDTO RestartDraft(string draftToken, string adminToken)
         {
             try
             {
-                Draft.GetDraftRoom(draftToken).ResetDraft(this, adminToken);
-                return new DraftConfigAdminDTO(Draft.GetDraftRoom(draftToken));
+                _draftService.GetDraftRoom(draftToken).ResetDraft(this, adminToken);
+                return new DraftConfigAdminDTO(_draftService.GetDraftRoom(draftToken));
             }
             catch (NullReferenceException)
             {
@@ -45,7 +53,7 @@ namespace Heisenslaught
         {
             try
             {
-                Draft.GetDraftRoom(draftToken).CloseDraft(this, adminToken);
+                _draftService.GetDraftRoom(draftToken).CloseDraft(this, adminToken);
             }
             catch (NullReferenceException)
             {
@@ -57,7 +65,7 @@ namespace Heisenslaught
         {
             try
             {
-                Draft.GetDraftRoom(draftToken).SetReady(this, teamToken);
+                _draftService.GetDraftRoom(draftToken).SetReady(this, teamToken);
             }
             catch (NullReferenceException)
             {
@@ -69,7 +77,7 @@ namespace Heisenslaught
         {
             try
             {
-                Draft.GetDraftRoom(draftToken).PickHero(this, heroId, teamToken);
+                _draftService.GetDraftRoom(draftToken).PickHero(this, heroId, teamToken);
             }
             catch (NullReferenceException)
             {

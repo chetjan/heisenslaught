@@ -6,22 +6,26 @@ using Heisenslaught.Infrastructure;
 using Heisenslaught.Models;
 using Heisenslaught.DataTransfer;
 using Microsoft.AspNetCore.SignalR.Hubs;
-using Heisenslaught.Persistence;
+using Heisenslaught.Persistence.Draft;
 
 
 namespace Heisenslaught.Services
 {
-    public class DraftService
+    public class DraftService : IDraftService
     {
-        private static MongoDraftRepository draftRepo = new MongoDraftRepository();
+        private readonly IDraftStore _draftStore;
         private Dictionary<string, DraftRoom> activeRooms = new Dictionary<string, DraftRoom>();
         private Dictionary<string, DraftRoom> connectionsRoom = new Dictionary<string, DraftRoom>();
 
+        public DraftService(IDraftStore draftStore)
+        {
+            _draftStore = draftStore;
+        }
 
         public DraftConfigAdminDTO CreateDraft(CreateDraftDTO config)
         {
             var model = new DraftModel(config.ToModel());
-            draftRepo.CreateDraft(model);
+            _draftStore.CreateDraft(model);
             return new DraftConfigAdminDTO(model);
         }
 
@@ -59,7 +63,7 @@ namespace Heisenslaught.Services
             var room = activeRooms.ContainsKey(draftToken) ? activeRooms[draftToken] : null;
             if (room == null && autoCreate)
             {
-                DraftModel config = draftRepo.FindByDraftToken(draftToken);
+                DraftModel config = _draftStore.FindByDraftToken(draftToken);
                 room = new DraftRoom(this, config);
             }
             return room;
@@ -84,7 +88,7 @@ namespace Heisenslaught.Services
 
         public void CompleteDraft(DraftRoom room)
         {
-            draftRepo.SaveDraft(room.DraftModel);
+            _draftStore.SaveDraft(room.DraftModel);
             TryDeactivateDraftRoom(room);
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
-namespace Heisenslaught.Infrastructure
+namespace Heisenslaught.Services
 {
 
     public class HeroData

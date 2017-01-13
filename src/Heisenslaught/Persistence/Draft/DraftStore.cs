@@ -4,39 +4,37 @@ using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Bson;
-
+using Microsoft.Extensions.Logging;
 using Heisenslaught.Models;
 
-namespace Heisenslaught.Persistence
+namespace Heisenslaught.Persistence.Draft
 {
-    public class MongoDraftRepository
+    public class DraftStore : IDraftStore
     {
-        private MongoClient client;
-        private IMongoDatabase database;
+        private IMongoDatabase _database;
+        private IMongoCollection<DraftModel> _draftCollection;
 
-        private IMongoCollection<DraftModel> draftCollection;
-
-        public MongoDraftRepository(string dbName = "Heisenslaught", string connectionString = "mongodb://localhost:27017")
+        public DraftStore(IMongoDatabase database, ILoggerFactory loggerFactory) : this(database, loggerFactory, "drafts") { }
+        public DraftStore(IMongoDatabase database, ILoggerFactory loggerFactory, string draftCollectionName)
         {
-            client = new MongoClient(connectionString);
-            database = client.GetDatabase(dbName);
+            _database = database;
             if (!CollectionExists("drafts"))
             {
                 CreateDraftCollection();
             }
-            draftCollection = database.GetCollection<DraftModel>("drafts");
+            _draftCollection = _database.GetCollection<DraftModel>("drafts");
         }
 
         private bool CollectionExists(string collectionName)
         {
             var filter = new BsonDocument("name", collectionName);
-            var collections = database.ListCollections(new ListCollectionsOptions { Filter = filter });
+            var collections = _database.ListCollections(new ListCollectionsOptions { Filter = filter });
             return collections.Any();
         }
 
         private void CreateDraftCollection()
         {
-            database.CreateCollection("drafts", new CreateCollectionOptions
+            _database.CreateCollection("drafts", new CreateCollectionOptions
             {
                 AutoIndexId = true
             });
@@ -47,7 +45,7 @@ namespace Heisenslaught.Persistence
             var mapIndex = builder.Ascending(_ => _.config.map);
             var phaseIndex = builder.Ascending(_ => _.state.phase);
 
-            var collection = database.GetCollection<DraftModel>("drafts");
+            var collection = _database.GetCollection<DraftModel>("drafts");
             collection.Indexes.CreateOne(draftTokenIndex, new CreateIndexOptions { Unique = true });
             collection.Indexes.CreateOne(adminTokenIndex);
             collection.Indexes.CreateOne(mapIndex);
@@ -56,20 +54,35 @@ namespace Heisenslaught.Persistence
 
         public void CreateDraft(DraftModel draft)
         {
-            draftCollection.InsertOne(draft);
+            _draftCollection.InsertOne(draft);
+        }
+
+
+        public DraftModel FindById(string id)
+        {
+            return null;
         }
 
         public DraftModel FindByDraftToken(string draftToken)
         {
             var q = Builders<DraftModel>.Filter.Eq("draftToken", draftToken);
+            return _draftCollection.Find<DraftModel>(q).First<DraftModel>();
+        }
+
+        public DraftModel FindByUserId(string userId)
+        {
+            /*var q = Builders<DraftModel>.Filter.Eq("draftToken", draftToken);
             return draftCollection.Find<DraftModel>(q).First<DraftModel>();
+            */
+            return null;
         }
 
         public ReplaceOneResult SaveDraft(DraftModel draft)
         {
             var q = Builders<DraftModel>.Filter.Eq("_id", draft._id);
-            return draftCollection.ReplaceOne(q, draft);
+            return _draftCollection.ReplaceOne(q, draft);
         }
+
 
     }
 }
