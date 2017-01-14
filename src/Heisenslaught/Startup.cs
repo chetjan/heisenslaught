@@ -133,10 +133,10 @@ namespace Heisenslaught
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-            if (env.IsDevelopment())
-            {
+          //  if (env.IsDevelopment())
+         //   {
                 app.UseDeveloperExceptionPage();
-            }
+         //   }
             app.UseStaticFiles();
 
             // set up login providers
