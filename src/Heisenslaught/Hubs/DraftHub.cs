@@ -26,9 +26,9 @@ namespace Heisenslaught
             return base.OnDisconnected(stopCalled);
         }
 
-        public DraftConfigAdminDTO CreateDraft(CreateDraftDTO cfg)
+        public async Task<DraftConfigAdminDTO> CreateDraft(CreateDraftDTO cfg)
         {
-            return _draftService.CreateDraft(cfg);
+            return await _draftService.CreateDraft(cfg, this);
         }
 
         public DraftConfigDTO ConnectToDraft(string draftToken, string teamToken = null)

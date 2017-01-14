@@ -19,6 +19,7 @@ namespace Heisenslaught.Models
         public bool wasFirstPickRandom = false;
         public DraftConfigModel config;
         public DraftStateModel state;
+        public string createdBy;
 
         public DraftModel(DraftConfigModel config = null)
         {
