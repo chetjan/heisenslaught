@@ -56,7 +56,7 @@ export class AuthGuard implements CanActivate, CanLoad, CanActivateChild {
       if (event instanceof NavigationCancel) {
         let resonResult = AUTHGUARD_CANCEL_REASON_REGEX.exec(event.reason);
         let placeholderResult = AUTHGUARD_RETURN_URL_PLACEHOLDER_REGEX.exec(this.loginService.returnUrl);
-        if (resonResult[1] === placeholderResult[1]) {
+        if (resonResult && placeholderResult && resonResult[1] === placeholderResult[1]) {
           this.loginService.returnUrl = event.url;
         }
       }
