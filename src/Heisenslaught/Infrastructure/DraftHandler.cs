@@ -10,7 +10,7 @@ namespace Heisenslaught.Infrastructure
 {
     public class DraftHandler
     {
-        private readonly HeroDataService _heroDataService;
+        private readonly IHeroDataService _heroDataService;
 
         private static Random rnd = new Random((int)DateTime.Now.Ticks);
         private static List<int> firstSlots= new List<int>{0,2,5,6,8,11,12};
@@ -27,7 +27,7 @@ namespace Heisenslaught.Infrastructure
         private DraftModel model;
 
 
-        public DraftHandler(DraftRoom draftRoom, HeroDataService heroDataService)
+        public DraftHandler(DraftRoom draftRoom, IHeroDataService heroDataService)
         {
             _heroDataService = heroDataService;
             this.model = draftRoom.DraftModel;

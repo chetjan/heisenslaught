@@ -11,14 +11,18 @@ using System.Threading.Tasks;
 
 namespace Heisenslaught
 {
-    public class DraftHub : UserAwareHub
+    public class DraftHub : Hub
     {
 
         private readonly IDraftService _draftService;
-       
-        public DraftHub(UserManager<HSUser> userManager, IDraftService draftService, IHubConnectionsService connectionService) :base (connectionService, userManager)
+        private readonly UserManager<HSUser> userManager;
+        private readonly IHubConnectionsService connectionService;
+
+        public DraftHub(IDraftService draftService, IHubConnectionsService connectionService, UserManager<HSUser> userManager) 
         {
             _draftService = draftService;
+            this.userManager = userManager;
+            this.connectionService = connectionService;
         }
 
         public override Task OnDisconnected(bool stopCalled)

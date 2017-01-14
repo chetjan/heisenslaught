@@ -16,14 +16,14 @@ namespace Heisenslaught.Services
     public class DraftService : IDraftService
     {
         private readonly IDraftStore _draftStore;
-        private readonly HeroDataService _heroDataService;
+        private readonly IHeroDataService _heroDataService;
         private readonly UserManager<HSUser> _userManager;
 
         private Dictionary<string, DraftRoom> activeRooms = new Dictionary<string, DraftRoom>();
         private Dictionary<string, DraftRoom> connectionsRoom = new Dictionary<string, DraftRoom>();
 
 
-        public DraftService(IDraftStore draftStore, HeroDataService heroDataService, UserManager<HSUser> userManager)
+        public DraftService(IDraftStore draftStore, IHeroDataService heroDataService, UserManager<HSUser> userManager)
         {
             _draftStore = draftStore;
             _heroDataService = heroDataService;

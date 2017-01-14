@@ -45,6 +45,11 @@ namespace Heisenslaught.Services
         private readonly List<HubChannelConnection> _channelConnections = new List<HubChannelConnection>();
 
 
+        public HubConnectionsService()
+        {
+            var a = 55;
+        }
+
         private HubConnection FindHubConnection(Hub hub)
         {
             return (from c in _hubConnections
