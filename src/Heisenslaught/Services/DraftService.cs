@@ -7,7 +7,9 @@ using Heisenslaught.Models;
 using Heisenslaught.DataTransfer;
 using Microsoft.AspNetCore.SignalR.Hubs;
 using Heisenslaught.Persistence.Draft;
-
+using Microsoft.AspNetCore.Identity;
+using Heisenslaught.Models.Users;
+using System.Security.Claims;
 
 namespace Heisenslaught.Services
 {
@@ -15,18 +17,24 @@ namespace Heisenslaught.Services
     {
         private readonly IDraftStore _draftStore;
         private readonly HeroDataService _heroDataService;
+        private readonly UserManager<HSUser> _userManager;
+
         private Dictionary<string, DraftRoom> activeRooms = new Dictionary<string, DraftRoom>();
         private Dictionary<string, DraftRoom> connectionsRoom = new Dictionary<string, DraftRoom>();
 
-        public DraftService(IDraftStore draftStore, HeroDataService heroDataService)
+
+        public DraftService(IDraftStore draftStore, HeroDataService heroDataService, UserManager<HSUser> userManager)
         {
             _draftStore = draftStore;
             _heroDataService = heroDataService;
+            _userManager = userManager;
         }
 
-        public DraftConfigAdminDTO CreateDraft(CreateDraftDTO config)
+        public async Task<DraftConfigAdminDTO> CreateDraft(CreateDraftDTO config, DraftHub hub)
         {
             var model = new DraftModel(config.ToModel());
+            var user = await _userManager.GetUserAsync((ClaimsPrincipal)hub.Context.User);
+            model.createdBy = user.Id;
             _draftStore.CreateDraft(model);
             return new DraftConfigAdminDTO(model);
         }

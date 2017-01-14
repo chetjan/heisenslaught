@@ -33,10 +33,9 @@ namespace Heisenslaught
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddJsonFile("/opt/Heisenslaught/appsettings.json", optional: true)
-                .AddJsonFile($"/opt/Heisenslaught/appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile("/opt/heisenslaught/appsettings.json", optional: true)
+                .AddJsonFile($"/opt/heisenslaught/appsettings.{env.EnvironmentName}.json", optional: true);
 
-           
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -83,17 +82,6 @@ namespace Heisenslaught
                 return new DraftStore(db, logger);
             });
 
-
-            /*
-            services.AddSingleton<IUserRoleStore<HSUser>>(provider =>
-            {
-                var options = provider.GetService<IOptions<MongoSettings>>();
-                var client = new MongoClient(options.Value.ConnectionString);
-                var db = client.GetDatabase(options.Value.Database);
-                var logger = provider.GetService<ILoggerFactory>();
-                return new HSRoleStore(db, logger);
-            });
-            */
             // services
             services.AddSingleton<IHubConnectionsService, HubConnectionsService>();
             services.AddSingleton<IDraftService, DraftService>();
@@ -113,7 +101,9 @@ namespace Heisenslaught
             services.AddOptions();
 
 
-            services.AddMvc();
+            services.AddMvc(options => {
+                options.SslPort = 44301;
+            });
             services.AddSignalR(options=> {
                 options.Hubs.EnableDetailedErrors = true;
             });
@@ -156,7 +146,6 @@ namespace Heisenslaught
 
             app.UseMvc(routes =>
             {
-                
                 routes.MapRoute(
                     name: "auth",
                     template: "auth/{action}/",
