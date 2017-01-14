@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LoginWindow } from './login-window';
 import { Subject, Observable, Subscriber } from 'rxjs';
 import { Http } from '@angular/http';
@@ -15,13 +15,16 @@ export class LoginService {
   private _authenticatedUser: AuthenticatedUser;
   private _authenticatedUserSubject: Subject<AuthenticatedUser> = new Subject();
   private _authenticatedUserObservable: Observable<AuthenticatedUser>;
-
-  public returnUrl: string;
+  private _returnUrl: string;
 
   constructor(
     private http: Http,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
+    if (window.localStorage) {
+      this._returnUrl = window.localStorage.getItem('login.returnUrl');
+    }
     window.addEventListener('loginEvent', (evt: CustomEvent) => {
       if (evt.detail['success']) {
         this.setAuthenticatedUser(evt.detail['data']);
@@ -30,6 +33,20 @@ export class LoginService {
     });
   }
 
+  public set returnUrl(value: string) {
+    this._returnUrl = value;
+    if (window.localStorage) {
+      if (value) {
+        window.localStorage.setItem('login.returnUrl', value);
+      } else {
+        window.localStorage.removeItem('login.returnUrl');
+      }
+    }
+  }
+
+  public get returnUrl(): string {
+    return this._returnUrl;
+  }
 
   public initialize(authenticatedUser: AuthenticatedUser): void {
     if (!this._initialized) {
@@ -57,6 +74,7 @@ export class LoginService {
       preserveQueryParams: true,
       replaceUrl: true
     });
+    this.returnUrl = undefined;
   }
 
   public get user(): Observable<AuthenticatedUser> {
@@ -81,6 +99,7 @@ export class LoginService {
   public logOut(): void {
     this.http.get('/auth/logout').toPromise().then(() => {
       this.setAuthenticatedUser(null);
+      this.returnUrl = undefined;
     });
   }
 }
