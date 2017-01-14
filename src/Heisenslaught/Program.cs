@@ -23,7 +23,7 @@ namespace Heisenslaught
                 });
             
             // needed?
-            builder.UseUrls("http://localhost:64808", "https://localhost:44301");
+            builder.UseUrls("http://localhost:5000", "http://localhost:64808", "https://localhost:44301");
             
                 
             var host = builder.UseContentRoot(Directory.GetCurrentDirectory())
