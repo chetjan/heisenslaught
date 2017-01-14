@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AspNet.Security.OAuth.BattleNet;
+using Heisenslaught.Config;
+using Heisenslaught.Models.Users;
+using Heisenslaught.Persistence.Draft;
+using Heisenslaught.Persistence.User;
+using Heisenslaught.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using System.IO;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.HttpOverrides;
-using Heisenslaught.Models.Users;
-using Heisenslaught.Persistence.User;
 using Microsoft.AspNetCore.Identity;
-using MongoDB.Driver;
-using AspNet.Security.OAuth.BattleNet;
-using Heisenslaught.Config;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Heisenslaught.Persistence.Draft;
-using Heisenslaught.Services;
+using MongoDB.Driver;
+
 
 namespace Heisenslaught
 {
@@ -86,6 +81,8 @@ namespace Heisenslaught
             services.AddSingleton<IHubConnectionsService, HubConnectionsService>();
             services.AddSingleton<IDraftService, DraftService>();
             services.AddSingleton<IHeroDataService, HeroDataService>();
+          
+
             
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -106,7 +103,9 @@ namespace Heisenslaught
             });
             services.AddSignalR(options=> {
                 options.Hubs.EnableDetailedErrors = true;
+                
             });
+           
             services.AddRouting(options => {
                 options.LowercaseUrls = true;
             });

@@ -1,22 +1,23 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Threading.Tasks;
-using Heisenslaught.DataTransfer;
+﻿using Heisenslaught.DataTransfer;
 using Heisenslaught.Exceptions;
+using Heisenslaught.Hubs;
+using Heisenslaught.Models.Users;
 using Heisenslaught.Services;
 using Microsoft.AspNetCore.Identity;
-using Heisenslaught.Models.Users;
+using Microsoft.AspNetCore.SignalR;
+using System;
+using System.Threading.Tasks;
+
+
 namespace Heisenslaught
 {
-    public class DraftHub : Hub
+    public class DraftHub : UserAwareHub
     {
 
         private readonly IDraftService _draftService;
-        private readonly UserManager<HSUser> _userManager;
-        
-        public DraftHub(UserManager<HSUser> userManager, IDraftService draftService)
+       
+        public DraftHub(UserManager<HSUser> userManager, IDraftService draftService, IHubConnectionsService connectionService) :base (connectionService, userManager)
         {
-            _userManager = userManager;
             _draftService = draftService;
         }
 
