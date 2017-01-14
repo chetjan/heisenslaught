@@ -36,15 +36,14 @@ namespace Heisenslaught
                 .AddJsonFile("/opt/heisenslaught/appsettings.json", optional: true)
                 .AddJsonFile($"/opt/heisenslaught/appsettings.{env.EnvironmentName}.json", optional: true);
 
-           
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
 
 
 
-            // This method gets called by the runtime. Use this method to add services to the container.
-            // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             // configs
@@ -83,17 +82,6 @@ namespace Heisenslaught
                 return new DraftStore(db, logger);
             });
        
-
-            /*
-            services.AddSingleton<IUserRoleStore<HSUser>>(provider =>
-            {
-                var options = provider.GetService<IOptions<MongoSettings>>();
-                var client = new MongoClient(options.Value.ConnectionString);
-                var db = client.GetDatabase(options.Value.Database);
-                var logger = provider.GetService<ILoggerFactory>();
-                return new HSRoleStore(db, logger);
-            });
-            */
             // services
             services.AddSingleton<IDraftService, DraftService>();
             services.AddSingleton<HeroDataService, HeroDataService>();
@@ -110,8 +98,6 @@ namespace Heisenslaught
             services.AddIdentity<HSUser, HSRole>()
                 .AddDefaultTokenProviders();
             services.AddOptions();
-
-
 
 
             services.AddMvc(options => {
@@ -135,10 +121,10 @@ namespace Heisenslaught
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-          //  if (env.IsDevelopment())
-         //   {
+            if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
-         //   }
+            }
             app.UseStaticFiles();
 
             // set up login providers
@@ -158,8 +144,7 @@ namespace Heisenslaught
             app.UseSignalR();
 
             app.UseMvc(routes =>
-            {
-                
+            { 
                 routes.MapRoute(
                     name: "auth",
                     template: "auth/{action}/",
