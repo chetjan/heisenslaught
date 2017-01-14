@@ -82,7 +82,7 @@ namespace Heisenslaught
                 var db = client.GetDatabase(options.Value.Database);
                 return new DraftStore(db, logger);
             });
-       
+
 
             /*
             services.AddSingleton<IUserRoleStore<HSUser>>(provider =>
@@ -95,8 +95,9 @@ namespace Heisenslaught
             });
             */
             // services
+            services.AddSingleton<IHubConnectionsService, HubConnectionsService>();
             services.AddSingleton<IDraftService, DraftService>();
-            services.AddSingleton<HeroDataService, HeroDataService>();
+            services.AddSingleton<IHeroDataService, HeroDataService>();
             
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -110,8 +111,6 @@ namespace Heisenslaught
             services.AddIdentity<HSUser, HSRole>()
                 .AddDefaultTokenProviders();
             services.AddOptions();
-
-
 
 
             services.AddMvc();

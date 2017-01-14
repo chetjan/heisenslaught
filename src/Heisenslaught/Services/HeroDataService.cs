@@ -23,7 +23,7 @@ namespace Heisenslaught.Services
         public string name;
     }
 
-    public class HeroDataService
+    public class HeroDataService : IHeroDataService
     {
         public List<HeroData> heroesData;
         public List<MapData> mapsData;
