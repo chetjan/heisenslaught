@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import {
-  CanActivate, CanLoad, CanActivateChild, Router,
+  CanActivate, CanLoad, CanActivateChild, Router, NavigationCancel,
   ActivatedRouteSnapshot, RouterStateSnapshot, Route, NavigationExtras
 } from '@angular/router';
 import { LoginService, AuthenticatedUser } from '../services/login.service';
 
 const SUPER_USER_ROLE = 'SU';
+const AUTHGUARD_CANCEL_REASON_REGEX = /Cannot load children because the guard of the route "path: '(.*?)'" returned false/;
+const AUTHGUARD_RETURN_URL_PLACEHOLDER_REGEX = /^!!CANCELED_PATH!!:(.*)$/;
 
 interface LoginParams {
   url: string;
   extras?: NavigationExtras;
 }
-
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanLoad, CanActivateChild {
@@ -49,7 +50,18 @@ export class AuthGuard implements CanActivate, CanLoad, CanActivateChild {
     };
   }
 
-  constructor(private loginService: LoginService,  private router: Router) { }
+  constructor(private loginService: LoginService, private router: Router) {
+    // workaround to get canLoad full requested path
+    router.events.subscribe((event) => {
+      if (event instanceof NavigationCancel) {
+        let resonResult = AUTHGUARD_CANCEL_REASON_REGEX.exec(event.reason);
+        let placeholderResult = AUTHGUARD_RETURN_URL_PLACEHOLDER_REGEX.exec(this.loginService.returnUrl);
+        if (resonResult[1] === placeholderResult[1]) {
+          this.loginService.returnUrl = event.url;
+        }
+      }
+    });
+  }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     return this.checkAccess(route, {
@@ -63,7 +75,7 @@ export class AuthGuard implements CanActivate, CanLoad, CanActivateChild {
 
   public canLoad(route: Route): Promise<boolean> {
     return this.checkAccess(route, {
-      url: window.location.pathname
+      url: '!!CANCELED_PATH!!:' + route.path
     });
   }
 
