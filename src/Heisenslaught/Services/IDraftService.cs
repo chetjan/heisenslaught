@@ -8,8 +8,8 @@ namespace Heisenslaught.Services
     {
         void ClientDisconnected(DraftHub hub);
         void CompleteDraft(DraftRoom room);
-        DraftConfigDTO ConnectToDraft(DraftHub hub, string draftToken, string authToken = null);
-        Task<DraftConfigAdminDTO> CreateDraft(CreateDraftDTO config, DraftHub hub);
+        Task<DraftConfigDTO> ConnectToDraftAsync(DraftHub hub, string draftToken, string authToken = null);
+        Task<DraftConfigAdminDTO> CreateDraftAsync(CreateDraftDTO config, DraftHub hub);
         DraftRoom GetDraftRoom(string draftToken, bool autoCreate = false);
     }
 }

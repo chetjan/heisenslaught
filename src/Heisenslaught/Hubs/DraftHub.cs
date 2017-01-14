@@ -5,24 +5,21 @@ using Heisenslaught.Models.Users;
 using Heisenslaught.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Hubs;
 using System;
 using System.Threading.Tasks;
 
 
 namespace Heisenslaught
 {
-    public class DraftHub : Hub
+    public class DraftHub : UserAwareHub
     {
 
         private readonly IDraftService _draftService;
-        private readonly UserManager<HSUser> userManager;
-        private readonly IHubConnectionsService connectionService;
-
-        public DraftHub(IDraftService draftService, IHubConnectionsService connectionService, UserManager<HSUser> userManager) 
+    
+        public DraftHub(IDraftService draftService, IHubConnectionsService connectionService, UserManager<HSUser> userManager) : base(connectionService, userManager)
         {
             _draftService = draftService;
-            this.userManager = userManager;
-            this.connectionService = connectionService;
         }
 
         public override Task OnDisconnected(bool stopCalled)
@@ -31,14 +28,16 @@ namespace Heisenslaught
             return base.OnDisconnected(stopCalled);
         }
 
-        public async Task<DraftConfigAdminDTO> CreateDraft(CreateDraftDTO cfg)
+        [HubMethodName("createDraft")]
+        public async Task<DraftConfigAdminDTO> CreateDraftAsync(CreateDraftDTO cfg)
         {
-            return await _draftService.CreateDraft(cfg, this);
+            return await _draftService.CreateDraftAsync(cfg, this);
         }
 
-        public DraftConfigDTO ConnectToDraft(string draftToken, string teamToken = null)
+        [HubMethodName("connectToDraft")]
+        public async Task<DraftConfigDTO> ConnectToDraftAsync(string draftToken, string teamToken = null)
         {
-            return _draftService.ConnectToDraft(this, draftToken, teamToken);
+            return await _draftService.ConnectToDraftAsync(this, draftToken, teamToken);
         }
 
         public DraftConfigAdminDTO RestartDraft(string draftToken, string adminToken)

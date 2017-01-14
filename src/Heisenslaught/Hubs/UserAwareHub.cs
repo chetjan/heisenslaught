@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Server;
 using Heisenslaught.Services;
 using Microsoft.AspNetCore.Identity;
 using Heisenslaught.Models.Users;
@@ -22,11 +23,17 @@ namespace Heisenslaught.Hubs
         }
 
 
-        public override async Task OnConnected()
+        public override Task OnConnected()
+        {
+
+           OnUserConnected();
+           return base.OnConnected();
+        }
+
+        protected async Task OnUserConnected()
         {
             var user = await userManager.GetUserAsync((ClaimsPrincipal)Context.User);
             connectionService.OnUserConnected(user, this);
-            await base.OnConnected();
         }
 
         public override async Task OnDisconnected(bool stopCalled)

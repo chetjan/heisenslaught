@@ -8,7 +8,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Heisenslaught.Models.Users
 {
-    public class HSUser
+    public class HSUser : IEquatable<HSUser>
     {
         private List<HSUserLogin> _logins;
         private List<string> _roles;
@@ -123,6 +123,11 @@ namespace Heisenslaught.Models.Users
                 return true;
             }
             return !PrimaryEmail.IsConfirmed();
+        }
+
+        public bool Equals(HSUser other)
+        {
+            return other.Id == Id;
         }
     }
 }

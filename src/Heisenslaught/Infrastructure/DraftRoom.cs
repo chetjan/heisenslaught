@@ -5,25 +5,31 @@ using Heisenslaught.Models;
 using Heisenslaught.Services;
 using Heisenslaught.Exceptions;
 using Heisenslaught.DataTransfer;
+using Heisenslaught.Models.Users;
 
 namespace Heisenslaught.Infrastructure
 {
     public class DraftRoom
     {
         private readonly IHeroDataService _heroDataService;
-        private Dictionary<string, DraftRoomConnection> connections = new Dictionary<string, DraftRoomConnection>();
+        private readonly IHubConnectionsService _conService;
+
+       // private Dictionary<string, DraftRoomConnection> connections = new Dictionary<string, DraftRoomConnection>();
+
         private DraftHandler draftHandler;
         private DraftModel model;
-        private string roomName;
         private DraftService service;
         private Timer timer;
 
-        public DraftRoom(DraftService service, IHeroDataService heroDataService, DraftModel model)
+        public string RoomName { get; private set; }
+
+        public DraftRoom(DraftService service, IHeroDataService heroDataService, IHubConnectionsService conService, DraftModel model)
         {
             this.service = service;
+            _conService = conService;
             _heroDataService = heroDataService;
             this.model = model;
-            this.roomName = "draftRoom-" + model.draftToken;
+            this.RoomName = "draftRoom-" + model.draftToken;
             this.draftHandler = new DraftHandler(this, _heroDataService);
         }
 
@@ -35,33 +41,25 @@ namespace Heisenslaught.Infrastructure
             }
         }
 
-        public DraftRoomConnection Connect(DraftHub hub, string authToken)
+        public DraftConnectionType Connect(DraftHub hub, HSUser user, string authToken)
         {
-            var connection = new DraftRoomConnection(hub.Context.ConnectionId, GetConnectionType(authToken));
-            if (!connections.ContainsKey(hub.Context.ConnectionId))
-            {
-                connections.Add(hub.Context.ConnectionId, connection);
-                hub.Groups.Add(hub.Context.ConnectionId, roomName);
-            }
+            hub.Groups.Add(hub.Context.ConnectionId, RoomName);
+            _conService.OnUserJoinedChannel(user, hub, RoomName);
             UpdateDraftState(hub);
-            return connection;
+            return GetConnectionType(authToken);
         }
 
-        public bool Disconnect(DraftHub hub)
+        public void Disconnect(DraftHub hub)
         {
-            if (connections.Remove(hub.Context.ConnectionId))
-            {
-                UpdateDraftState(hub);
-                return true;
-            }
-            return false;
+            _conService.OnUserLeftChannel(hub, RoomName);
+            UpdateDraftState(hub);
         }
 
         public int ConnectionCount
         {
             get
             {
-                return connections.Count;
+                return _conService.GetConnectedUsers(typeof(DraftHub), RoomName).Count;
             }
         }
 
@@ -186,7 +184,7 @@ namespace Heisenslaught.Infrastructure
 
         private void UpdateDraftState(DraftHub hub)
         {
-            hub.Clients.Group(roomName).updateDraftState(new DraftStateDTO(this));
+            hub.Clients.Group(RoomName).updateDraftState(new DraftStateDTO(this));
         }
 
         public void StartTimer(DraftHub hub)

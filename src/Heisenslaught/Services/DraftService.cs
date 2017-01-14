@@ -18,19 +18,21 @@ namespace Heisenslaught.Services
         private readonly IDraftStore _draftStore;
         private readonly IHeroDataService _heroDataService;
         private readonly UserManager<HSUser> _userManager;
+        private readonly IHubConnectionsService _connectionService;
 
         private Dictionary<string, DraftRoom> activeRooms = new Dictionary<string, DraftRoom>();
         private Dictionary<string, DraftRoom> connectionsRoom = new Dictionary<string, DraftRoom>();
 
 
-        public DraftService(IDraftStore draftStore, IHeroDataService heroDataService, UserManager<HSUser> userManager)
+        public DraftService(IDraftStore draftStore, IHeroDataService heroDataService, UserManager<HSUser> userManager, IHubConnectionsService connectionService)
         {
             _draftStore = draftStore;
             _heroDataService = heroDataService;
             _userManager = userManager;
+            _connectionService = connectionService;
         }
 
-        public async Task<DraftConfigAdminDTO> CreateDraft(CreateDraftDTO config, DraftHub hub)
+        public async Task<DraftConfigAdminDTO> CreateDraftAsync(CreateDraftDTO config, DraftHub hub)
         {
             var model = new DraftModel(config.ToModel());
             var user = await _userManager.GetUserAsync((ClaimsPrincipal)hub.Context.User);
@@ -39,21 +41,21 @@ namespace Heisenslaught.Services
             return new DraftConfigAdminDTO(model);
         }
 
-        public DraftConfigDTO ConnectToDraft(DraftHub hub, string draftToken, string authToken = null)
+        public async Task<DraftConfigDTO> ConnectToDraftAsync(DraftHub hub, string draftToken, string authToken = null)
         {
             DraftConfigDTO config = null;
             var room = GetDraftRoom(draftToken, true);
-            var connection = room.Connect(hub, authToken);
-            // TODO: if user is connecected to another room disconnect from that room or support multi room connections;
-            lock (connectionsRoom)
+            try
             {
-                if (!connectionsRoom.ContainsKey(hub.Context.ConnectionId))
-                    connectionsRoom.Add(hub.Context.ConnectionId, room);
+                connectionsRoom.Add(hub.Context.ConnectionId, room);
             }
+            catch (Exception) { }
+            var user = await _userManager.GetUserAsync((ClaimsPrincipal)hub.Context.User);
+            var connectionType = room.Connect(hub, user, authToken);
 
             TryActivateDraftRoom(room);
 
-            switch (connection.Type)
+            switch (connectionType)
             {
                 case DraftConnectionType.ADMIN:
                     config = new DraftConfigAdminDTO(room);
@@ -74,25 +76,24 @@ namespace Heisenslaught.Services
             if (room == null && autoCreate)
             {
                 DraftModel config = _draftStore.FindByDraftToken(draftToken);
-                room = new DraftRoom(this, _heroDataService, config);
+                room = new DraftRoom(this, _heroDataService, _connectionService, config);
             }
             return room;
         }
 
+
         public void ClientDisconnected(DraftHub hub)
         {
-            var id = hub.Context.ConnectionId;
-            lock (connectionsRoom)
+            DraftRoom room = null;
+            try
             {
-                if (connectionsRoom.ContainsKey(id))
-                {
-                    var room = connectionsRoom[id];
-                    if (room.Disconnect(hub))
-                    {
-                        connectionsRoom.Remove(id);
-                        TryDeactivateDraftRoom(room);
-                    }
-                }
+                room = connectionsRoom[hub.Context.ConnectionId];
+            }
+            catch (Exception) { }
+            if(room != null)
+            {
+                room.Disconnect(hub);
+                TryDeactivateDraftRoom(room);
             }
         }
 

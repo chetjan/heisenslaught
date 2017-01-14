@@ -44,17 +44,11 @@ namespace Heisenslaught.Services
         private readonly List<HubConnection> _hubConnections = new List<HubConnection>();
         private readonly List<HubChannelConnection> _channelConnections = new List<HubChannelConnection>();
 
-
-        public HubConnectionsService()
-        {
-            var a = 55;
-        }
-
         private HubConnection FindHubConnection(Hub hub)
         {
             return (from c in _hubConnections
                     where c.HubType == hub.GetType() && c.ConnectionId == hub.Context.ConnectionId
-                    select c).First();
+                    select c).FirstOrDefault();
         }
 
         private IEnumerable<HubConnection> FindHubConnectionByUserId(string userId)
@@ -75,7 +69,7 @@ namespace Heisenslaught.Services
         {
             return (from c in _channelConnections
                     where c.ChannelName == channelName && c.Connection.HubType == hub.GetType() && c.Connection.ConnectionId == hub.Context.ConnectionId
-                    select c).First();
+                    select c).FirstOrDefault();
         }
 
         private HSUser GetConnectedUser(string userId)
@@ -235,7 +229,7 @@ namespace Heisenslaught.Services
             try
             {
                 _lock.EnterReadLock();
-                return _connectedUsers.Values.ToList<HSUser>();
+                return _connectedUsers.Values.Distinct().ToList<HSUser>();
             }
             finally
             {
@@ -250,7 +244,7 @@ namespace Heisenslaught.Services
                 _lock.EnterReadLock();
                 return (from c in _hubConnections
                         where c.HubType == hubType
-                        select c.User).ToList();
+                        select c.User).Distinct().ToList();
             }
             finally
             {
@@ -265,7 +259,7 @@ namespace Heisenslaught.Services
                 _lock.EnterReadLock();
                 return (from c in _channelConnections
                         where c.Connection.HubType == hubType && c.ChannelName == channelName
-                        select c.Connection.User).ToList();
+                        select c.Connection.User).Distinct().ToList();
             }
             finally
             {

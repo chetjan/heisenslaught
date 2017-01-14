@@ -78,6 +78,7 @@ namespace Heisenslaught
             });
 
             // services
+            services.AddSingleton<IHubConnectionsService, HubConnectionsService>();
             services.AddSingleton<IDraftService, DraftService>();
             services.AddSingleton<IHeroDataService, HeroDataService>();
           
@@ -91,7 +92,6 @@ namespace Heisenslaught
             services.AddSingleton<UserManager<HSUser>, UserManager<HSUser>>();
             services.AddScoped<SignInManager<HSUser>, SignInManager<HSUser>>();
 
-            services.AddSingleton<IHubConnectionsService, HubConnectionsService>();
             
             // initialize Identity
             services.AddIdentity<HSUser, HSRole>()
