@@ -114,7 +114,9 @@ namespace Heisenslaught
 
 
 
-            services.AddMvc();
+            services.AddMvc(options => {
+                options.SslPort = 44301;
+            });
             services.AddSignalR(options=> {
                 options.Hubs.EnableDetailedErrors = true;
             });
