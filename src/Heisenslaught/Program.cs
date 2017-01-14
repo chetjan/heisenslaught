@@ -18,7 +18,7 @@ namespace Heisenslaught
                     // This section may only be needed in devmode, it should most likely be handled by ngix when deployed
                     options.NoDelay = true;
                    // options.UseHttps("testCert.pfx", "testPassword");
-                    options.UseConnectionLogging();
+                   // options.UseConnectionLogging();
                     
                 });
             
