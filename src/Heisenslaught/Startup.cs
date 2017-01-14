@@ -33,8 +33,8 @@ namespace Heisenslaught
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddJsonFile("/opt/Heisenslaught/appsettings.json", optional: true)
-                .AddJsonFile($"/opt/Heisenslaught/appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile("/opt/heisenslaught/appsettings.json", optional: true)
+                .AddJsonFile($"/opt/heisenslaught/appsettings.{env.EnvironmentName}.json", optional: true);
 
            
             builder.AddEnvironmentVariables();
