@@ -16,6 +16,7 @@
             <md-list-item *ngIf="!(user | async)" (click)="mainNav.close(); login()"> Login </md-list-item>
             <md-list-item *ngIf="(user | async)" (click)="mainNav.close(); logout()"> Logout </md-list-item>
         </md-nav-list>
+        <app-navigation></app-navigation>
     </md-sidenav>
     <div class="content">
         <router-outlet></router-outlet>
