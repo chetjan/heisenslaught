@@ -27,11 +27,13 @@ namespace Heisenslaught.Services
     {
         public HubConnection Connection;
         public string ChannelName;
+        public int Flag;
 
-        public HubChannelConnection(HubConnection connection, string channelName)
+        public HubChannelConnection(HubConnection connection, string channelName, int flag)
         {
             Connection = connection;
             ChannelName = channelName;
+            Flag = flag;
         }
     }
     
@@ -136,7 +138,7 @@ namespace Heisenslaught.Services
             }
         }
 
-        public void OnUserJoinedChannel(HSUser user, Hub hub, string channelName)
+        public void OnUserJoinedChannel(HSUser user, Hub hub, string channelName, int flag = 0)
         {
             _lock.EnterWriteLock();
             try
@@ -149,7 +151,7 @@ namespace Heisenslaught.Services
                     {
                         connection = OnUserConnected(user, hub);
                     }
-                    channelConnection = new HubChannelConnection(connection, channelName);
+                    channelConnection = new HubChannelConnection(connection, channelName, flag);
                     _channelConnections.Add(channelConnection);
 
                 }
@@ -297,5 +299,63 @@ namespace Heisenslaught.Services
             }
         }
 
+        public HSUser GetUserFromConnection(string connectionId)
+        {
+            try
+            {
+                _lock.EnterReadLock();
+                return (from c in _hubConnections
+                        where c.ConnectionId == connectionId
+                        select c.User).FirstOrDefault();
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
+
+        public TReturn Query<TReturn>(Func<Dictionary<string, HSUser>, TReturn> query)
+        {
+            try
+            {
+                _lock.EnterReadLock();
+                return query(_connectedUsers);
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
+
+        public TReturn Query<TReturn>(Func<List<HubConnection>, TReturn> query)
+        {
+            try
+            {
+                _lock.EnterReadLock();
+                return query(_hubConnections);
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
+
+        public TReturn Query<TReturn>(Func<List<HubChannelConnection>, TReturn> query)
+        {
+            try
+            {
+                _lock.EnterReadLock();
+                return query(_channelConnections);
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
+
+    }
+    class ChannelListItem
+    {
+        public string name;
     }
 }

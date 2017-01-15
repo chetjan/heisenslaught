@@ -25,12 +25,11 @@ namespace Heisenslaught.Hubs
 
         public override Task OnConnected()
         {
-
-           OnUserConnected();
+           OnUserConnectedAsync().Wait();
            return base.OnConnected();
         }
 
-        protected async Task OnUserConnected()
+        protected async Task OnUserConnectedAsync()
         {
             var user = await userManager.GetUserAsync((ClaimsPrincipal)Context.User);
             connectionService.OnUserConnected(user, this);

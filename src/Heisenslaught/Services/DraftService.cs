@@ -54,13 +54,15 @@ namespace Heisenslaught.Services
             var connectionType = room.Connect(hub, user, authToken);
 
             TryActivateDraftRoom(room);
+            
 
             switch (connectionType)
             {
                 case DraftConnectionType.ADMIN:
                     config = new DraftConfigAdminDTO(room);
                     break;
-                case DraftConnectionType.DRAFTER:
+                case DraftConnectionType.DRAFTER_TEAM_1:
+                case DraftConnectionType.DRAFTER_TEAM_2:
                     config = new DraftConfigDrafterDTO(room, authToken);
                     break;
                 case DraftConnectionType.OBSERVER:

@@ -6,6 +6,8 @@ using Heisenslaught.Services;
 using Heisenslaught.Exceptions;
 using Heisenslaught.DataTransfer;
 using Heisenslaught.Models.Users;
+using System.Linq;
+using System;
 
 namespace Heisenslaught.Infrastructure
 {
@@ -43,17 +45,59 @@ namespace Heisenslaught.Infrastructure
 
         public DraftConnectionType Connect(DraftHub hub, HSUser user, string authToken)
         {
+            var connectionType = GetConnectionType(authToken);
             hub.Groups.Add(hub.Context.ConnectionId, RoomName);
-            _conService.OnUserJoinedChannel(user, hub, RoomName);
+            _conService.OnUserJoinedChannel(user, hub, RoomName, (int)connectionType);
+
+            hub.Clients.Caller.SetConnectedUsers(GetDraftConnections());
+            hub.Clients.Group(RoomName, new string[] { hub.Context.ConnectionId }).OnUserJoined(GetDraftConnection(user.Id));
+
             UpdateDraftState(hub);
-            return GetConnectionType(authToken);
+            return connectionType;
         }
 
         public void Disconnect(DraftHub hub)
         {
+            var user = _conService.GetUserFromConnection(hub.Context.ConnectionId);
+            var connection = GetDraftConnection(user.Id);
             _conService.OnUserLeftChannel(hub, RoomName);
+            if(user == null || !_conService.IsUserConnected(user.Id, hub.GetType(), RoomName))
+            {
+                // send user left message
+                hub.Clients.Group(RoomName, new string[] { hub.Context.ConnectionId }).OnUserLeft(connection);
+            }
             UpdateDraftState(hub);
         }
+
+
+        protected IEnumerable<DraftRoomConnection> _getDraftConnections(string userId = null)
+        {
+            var result =_conService.Query<IEnumerable<DraftRoomConnection>>((List<HubChannelConnection> cons) => {
+                var q = from c in cons
+                        where c.ChannelName == RoomName && (userId == null || c.Connection.User.Id == userId)
+                        group c by c.Connection.User.Id into usrGroup
+
+                        select new DraftRoomConnection {
+                            Id = usrGroup.FirstOrDefault().Connection.User.Id,
+                            Name = usrGroup.FirstOrDefault().Connection.User.BattleTagDisplay,
+                            ConnectionTypes = usrGroup.Select(t=> t.Flag).Distinct().Sum()
+                        };
+                return q;
+            });
+            return result;
+        }
+
+        protected DraftRoomConnection GetDraftConnection(string userId)
+        {
+            return _getDraftConnections(userId).FirstOrDefault();
+        }
+
+        protected List<DraftRoomConnection> GetDraftConnections()
+        {
+            return _getDraftConnections().ToList();
+         }
+
+
 
         public int ConnectionCount
         {
@@ -96,8 +140,10 @@ namespace Heisenslaught.Infrastructure
         {
             if (authToken == DraftModel.adminToken)
                 return DraftConnectionType.ADMIN;
-            if (authToken == DraftModel.team1DrafterToken || authToken == DraftModel.team2DrafterToken)
-                return DraftConnectionType.DRAFTER;
+            if (authToken == DraftModel.team1DrafterToken)
+                return DraftConnectionType.DRAFTER_TEAM_1;
+            if (authToken == DraftModel.team2DrafterToken)
+                return DraftConnectionType.DRAFTER_TEAM_2;
             return DraftConnectionType.OBSERVER;
         }
 
@@ -142,7 +188,7 @@ namespace Heisenslaught.Infrastructure
                 throw new MethodNotAllowedInPhaseException();
             }
             var conType = GetConnectionType(authToken);
-            if (conType != DraftConnectionType.DRAFTER)
+            if (conType != DraftConnectionType.DRAFTER_TEAM_1 && conType != DraftConnectionType.DRAFTER_TEAM_2)
             {
                 throw new InsufficientDraftPermissionsException();
             }
@@ -168,7 +214,7 @@ namespace Heisenslaught.Infrastructure
                 throw new MethodNotAllowedInPhaseException();
             }
             var conType = GetConnectionType(authToken);
-            if (conType != DraftConnectionType.DRAFTER)
+            if (conType != DraftConnectionType.DRAFTER_TEAM_1 && conType != DraftConnectionType.DRAFTER_TEAM_2)
             {
                 throw new InsufficientDraftPermissionsException();
             }
@@ -222,40 +268,19 @@ namespace Heisenslaught.Infrastructure
 
     }
 
+    [Flags]
     public enum DraftConnectionType
     {
-        OBSERVER,
-        DRAFTER,
-        ADMIN
+        DRAFTER_TEAM_1 = 1,
+        DRAFTER_TEAM_2 = 2,
+        OBSERVER = 4,
+        ADMIN = 8
     }
 
     public class DraftRoomConnection
     {
-        private string id;
-        private DraftConnectionType type;
-
-
-        public DraftRoomConnection(string id, DraftConnectionType type)
-        {
-            this.id = id;
-        
-            this.type = type;
-        }
-
-        public string Id
-        {
-            get
-            {
-                return id;
-            }
-        }
-
-        public DraftConnectionType Type
-        {
-            get
-            {
-                return type;
-            }
-        }
+        public string Id;
+        public string Name;
+        public int ConnectionTypes;
     }
 }
