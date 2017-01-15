@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-
+using System;
 
 namespace Heisenslaught
 {
@@ -94,7 +94,10 @@ namespace Heisenslaught
 
             
             // initialize Identity
-            services.AddIdentity<HSUser, HSRole>()
+            services.AddIdentity<HSUser, HSRole>(options=> {
+                options.Cookies.ExternalCookie.ExpireTimeSpan = TimeSpan.FromHours(1);
+                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromHours(1);
+            })
                 .AddDefaultTokenProviders();
             services.AddOptions();
 

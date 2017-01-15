@@ -20,14 +20,17 @@ namespace Heisenslaught.Hubs
 
         public override Task OnConnected()
         {
-           OnUserConnectedAsync().Wait();
-           return base.OnConnected();
+            #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            OnUserConnectedAsync();
+            #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            return base.OnConnected();
         }
 
-        protected async Task OnUserConnectedAsync()
+        protected async Task<bool> OnUserConnectedAsync()
         {
             var user = await userManager.GetUserAsync((ClaimsPrincipal)Context.User);
             connectionService.OnUserConnected(user, this);
+            return true;
         }
 
         public override async Task OnDisconnected(bool stopCalled)

@@ -64,6 +64,10 @@ namespace Heisenslaught.Infrastructure
                 // send user left message
                 hub.Clients.Group(RoomName, new string[] { hub.Context.ConnectionId }).OnUserLeft(connection);
             }
+            else
+            {
+                hub.Clients.Group(RoomName, new string[] { hub.Context.ConnectionId }).OnUserStatusUpdate(GetDraftConnection(user.Id));
+            }
             UpdateDraftState(hub);
         }
 
