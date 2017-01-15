@@ -1,16 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-
-using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace Heisenslaught.Models.Users
 {
-        
-        
-        
     public class HSUserValidator : IUserValidator<HSUser>
     {
         private static readonly Regex BattleTagRegexp = new Regex("^\\d+#\\d+", RegexOptions.Compiled | RegexOptions.IgnoreCase);

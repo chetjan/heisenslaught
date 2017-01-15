@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { DraftService, HubConnectionState, IDraftState } from '../../../heroes-draft-service/heroes-draft-service.module';
+import { DraftService, HubConnectionState, IDraftUser } from '../../../heroes-draft-service/heroes-draft-service.module';
 
 
 @Component({
@@ -11,12 +11,12 @@ import { DraftService, HubConnectionState, IDraftState } from '../../../heroes-d
 })
 export class DraftConnectionStatusComponent implements OnInit, OnDestroy {
   private connectionStateSub: Subscription;
-  private stateSubscription: Subscription;
+  private userSubscription: Subscription;
 
   public connectionIcon: string = 'warning';
   public connectionStatus: string = 'disconnected';
   public connectionCount: number = 0;
-
+  public connectedUsers: IDraftUser[] = [];
 
   constructor(
     private draftService: DraftService,
@@ -25,19 +25,19 @@ export class DraftConnectionStatusComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.updateConnectionState(this.draftService.connectionState);
-    this.updateDraftState(this.draftService.draftState);
+    this.updateUserConnections(this.draftService.connectedUsers);
 
     this.connectionStateSub = this.draftService.connectionStateObservable.subscribe((state) => {
       this.updateConnectionState(state);
     });
-    this.stateSubscription = this.draftService.draftStateObservable.subscribe((state) => {
-      this.updateDraftState(state);
+    this.userSubscription = this.draftService.connectedUserObsevable.subscribe((users) => {
+      this.updateUserConnections(users);
     });
   }
 
   ngOnDestroy() {
     this.connectionStateSub.unsubscribe();
-    this.stateSubscription.unsubscribe();
+    this.userSubscription.unsubscribe();
   }
 
   private updateConnectionState(state: HubConnectionState): void {
@@ -62,11 +62,20 @@ export class DraftConnectionStatusComponent implements OnInit, OnDestroy {
     } catch (e) { }
   }
 
-  private updateDraftState(state: IDraftState) {
-    if (state) {
-      this.connectionCount = state.connectionCount;
+  private updateUserConnections(users: IDraftUser[]) {
+    if (users) {
+      this.connectionCount = users.length;
+      this.connectedUsers = users;
       this.changeRef.detectChanges();
     }
   }
 
+  public status(user: IDraftUser): any {
+    return {
+      d1: (user.connectionTypes & 1) === 1,
+      d2: (user.connectionTypes & 2) === 2,
+      obs: (user.connectionTypes & 4) === 4,
+      admin: (user.connectionTypes & 8) === 8
+    };
+  }
 }

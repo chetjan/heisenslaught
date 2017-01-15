@@ -11,7 +11,7 @@ namespace Heisenslaught.Controllers
     [Route("api/auth")]
     public class AuthAPIController : Controller
     {
-        public AuthAPIController(IDraftService service)
+        public AuthAPIController(IDraftService service, IHubConnectionsService hcs)
         {
             var a = service;
         }

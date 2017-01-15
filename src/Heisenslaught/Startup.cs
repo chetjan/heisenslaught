@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AspNet.Security.OAuth.BattleNet;
+using Heisenslaught.Config;
+using Heisenslaught.Models.Users;
+using Heisenslaught.Persistence.Draft;
+using Heisenslaught.Persistence.User;
+using Heisenslaught.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using System.IO;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.HttpOverrides;
-using Heisenslaught.Models.Users;
-using Heisenslaught.Persistence.User;
 using Microsoft.AspNetCore.Identity;
-using MongoDB.Driver;
-using AspNet.Security.OAuth.BattleNet;
-using Heisenslaught.Config;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Heisenslaught.Persistence.Draft;
-using Heisenslaught.Services;
+using MongoDB.Driver;
+using System;
 
 namespace Heisenslaught
 {
@@ -42,8 +37,8 @@ namespace Heisenslaught
 
 
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+            // This method gets called by the runtime. Use this method to add services to the container.
+            // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             // configs
@@ -81,10 +76,13 @@ namespace Heisenslaught
                 var db = client.GetDatabase(options.Value.Database);
                 return new DraftStore(db, logger);
             });
-       
+
             // services
+            services.AddSingleton<IHubConnectionsService, HubConnectionsService>();
             services.AddSingleton<IDraftService, DraftService>();
-            services.AddSingleton<HeroDataService, HeroDataService>();
+            services.AddSingleton<IHeroDataService, HeroDataService>();
+          
+
             
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -93,9 +91,13 @@ namespace Heisenslaught
             services.AddSingleton<RoleManager<HSRole>, RoleManager<HSRole>>();
             services.AddSingleton<UserManager<HSUser>, UserManager<HSUser>>();
             services.AddScoped<SignInManager<HSUser>, SignInManager<HSUser>>();
+
             
             // initialize Identity
-            services.AddIdentity<HSUser, HSRole>()
+            services.AddIdentity<HSUser, HSRole>(options=> {
+                options.Cookies.ExternalCookie.ExpireTimeSpan = TimeSpan.FromHours(1);
+                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromHours(1);
+            })
                 .AddDefaultTokenProviders();
             services.AddOptions();
 
@@ -105,7 +107,9 @@ namespace Heisenslaught
             });
             services.AddSignalR(options=> {
                 options.Hubs.EnableDetailedErrors = true;
+                
             });
+           
             services.AddRouting(options => {
                 options.LowercaseUrls = true;
             });
@@ -144,7 +148,7 @@ namespace Heisenslaught
             app.UseSignalR();
 
             app.UseMvc(routes =>
-            { 
+            {
                 routes.MapRoute(
                     name: "auth",
                     template: "auth/{action}/",

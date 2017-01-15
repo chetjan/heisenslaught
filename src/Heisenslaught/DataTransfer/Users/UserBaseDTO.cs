@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Heisenslaught.Models.Users;
+﻿using Heisenslaught.Models.Users;
 
 namespace Heisenslaught.DataTransfer.Users
 {

@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Heisenslaught.Models.Users;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Heisenslaught.Models.Users;
 using System.Threading;
-using Microsoft.Extensions.Logging;
-
-using MongoDB.Driver;
+using System.Threading.Tasks;
 
 namespace Heisenslaught.Persistence.User
 {

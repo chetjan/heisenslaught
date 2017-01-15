@@ -2,5 +2,23 @@
   <md-icon [ngClass]="[connectionStatus]" [attr.title]="connectionStatus">{{connectionIcon}}</md-icon>
 </div>
 <div class="connected-clients" *ngIf="connectionCount">
-  <span class="count">{{connectionCount}}</span><md-icon >people</md-icon>
+  <span class="count">{{connectionCount}}</span>
+  <md-icon>people</md-icon>
+  <app-tooltip [origin]="{originX:'end', originY:'bottom'}" [position]="{overlayX:'end', overlayY:'top'}">
+    <div class="connected-client-list">
+      <table>
+        <tr *ngFor="let user of connectedUsers">
+          <td class="left">
+            <md-icon *ngIf="status(user).obs" class="obs">remove_red_eye</md-icon>
+            <md-icon *ngIf="status(user).d2" class="team2">looks_two</md-icon>
+            <md-icon *ngIf="status(user).d1" class="team1">looks_one</md-icon>
+          </td>
+          <td class="center">{{user.name}}</td>
+          <td  class="right">
+            <md-icon *ngIf="status(user).admin" class="admin">edit</md-icon>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </app-tooltip>
 </div>

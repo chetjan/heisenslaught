@@ -3,11 +3,13 @@ import { Observable, Subject } from 'rxjs/Rx';
 
 import { IDraftConfigAdminDTO, IDraftConfigDTO, ICreateDraftDTO } from './types/draft-config';
 import { IDraftState } from './types/draft-state';
+import { IDraftUser } from './types/draft-users';
 import { IDraftHubProxy } from './types/draft-hub-proxy';
 import { HubConnectionState } from './types/hub-connection-sate';
 
 export { ICreateDraftDTO, IDraftConfigAdminDTO, IDraftConfigDTO, IDraftConfigDrafterDTO } from './types/draft-config';
 export { IDraftState, DraftPhase } from './types/draft-state';
+export { IDraftUser } from './types/draft-users';
 export { HubConnectionState } from './types/hub-connection-sate';
 
 @Injectable()
@@ -18,10 +20,12 @@ export class DraftService {
     private _connectionSubject: Subject<HubConnectionState> = new Subject<HubConnectionState>();
     private _draftConfigSubject: Subject<IDraftConfigDTO> = new Subject<IDraftConfigDTO>();
     private _draftStateSubject: Subject<IDraftState> = new Subject<IDraftState>();
+    private _connectedUsersSubject: Subject<IDraftUser[]> = new Subject<IDraftUser[]>();
     private _reconnecting: boolean = false;
     public connectionState: HubConnectionState = HubConnectionState.DISCONNECTED;
     public draftState: IDraftState;
     public draftConfig: IDraftConfigDTO;
+    public connectedUsers: IDraftUser[] = [];
 
     constructor() {
         try {
@@ -36,6 +40,51 @@ export class DraftService {
                 this.draftState = state;
                 this._draftStateSubject.next(state);
             };
+
+            this.hub.client.SetConnectedUsers = (users: IDraftUser[]) => {
+                this.connectedUsers = users;
+                this.sortUsers();
+                this._connectedUsersSubject.next(users);
+            };
+
+            this.hub.client.OnUserJoined = (user: IDraftUser) => {
+                let match = this.connectedUsers.find((item) => {
+                    return item.id === user.id;
+                });
+                if (match) {
+                    Object.assign(match, user);
+                } else {
+                    this.connectedUsers.push(user);
+                }
+                this.sortUsers();
+                this._connectedUsersSubject.next(this.connectedUsers);
+            };
+
+            this.hub.client.OnUserStatusUpdate = (user: IDraftUser) => {
+                let match = this.connectedUsers.find((item) => {
+                    return item.id === user.id;
+                });
+                if (match) {
+                    Object.assign(match, user);
+                } else {
+                    this.connectedUsers.push(user);
+                }
+                this.sortUsers();
+                this._connectedUsersSubject.next(this.connectedUsers);
+            };
+
+            this.hub.client.OnUserLeft = (user: IDraftUser) => {
+                let match = this.connectedUsers.find((item) => {
+                    return item.id === user.id;
+                });
+                if (match) {
+                    let idx = this.connectedUsers.indexOf(match);
+                    this.connectedUsers.splice(idx, 1);
+                    this.sortUsers();
+                    this._connectedUsersSubject.next(this.connectedUsers);
+                }
+            };
+
 
             this.hub.connection.stateChanged((state: SignalR.StateChanged) => {
                 switch (state.newState) {
@@ -66,6 +115,36 @@ export class DraftService {
         }
     }
 
+    private sortUsers() {
+        this.connectedUsers.sort((a, b) => {
+            let aT = a.connectionTypes & 1;
+            let bT = b.connectionTypes & 1;
+            if (aT > bT) {
+                return -1;
+            } if (aT < bT) {
+                return 1;
+            }
+
+            aT = a.connectionTypes & 2;
+            bT = b.connectionTypes & 2;
+            if (aT > bT) {
+                return -1;
+            } if (aT < bT) {
+                return 1;
+            }
+
+            aT = a.connectionTypes & 4;
+            bT = b.connectionTypes & 4;
+            if (aT > bT) {
+                return -1;
+            } if (aT < bT) {
+                return 1;
+            }
+
+            return a.name.localeCompare(b.name);
+        });
+    }
+
     public get draftConfigObservable(): Observable<IDraftConfigDTO> {
         return this._draftConfigSubject.asObservable();
     }
@@ -76,6 +155,10 @@ export class DraftService {
 
     public get draftStateObservable(): Observable<IDraftState> {
         return this._draftStateSubject.asObservable();
+    }
+
+    public get connectedUserObsevable(): Observable<IDraftUser[]> {
+        return this._connectedUsersSubject.asObservable();
     }
 
     private connect(): Promise<any> {

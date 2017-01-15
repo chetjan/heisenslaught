@@ -1,22 +1,22 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Threading.Tasks;
-using Heisenslaught.DataTransfer;
+﻿using Heisenslaught.DataTransfer;
 using Heisenslaught.Exceptions;
+using Heisenslaught.Hubs;
+using Heisenslaught.Models.Users;
 using Heisenslaught.Services;
 using Microsoft.AspNetCore.Identity;
-using Heisenslaught.Models.Users;
+using Microsoft.AspNetCore.SignalR.Hubs;
+using System;
+using System.Threading.Tasks;
+
+
 namespace Heisenslaught
 {
-    public class DraftHub : Hub
+    public class DraftHub : UserAwareHub
     {
-
         private readonly IDraftService _draftService;
-        private readonly UserManager<HSUser> _userManager;
-        
-        public DraftHub(UserManager<HSUser> userManager, IDraftService draftService)
+    
+        public DraftHub(IDraftService draftService, IHubConnectionsService connectionService, UserManager<HSUser> userManager) : base(connectionService, userManager)
         {
-            _userManager = userManager;
             _draftService = draftService;
         }
 
@@ -26,14 +26,16 @@ namespace Heisenslaught
             return base.OnDisconnected(stopCalled);
         }
 
-        public async Task<DraftConfigAdminDTO> CreateDraft(CreateDraftDTO cfg)
+        [HubMethodName("createDraft")]
+        public async Task<DraftConfigAdminDTO> CreateDraftAsync(CreateDraftDTO cfg)
         {
-            return await _draftService.CreateDraft(cfg, this);
+            return await _draftService.CreateDraftAsync(cfg, this);
         }
 
-        public DraftConfigDTO ConnectToDraft(string draftToken, string teamToken = null)
+        [HubMethodName("connectToDraft")]
+        public async Task<DraftConfigDTO> ConnectToDraftAsync(string draftToken, string teamToken = null)
         {
-            return _draftService.ConnectToDraft(this, draftToken, teamToken);
+            return await _draftService.ConnectToDraftAsync(this, draftToken, teamToken);
         }
 
         public DraftConfigAdminDTO RestartDraft(string draftToken, string adminToken)

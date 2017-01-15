@@ -1,31 +1,37 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Threading;
-using Heisenslaught.Models;
-using Heisenslaught.Services;
+﻿using Heisenslaught.DataTransfer;
 using Heisenslaught.Exceptions;
-using Heisenslaught.DataTransfer;
+using Heisenslaught.Models;
+using Heisenslaught.Models.Users;
+using Heisenslaught.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace Heisenslaught.Infrastructure
 {
     public class DraftRoom
     {
-        private readonly HeroDataService _heroDataService;
-        private Dictionary<string, DraftRoomConnection> connections = new Dictionary<string, DraftRoomConnection>();
+        private readonly IHeroDataService _heroDataService;
+        private readonly IHubConnectionsService _conService;
+
         private DraftHandler draftHandler;
         private DraftModel model;
-        private string roomName;
         private DraftService service;
         private Timer timer;
 
-        public DraftRoom(DraftService service, HeroDataService heroDataService, DraftModel model)
+
+        public DraftRoom(DraftService service, IHeroDataService heroDataService, IHubConnectionsService conService, DraftModel model)
         {
             this.service = service;
+            _conService = conService;
             _heroDataService = heroDataService;
             this.model = model;
-            this.roomName = "draftRoom-" + model.draftToken;
+            this.RoomName = "draftRoom-" + model.draftToken;
             this.draftHandler = new DraftHandler(this, _heroDataService);
         }
+
+        public string RoomName { get; private set; }
 
         public DraftModel DraftModel
         {
@@ -35,33 +41,68 @@ namespace Heisenslaught.Infrastructure
             }
         }
 
-        public DraftRoomConnection Connect(DraftHub hub, string authToken)
+        public DraftConnectionType Connect(DraftHub hub, HSUser user, string authToken)
         {
-            var connection = new DraftRoomConnection(hub.Context.ConnectionId, GetConnectionType(authToken));
-            if (!connections.ContainsKey(hub.Context.ConnectionId))
-            {
-                connections.Add(hub.Context.ConnectionId, connection);
-                hub.Groups.Add(hub.Context.ConnectionId, roomName);
-            }
+            var connectionType = GetConnectionType(authToken);
+            hub.Groups.Add(hub.Context.ConnectionId, RoomName);
+            _conService.OnUserJoinedChannel(user, hub, RoomName, (int)connectionType);
+
+            hub.Clients.Caller.SetConnectedUsers(GetDraftConnections());
+            hub.Clients.Group(RoomName, new string[] { hub.Context.ConnectionId }).OnUserJoined(GetDraftConnection(user.Id));
+
             UpdateDraftState(hub);
-            return connection;
+            return connectionType;
         }
 
-        public bool Disconnect(DraftHub hub)
+        public void Disconnect(DraftHub hub)
         {
-            if (connections.Remove(hub.Context.ConnectionId))
+            var user = _conService.GetUserFromConnection(hub.Context.ConnectionId);
+            var connection = GetDraftConnection(user.Id);
+            _conService.OnUserLeftChannel(hub, RoomName);
+            if(user == null || !_conService.IsUserConnected(user.Id, hub.GetType(), RoomName))
             {
-                UpdateDraftState(hub);
-                return true;
+                // send user left message
+                hub.Clients.Group(RoomName, new string[] { hub.Context.ConnectionId }).OnUserLeft(connection);
             }
-            return false;
+            else
+            {
+                hub.Clients.Group(RoomName, new string[] { hub.Context.ConnectionId }).OnUserStatusUpdate(GetDraftConnection(user.Id));
+            }
+            UpdateDraftState(hub);
+        }
+
+        protected IEnumerable<DraftRoomConnection> _getDraftConnections(string userId = null)
+        {
+            var result =_conService.Query<IEnumerable<DraftRoomConnection>>((List<HubChannelConnection> cons) => {
+                var q = from c in cons
+                        where c.ChannelName == RoomName && (userId == null || c.Connection.User.Id == userId)
+                        group c by c.Connection.User.Id into usrGroup
+
+                        select new DraftRoomConnection {
+                            id = usrGroup.FirstOrDefault().Connection.User.Id,
+                            name = usrGroup.FirstOrDefault().Connection.User.BattleTagDisplay,
+                            connectionTypes = usrGroup.Select(t=> t.Flag).Distinct().Sum()
+                        };
+                return q;
+            });
+            return result;
+        }
+
+        protected DraftRoomConnection GetDraftConnection(string userId)
+        {
+            return _getDraftConnections(userId).FirstOrDefault();
+        }
+
+        protected List<DraftRoomConnection> GetDraftConnections()
+        {
+            return _getDraftConnections().ToList();
         }
 
         public int ConnectionCount
         {
             get
             {
-                return connections.Count;
+                return _conService.GetConnectedUsers(typeof(DraftHub), RoomName).Count;
             }
         }
 
@@ -98,8 +139,10 @@ namespace Heisenslaught.Infrastructure
         {
             if (authToken == DraftModel.adminToken)
                 return DraftConnectionType.ADMIN;
-            if (authToken == DraftModel.team1DrafterToken || authToken == DraftModel.team2DrafterToken)
-                return DraftConnectionType.DRAFTER;
+            if (authToken == DraftModel.team1DrafterToken)
+                return DraftConnectionType.DRAFTER_TEAM_1;
+            if (authToken == DraftModel.team2DrafterToken)
+                return DraftConnectionType.DRAFTER_TEAM_2;
             return DraftConnectionType.OBSERVER;
         }
 
@@ -144,7 +187,7 @@ namespace Heisenslaught.Infrastructure
                 throw new MethodNotAllowedInPhaseException();
             }
             var conType = GetConnectionType(authToken);
-            if (conType != DraftConnectionType.DRAFTER)
+            if (conType != DraftConnectionType.DRAFTER_TEAM_1 && conType != DraftConnectionType.DRAFTER_TEAM_2)
             {
                 throw new InsufficientDraftPermissionsException();
             }
@@ -170,7 +213,7 @@ namespace Heisenslaught.Infrastructure
                 throw new MethodNotAllowedInPhaseException();
             }
             var conType = GetConnectionType(authToken);
-            if (conType != DraftConnectionType.DRAFTER)
+            if (conType != DraftConnectionType.DRAFTER_TEAM_1 && conType != DraftConnectionType.DRAFTER_TEAM_2)
             {
                 throw new InsufficientDraftPermissionsException();
             }
@@ -183,10 +226,9 @@ namespace Heisenslaught.Infrastructure
             UpdateDraftState(hub);
         }
 
-
         private void UpdateDraftState(DraftHub hub)
         {
-            hub.Clients.Group(roomName).updateDraftState(new DraftStateDTO(this));
+            hub.Clients.Group(RoomName).updateDraftState(new DraftStateDTO(this));
         }
 
         public void StartTimer(DraftHub hub)
@@ -221,43 +263,21 @@ namespace Heisenslaught.Infrastructure
         {
             service.CompleteDraft(this);
         }
-
     }
 
+    [Flags]
     public enum DraftConnectionType
     {
-        OBSERVER,
-        DRAFTER,
-        ADMIN
+        DRAFTER_TEAM_1 = 1,
+        DRAFTER_TEAM_2 = 2,
+        OBSERVER = 4,
+        ADMIN = 8
     }
 
     public class DraftRoomConnection
     {
-        private string id;
-        private DraftConnectionType type;
-
-
-        public DraftRoomConnection(string id, DraftConnectionType type)
-        {
-            this.id = id;
-        
-            this.type = type;
-        }
-
-        public string Id
-        {
-            get
-            {
-                return id;
-            }
-        }
-
-        public DraftConnectionType Type
-        {
-            get
-            {
-                return type;
-            }
-        }
+        public string id;
+        public string name;
+        public int connectionTypes;
     }
 }

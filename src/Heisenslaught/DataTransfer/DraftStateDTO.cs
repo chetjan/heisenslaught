@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Heisenslaught.Infrastructure;
 using Heisenslaught.Models;
-using Heisenslaught.Infrastructure;
+using System.Collections.Generic;
 
 
 namespace Heisenslaught.DataTransfer

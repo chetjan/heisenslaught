@@ -1,18 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Heisenslaught.Config;
+using Heisenslaught.DataTransfer.Users;
+using Heisenslaught.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Heisenslaught.Models.Users;
-using Newtonsoft.Json;
-using Heisenslaught.DataTransfer.Users;
-using Heisenslaught.Config;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Heisenslaught.Controllers
 {
@@ -46,7 +40,6 @@ namespace Heisenslaught.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        //https://localhost:44301/
         public async Task<IActionResult> CallbackAsync(string returnUrl = null, string remoteError = null)
         {
             if (remoteError != null)
@@ -107,7 +100,6 @@ namespace Heisenslaught.Controllers
                 return View("LoginEvent");
             }
         }
-
 
         [HttpGet]
         public async Task<bool> Logout()

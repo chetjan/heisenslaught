@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MongoDB.Bson;
-using Heisenslaught.Infrastructure;
+﻿using MongoDB.Bson;
+using System;
 
 namespace Heisenslaught.Models
 {
