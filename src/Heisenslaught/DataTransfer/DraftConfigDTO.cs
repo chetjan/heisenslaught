@@ -1,5 +1,5 @@
-﻿using Heisenslaught.Models;
-using Heisenslaught.Infrastructure;
+﻿using Heisenslaught.Infrastructure;
+using Heisenslaught.Models;
 
 
 namespace Heisenslaught.DataTransfer

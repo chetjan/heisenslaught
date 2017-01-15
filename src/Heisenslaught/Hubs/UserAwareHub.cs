@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.SignalR.Server;
+﻿using Heisenslaught.Models.Users;
 using Heisenslaught.Services;
 using Microsoft.AspNetCore.Identity;
-using Heisenslaught.Models.Users;
+using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Heisenslaught.Hubs
 {
@@ -21,7 +17,6 @@ namespace Heisenslaught.Hubs
             this.connectionService = connectionService;
             this.userManager = userManager;
         }
-
 
         public override Task OnConnected()
         {
@@ -41,6 +36,5 @@ namespace Heisenslaught.Hubs
             connectionService.OnUserDisconnected(user, this);
             await base.OnDisconnected(stopCalled);
         }
-
     }
 }

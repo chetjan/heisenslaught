@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MongoDB.Driver;
-using MongoDB.Bson;
+﻿using Heisenslaught.Models;
 using Microsoft.Extensions.Logging;
-using Heisenslaught.Models;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using System.Linq;
 
 namespace Heisenslaught.Persistence.Draft
 {

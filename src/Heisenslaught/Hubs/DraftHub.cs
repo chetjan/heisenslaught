@@ -4,7 +4,6 @@ using Heisenslaught.Hubs;
 using Heisenslaught.Models.Users;
 using Heisenslaught.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Hubs;
 using System;
 using System.Threading.Tasks;
@@ -14,7 +13,6 @@ namespace Heisenslaught
 {
     public class DraftHub : UserAwareHub
     {
-
         private readonly IDraftService _draftService;
     
         public DraftHub(IDraftService draftService, IHubConnectionsService connectionService, UserManager<HSUser> userManager) : base(connectionService, userManager)

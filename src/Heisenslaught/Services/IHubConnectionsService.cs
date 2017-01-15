@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Heisenslaught.Models.Users;
+﻿using Heisenslaught.Models.Users;
 using Microsoft.AspNetCore.SignalR;
+using System;
+using System.Collections.Generic;
 
 namespace Heisenslaught.Services
 {

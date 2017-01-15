@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Threading;
-using Heisenslaught.Models;
-using Heisenslaught.Services;
+﻿using Heisenslaught.DataTransfer;
 using Heisenslaught.Exceptions;
-using Heisenslaught.DataTransfer;
+using Heisenslaught.Models;
 using Heisenslaught.Models.Users;
-using System.Linq;
+using Heisenslaught.Services;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace Heisenslaught.Infrastructure
 {
@@ -16,14 +15,11 @@ namespace Heisenslaught.Infrastructure
         private readonly IHeroDataService _heroDataService;
         private readonly IHubConnectionsService _conService;
 
-       // private Dictionary<string, DraftRoomConnection> connections = new Dictionary<string, DraftRoomConnection>();
-
         private DraftHandler draftHandler;
         private DraftModel model;
         private DraftService service;
         private Timer timer;
 
-        public string RoomName { get; private set; }
 
         public DraftRoom(DraftService service, IHeroDataService heroDataService, IHubConnectionsService conService, DraftModel model)
         {
@@ -34,6 +30,8 @@ namespace Heisenslaught.Infrastructure
             this.RoomName = "draftRoom-" + model.draftToken;
             this.draftHandler = new DraftHandler(this, _heroDataService);
         }
+
+        public string RoomName { get; private set; }
 
         public DraftModel DraftModel
         {
@@ -69,7 +67,6 @@ namespace Heisenslaught.Infrastructure
             UpdateDraftState(hub);
         }
 
-
         protected IEnumerable<DraftRoomConnection> _getDraftConnections(string userId = null)
         {
             var result =_conService.Query<IEnumerable<DraftRoomConnection>>((List<HubChannelConnection> cons) => {
@@ -78,9 +75,9 @@ namespace Heisenslaught.Infrastructure
                         group c by c.Connection.User.Id into usrGroup
 
                         select new DraftRoomConnection {
-                            Id = usrGroup.FirstOrDefault().Connection.User.Id,
-                            Name = usrGroup.FirstOrDefault().Connection.User.BattleTagDisplay,
-                            ConnectionTypes = usrGroup.Select(t=> t.Flag).Distinct().Sum()
+                            id = usrGroup.FirstOrDefault().Connection.User.Id,
+                            name = usrGroup.FirstOrDefault().Connection.User.BattleTagDisplay,
+                            connectionTypes = usrGroup.Select(t=> t.Flag).Distinct().Sum()
                         };
                 return q;
             });
@@ -95,9 +92,7 @@ namespace Heisenslaught.Infrastructure
         protected List<DraftRoomConnection> GetDraftConnections()
         {
             return _getDraftConnections().ToList();
-         }
-
-
+        }
 
         public int ConnectionCount
         {
@@ -227,7 +222,6 @@ namespace Heisenslaught.Infrastructure
             UpdateDraftState(hub);
         }
 
-
         private void UpdateDraftState(DraftHub hub)
         {
             hub.Clients.Group(RoomName).updateDraftState(new DraftStateDTO(this));
@@ -265,7 +259,6 @@ namespace Heisenslaught.Infrastructure
         {
             service.CompleteDraft(this);
         }
-
     }
 
     [Flags]
@@ -279,8 +272,8 @@ namespace Heisenslaught.Infrastructure
 
     public class DraftRoomConnection
     {
-        public string Id;
-        public string Name;
-        public int ConnectionTypes;
+        public string id;
+        public string name;
+        public int connectionTypes;
     }
 }

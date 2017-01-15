@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
-using Heisenslaught.Models;
+﻿using Heisenslaught.Models;
 using Heisenslaught.Services;
+using System;
+using System.Collections.Generic;
 
 namespace Heisenslaught.Infrastructure
 {
     public class DraftHandler
     {
-        private readonly IHeroDataService _heroDataService;
-
         private static Random rnd = new Random((int)DateTime.Now.Ticks);
         private static List<int> firstSlots= new List<int>{0,2,5,6,8,11,12};
         private static List<int> secondSlots = new List<int> {1,2,3,7,9,10,13};
@@ -19,6 +14,8 @@ namespace Heisenslaught.Infrastructure
         private static List<int> secondPickSlots = new List<int> {3,4,9,10,13};
         private static List<int> firstBanSlots = new List<int> {0,8};
         private static List<int> secondBanSlots = new List<int> {1,7};
+
+        private readonly IHeroDataService _heroDataService; 
 
         private List<List<int>> teamSlots = new List<List<int>>();
         private List<List<int>> teamPickSlots = new List<List<int>>();

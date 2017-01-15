@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Heisenslaught.Models.Users;
+using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-
 using System.Threading;
-using Heisenslaught.Models.Users;
-using Microsoft.AspNetCore.SignalR;
 
 namespace Heisenslaught.Services
 {
@@ -39,9 +36,7 @@ namespace Heisenslaught.Services
     
     public class HubConnectionsService : IHubConnectionsService
     {
-
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-
         private readonly Dictionary<string, HSUser> _connectedUsers = new Dictionary<string, HSUser>();
         private readonly List<HubConnection> _hubConnections = new List<HubConnection>();
         private readonly List<HubChannelConnection> _channelConnections = new List<HubChannelConnection>();
@@ -86,7 +81,6 @@ namespace Heisenslaught.Services
             _lock.EnterWriteLock();
             try
             {
-
                 var hubConnection = FindHubConnection(hub);
                 if (hubConnection == null)
                 {
@@ -153,7 +147,6 @@ namespace Heisenslaught.Services
                     }
                     channelConnection = new HubChannelConnection(connection, channelName, flag);
                     _channelConnections.Add(channelConnection);
-
                 }
             }
             finally
@@ -179,8 +172,6 @@ namespace Heisenslaught.Services
             }
         }
 
-
-
         public bool IsUserConnected(string userId)
         {
             try
@@ -193,8 +184,6 @@ namespace Heisenslaught.Services
                 _lock.ExitReadLock();
             }
         }
-
-     
 
         public bool IsUserConnected(string userId, Type hubType)
         {
@@ -353,9 +342,5 @@ namespace Heisenslaught.Services
             }
         }
 
-    }
-    class ChannelListItem
-    {
-        public string name;
     }
 }

@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Heisenslaught.DataTransfer;
 using Heisenslaught.Infrastructure;
 using Heisenslaught.Models;
-using Heisenslaught.DataTransfer;
-using Microsoft.AspNetCore.SignalR.Hubs;
+using Heisenslaught.Models.Users;
 using Heisenslaught.Persistence.Draft;
 using Microsoft.AspNetCore.Identity;
-using Heisenslaught.Models.Users;
+using System;
+using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading.Tasks;
+
 
 namespace Heisenslaught.Services
 {
@@ -83,7 +82,6 @@ namespace Heisenslaught.Services
             return room;
         }
 
-
         public void ClientDisconnected(DraftHub hub)
         {
             DraftRoom room = null;
@@ -104,7 +102,6 @@ namespace Heisenslaught.Services
             _draftStore.SaveDraft(room.DraftModel);
             TryDeactivateDraftRoom(room);
         }
-
 
         private void TryActivateDraftRoom(DraftRoom room)
         {
@@ -130,6 +127,5 @@ namespace Heisenslaught.Services
                 }
             }
         }
-
     }
 }

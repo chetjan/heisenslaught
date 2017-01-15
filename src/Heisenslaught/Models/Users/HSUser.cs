@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System;
+using System.Collections.Generic;
+
 
 namespace Heisenslaught.Models.Users
 {
@@ -19,8 +17,6 @@ namespace Heisenslaught.Models.Users
         public string BattleTag { get; private set; }
         public string BattleTagNormaized { get; private set; }
         public string BattleTagDisplay { get; private set; }
-
-
 
         // for later
         public string PasswordHash;
@@ -72,7 +68,7 @@ namespace Heisenslaught.Models.Users
 
         public void AddLogin(HSUserLogin login)
         {
-            this._logins.Add(login);
+            _logins.Add(login);
         }
 
         public bool RemoveLogin(HSUserLogin login)
