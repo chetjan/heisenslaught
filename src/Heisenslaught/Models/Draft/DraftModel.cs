@@ -1,13 +1,16 @@
 ﻿using MongoDB.Bson;
 using System;
+using MongoDB.Bson.Serialization.Attributes;
+using Heisenslaught.Persistence.MongoDb.Models;
 
-namespace Heisenslaught.Models
+namespace Heisenslaught.Models.Draft
 {
-    public class DraftModel
+    public class DraftModel : IMongoDocument<string>
     {
         private static Random rnd = new Random((int)DateTime.Now.Ticks);
-
-        public ObjectId _id;
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
         public string draftToken;
         public string adminToken;
         public string team1DrafterToken;
@@ -16,6 +19,8 @@ namespace Heisenslaught.Models
         public DraftConfigModel config;
         public DraftStateModel state;
         public string createdBy;
+
+        
 
         public DraftModel(DraftConfigModel config = null)
         {

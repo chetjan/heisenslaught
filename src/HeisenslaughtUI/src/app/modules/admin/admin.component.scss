@@ -1,0 +1,15 @@
+:host{
+    display: block;
+    &, md-sidenav-layout, md-sidenav{
+        height: 100%;
+    }
+    md-sidenav{
+        width:300px;
+    }
+    .content{
+        height: 100%;
+        width: 100%;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+}

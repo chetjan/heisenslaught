@@ -1,6 +1,6 @@
 ﻿using Heisenslaught.DataTransfer;
 using Heisenslaught.Infrastructure;
-using Heisenslaught.Models;
+using Heisenslaught.Models.Draft;
 using Heisenslaught.Models.Users;
 using Heisenslaught.Persistence.Draft;
 using Microsoft.AspNetCore.Identity;
@@ -36,7 +36,7 @@ namespace Heisenslaught.Services
             var model = new DraftModel(config.ToModel());
             var user = await _userManager.GetUserAsync((ClaimsPrincipal)hub.Context.User);
             model.createdBy = user.Id;
-            _draftStore.CreateDraft(model);
+            _draftStore.Create(model);
             return new DraftConfigAdminDTO(model);
         }
 
@@ -99,7 +99,7 @@ namespace Heisenslaught.Services
 
         public void CompleteDraft(DraftRoom room)
         {
-            _draftStore.SaveDraft(room.DraftModel);
+            _draftStore.Update(room.DraftModel);
             TryDeactivateDraftRoom(room);
         }
 

@@ -7,12 +7,31 @@ import { LoginScreenComponent } from './screens/login-screen/login-screen.compon
 import { AuthGuard } from './modules/users/shared/guards/auth-guard.service';
 
 const appRoutes: Routes = [
-    { path: '', component: HomeScreenComponent },
-    { path: 'login', component: LoginScreenComponent },
+    {
+        path: '',
+        component: HomeScreenComponent,
+        data: {
+            navigation: { label: 'Home' }
+        }
+    },
     {
         path: 'draft',
         canLoad: [AuthGuard],
-        loadChildren: 'app/modules/heroes-drafting/heroes-drafting.module#HeroesDraftingModule'
+        loadChildren: 'app/modules/heroes-drafting/heroes-drafting.module#HeroesDraftingModule',
+        data: {
+            navigation: { label: 'Create Draft' }
+        }
+    },
+    {
+        path: 'admin',
+        canLoad: [AuthGuard],
+        loadChildren: 'app/modules/admin/admin.module#AdminModule',
+        data: {
+            navigation: { label: 'Admin' }
+        }
+    },
+    {
+        path: 'login', component: LoginScreenComponent
     },
     { path: '**', component: NotFoundScreenComponent }
 ];

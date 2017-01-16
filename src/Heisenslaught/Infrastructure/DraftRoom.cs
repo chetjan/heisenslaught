@@ -1,6 +1,6 @@
 ﻿using Heisenslaught.DataTransfer;
 using Heisenslaught.Exceptions;
-using Heisenslaught.Models;
+using Heisenslaught.Models.Draft;
 using Heisenslaught.Models.Users;
 using Heisenslaught.Services;
 using System;

@@ -1,13 +1,33 @@
-﻿using Heisenslaught.Models;
+﻿using Heisenslaught.Models.Draft;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Collections.Generic;
 using System.Linq;
+using System;
+using Heisenslaught.Persistence.MongoDb.Store;
 
 namespace Heisenslaught.Persistence.Draft
 {
-    public class DraftStore : IDraftStore
+    public class DraftStore : CrudMongoStore<string, DraftModel>, IDraftStore
     {
+        public DraftStore(IMongoDatabase database) : base(database, "drafts") { }
+        public DraftStore(IMongoDatabase database, string collectionName) : base(database, collectionName) { }
+
+
+        public DraftModel FindByDraftToken(string draftToken)
+        {
+            var q = Builders<DraftModel>.Filter.Eq("draftToken", draftToken);
+            return QueryOne(q);
+        }
+
+        public List<DraftModel> FindByUserId(string userId)
+        {
+            var q = Builders<DraftModel>.Filter.Eq("createdBy", userId);
+            return Query(q, null, null);
+        }
+
+        /*
         private IMongoDatabase _database;
         private IMongoCollection<DraftModel> _draftCollection;
 
@@ -52,8 +72,13 @@ namespace Heisenslaught.Persistence.Draft
         public void CreateDraft(DraftModel draft)
         {
             _draftCollection.InsertOne(draft);
+            emit(OnDraftCreated, draft);
         }
 
+        protected void emit(EventHandler<DraftModel> evt, DraftModel model)
+        {
+            evt?.Invoke(this, model);
+        }
 
         public DraftModel FindById(string id)
         {
@@ -68,18 +93,21 @@ namespace Heisenslaught.Persistence.Draft
 
         public DraftModel FindByUserId(string userId)
         {
-            /*var q = Builders<DraftModel>.Filter.Eq("draftToken", draftToken);
-            return draftCollection.Find<DraftModel>(q).First<DraftModel>();
-            */
+          
+
             return null;
         }
 
         public ReplaceOneResult SaveDraft(DraftModel draft)
         {
-            var q = Builders<DraftModel>.Filter.Eq("_id", draft._id);
-            return _draftCollection.ReplaceOne(q, draft);
+            var q = Builders<DraftModel>.Filter.Eq("_id", draft.Id);
+            var result = _draftCollection.ReplaceOne(q, draft);
+            OnDraftUpdated(this, draft);
+           
+            return result;
         }
 
+    */
 
     }
 }

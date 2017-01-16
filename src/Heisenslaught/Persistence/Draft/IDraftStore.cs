@@ -1,14 +1,14 @@
-﻿using Heisenslaught.Models;
-using MongoDB.Driver;
+﻿using Heisenslaught.Models.Draft;
+using Heisenslaught.Persistence.MongoDb.Store;
+using System;
+using System.Collections.Generic;
+
 
 namespace Heisenslaught.Persistence.Draft
 {
-    public interface IDraftStore
+    public interface IDraftStore : ICrudMongoStore<string, DraftModel>
     {
-        void CreateDraft(DraftModel draft);
         DraftModel FindByDraftToken(string draftToken);
-        DraftModel FindById(string id);
-        DraftModel FindByUserId(string userId);
-        ReplaceOneResult SaveDraft(DraftModel draft);
+        List<DraftModel> FindByUserId(string userId);
     }
 }

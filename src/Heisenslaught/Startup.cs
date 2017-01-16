@@ -16,6 +16,9 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System;
 
+using Heisenslaught.Extentions;
+using Heisenslaught.Persistence.service;
+
 namespace Heisenslaught
 {
     public class Startup
@@ -35,7 +38,7 @@ namespace Heisenslaught
             Configuration = builder.Build();
         }
 
-
+       
 
             // This method gets called by the runtime. Use this method to add services to the container.
             // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -45,7 +48,7 @@ namespace Heisenslaught
             services.Configure<MongoSettings>(Configuration.GetSection("MongoDb"));
             services.Configure<UserCreationSettings>(Configuration.GetSection("UserCreation"));
 
-
+           
             // mongo strores
             services.AddSingleton<IRoleStore<HSRole>>(provider =>
             {
@@ -65,23 +68,30 @@ namespace Heisenslaught
                 var options = provider.GetService<IOptions<MongoSettings>>();
                 var client = new MongoClient(options.Value.ConnectionString);
                 var db = client.GetDatabase(options.Value.Database);
-                return new HSUserStore(db, logger, roleManager);
+                var store =  new HSUserStore(db, logger, roleManager);
+               // services.AddSingleton()
+                return store;
             });
 
             services.AddSingleton<IDraftStore>(provider => {
-                var logger = provider.GetService<ILoggerFactory>();
-
                 var options = provider.GetService<IOptions<MongoSettings>>();
                 var client = new MongoClient(options.Value.ConnectionString);
                 var db = client.GetDatabase(options.Value.Database);
-                return new DraftStore(db, logger);
+                return new DraftStore(db);
+            });
+
+            services.AddSingleton<DraftListViewStore>(provider =>
+            {
+                var options = provider.GetService<IOptions<MongoSettings>>();
+                var client = new MongoClient(options.Value.ConnectionString);
+                var db = client.GetDatabase(options.Value.Database);
+                return new DraftListViewStore(db);
             });
 
             // services
             services.AddSingleton<IHubConnectionsService, HubConnectionsService>();
             services.AddSingleton<IDraftService, DraftService>();
             services.AddSingleton<IHeroDataService, HeroDataService>();
-          
 
             
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -92,7 +102,8 @@ namespace Heisenslaught
             services.AddSingleton<UserManager<HSUser>, UserManager<HSUser>>();
             services.AddScoped<SignInManager<HSUser>, SignInManager<HSUser>>();
 
-            
+            services.AddService<DraftListViewGenerator>();
+
             // initialize Identity
             services.AddIdentity<HSUser, HSRole>(options=> {
                 options.Cookies.ExternalCookie.ExpireTimeSpan = TimeSpan.FromHours(1);
@@ -114,8 +125,8 @@ namespace Heisenslaught
                 options.LowercaseUrls = true;
             });
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+  
+            // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
@@ -143,9 +154,10 @@ namespace Heisenslaught
             });
 
 
-            
             app.UseWebSockets();
             app.UseSignalR();
+
+            app.UseServices();
 
             app.UseMvc(routes =>
             {

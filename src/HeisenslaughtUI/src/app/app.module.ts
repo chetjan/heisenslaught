@@ -19,7 +19,7 @@ import { LoginService } from './modules/users/shared/services/login.service';
 import { LoginScreenComponent } from './screens/login-screen/login-screen.component';
 import { AuthGuard } from './modules/users/shared/guards/auth-guard.service';
 import { LoginBarComponent } from './components/login-bar/login-bar.component';
-import { NavigationComponent } from './components/navigation/navigation.component';
+
 
 
 @NgModule({
@@ -28,8 +28,7 @@ import { NavigationComponent } from './components/navigation/navigation.componen
     HomeScreenComponent,
     NotFoundScreenComponent,
     LoginScreenComponent,
-    LoginBarComponent,
-    NavigationComponent
+    LoginBarComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +40,7 @@ import { NavigationComponent } from './components/navigation/navigation.componen
     AppCommonModule,
     AppRoutingModule
   ],
-  exports: [NavigationComponent],
+  exports: [],
   providers: [LoginService, AuthGuard],
   bootstrap: [AppComponent]
 })

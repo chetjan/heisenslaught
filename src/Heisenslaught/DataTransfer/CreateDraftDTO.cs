@@ -1,4 +1,4 @@
-﻿using Heisenslaught.Models;
+﻿using Heisenslaught.Models.Draft;
 using System.Collections.Generic;
 
 
@@ -32,15 +32,17 @@ namespace Heisenslaught.DataTransfer
 
         public DraftConfigModel ToModel()
         {
-            var model = new DraftConfigModel();
-            model.bankTime = bankTime;
-            model.bonusTime = bonusTime;
-            model.disabledHeroes = disabledHeroes;
-            model.firstPick = firstPick;
-            model.map = map;
-            model.pickTime = pickTime;
-            model.team1Name = team1Name;
-            model.team2Name = team2Name;
+            var model = new DraftConfigModel()
+            {
+                bankTime = bankTime,
+                bonusTime = bonusTime,
+                disabledHeroes = disabledHeroes,
+                firstPick = firstPick,
+                map = map,
+                pickTime = pickTime,
+                team1Name = team1Name,
+                team2Name = team2Name
+            };
             return model;
         }
     }

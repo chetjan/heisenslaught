@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Heisenslaught.Models
+namespace Heisenslaught.Models.Draft
 {
     public enum DraftStatePhase
     {

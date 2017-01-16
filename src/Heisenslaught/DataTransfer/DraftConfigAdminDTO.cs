@@ -1,5 +1,5 @@
 ﻿using Heisenslaught.Infrastructure;
-using Heisenslaught.Models;
+using Heisenslaught.Models.Draft;
 
 
 namespace Heisenslaught.DataTransfer
@@ -25,7 +25,7 @@ namespace Heisenslaught.DataTransfer
 
         private void Initialize(DraftModel model)
         {
-            id = model._id.ToString();
+            id = model.Id;
             draftToken = model.draftToken;
             team1DrafterToken = model.team1DrafterToken;
             team2DrafterToken = model.team2DrafterToken;
