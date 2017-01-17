@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoginWindow } from './login-window';
 import { Subject, Observable, Subscriber } from 'rxjs';
 import { Http } from '@angular/http';
 import { AuthenticatedUser } from './types/user';
+import { SignalRConnection } from '../../../../services/signalr/signalr-connection';
 
 export * from './types/user';
 
@@ -20,14 +21,21 @@ export class LoginService {
   constructor(
     private http: Http,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    @Optional() private signalRConnection: SignalRConnection
   ) {
     if (window.localStorage) {
       this._returnUrl = window.localStorage.getItem('login.returnUrl');
+      window.addEventListener('storage', (event: StorageEvent) => {
+        if (event.key === 'login.userChanged') {
+          this.handleExternalUserChange();
+        }
+      });
     }
     window.addEventListener('loginEvent', (evt: CustomEvent) => {
       if (evt.detail['success']) {
         this.setAuthenticatedUser(evt.detail['data']);
+        this.reconnectSignalR();
         this._battlenetLoginWindow.close();
       }
     });
@@ -38,8 +46,10 @@ export class LoginService {
     if (window.localStorage) {
       if (value) {
         window.localStorage.setItem('login.returnUrl', value);
+        console.log('returnUrl changed')
       } else {
         window.localStorage.removeItem('login.returnUrl');
+        console.log('returnUrl removed')
       }
     }
   }
@@ -55,8 +65,30 @@ export class LoginService {
     }
   }
 
-  private setAuthenticatedUser(authenticatedUser: AuthenticatedUser): void {
+  private handleExternalUserChange(): void {
+    this.http.get('/auth/user').map(res => res.json()).toPromise().then((user: AuthenticatedUser) => {
+      if (
+        (!this._authenticatedUser && user) ||
+        (this._authenticatedUser && !user) ||
+        (this._authenticatedUser.id !== user.id)
+      ) {
+        this.reconnectSignalR();
+      }
+      this.setAuthenticatedUser(user, true);
+    });
+  }
+
+  private reconnectSignalR(): void {
+    if (this.signalRConnection) {
+      this.signalRConnection.reconnect();
+    }
+  }
+
+  private setAuthenticatedUser(authenticatedUser: AuthenticatedUser, noEvent?: boolean): void {
     this._authenticatedUser = authenticatedUser;
+    if (!noEvent && window.localStorage) {
+      window.localStorage.setItem('login.userChanged', new Date().getTime().toString());
+    }
     this._authenticatedUserSubject.next(authenticatedUser);
   }
 
@@ -99,6 +131,7 @@ export class LoginService {
   public logOut(): void {
     this.http.get('/auth/logout').toPromise().then(() => {
       this.setAuthenticatedUser(null);
+      this.reconnectSignalR();
       this.returnUrl = undefined;
     });
   }

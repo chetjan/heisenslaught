@@ -8,6 +8,8 @@ import { MaterialModule } from '@angular/material';
 import { MdSidenavModule } from '@angular/material/sidenav';
 import { CovalentCoreModule } from '@covalent/core';
 
+import { SignalRConnection } from './services/signalr/signalr-connection';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -41,7 +43,7 @@ import { LoginBarComponent } from './components/login-bar/login-bar.component';
     AppRoutingModule
   ],
   exports: [],
-  providers: [LoginService, AuthGuard],
+  providers: [LoginService, AuthGuard, SignalRConnection],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

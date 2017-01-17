@@ -2,13 +2,9 @@ import { Component, ElementRef } from '@angular/core';
 import { LoginService } from './modules/users/shared/services/login.service';
 import { Observable } from 'rxjs';
 
-interface IDraftState {
-  TimeTeam0: number;
-  TimeTeam1: number;
-  TimeBonus: number;
-  CurrentState: string;
-  CurrentAction: string;
-}
+
+import { SignalRConnection, SignalRConnectionState } from './services/signalr/signalr-connection';
+
 
 @Component({
   selector: 'app-root',
@@ -18,10 +14,24 @@ interface IDraftState {
 export class AppComponent {
 
 
-  constructor(private loginService: LoginService, private elm: ElementRef) {
+  constructor(
+    private loginService: LoginService,
+    private elm: ElementRef,
+    signalR: SignalRConnection
+  ) {
     let user = JSON.parse((<HTMLElement>elm.nativeElement).getAttribute('authenticatedUser'));
     (<HTMLElement>elm.nativeElement).removeAttribute('authenticatedUser');
     loginService.initialize(user);
+
+
+    let sub = signalR.subscribe((state: SignalRConnectionState) => {
+      console.log('state', SignalRConnectionState[state]);
+    });
+
+    setTimeout(() => {
+     // signalR.reconnect();
+    }, 5000);
+
   }
 
   public get user(): Observable<any> {

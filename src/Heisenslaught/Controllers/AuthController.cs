@@ -108,5 +108,20 @@ namespace Heisenslaught.Controllers
             return true;
         }
 
+        [HttpGet("auth/user")]
+        [AllowAnonymous]
+        public async Task<AuthenticatedUserDTO> GetAuthenticatedUserAsync()
+        {
+            if (User != null)
+            {
+                HSUser user = await _userManager.GetUserAsync(this.User);
+                if(user != null)
+                {
+                    return new AuthenticatedUserDTO(user);
+                }
+            }
+            return null;
+        }
+
     }
 }
