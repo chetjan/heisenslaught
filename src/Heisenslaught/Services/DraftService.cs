@@ -30,6 +30,12 @@ namespace Heisenslaught.Services
             _userManager = userManager;
             _connectionService = connectionService;
         }
+        public List<DraftRoom> ActiveRooms{
+            get
+            {
+                return new List<DraftRoom>(activeRooms.Values);
+            }
+        }
 
         public async Task<DraftConfigAdminDTO> CreateDraftAsync(CreateDraftDTO config, DraftHub hub)
         {
