@@ -44,11 +44,15 @@ namespace Heisenslaught.Services
         {
             DraftConfigDTO config = null;
             var room = GetDraftRoom(draftToken, true);
-            try
+            lock (connectionsRoom)
             {
-                connectionsRoom.Add(hub.Context.ConnectionId, room);
+                if (!connectionsRoom.ContainsKey(hub.Context.ConnectionId))
+                {
+                    connectionsRoom.Add(hub.Context.ConnectionId, room);
+                }
+
             }
-            catch (Exception) { }
+           
             var user = await _userManager.GetUserAsync((ClaimsPrincipal)hub.Context.User);
             var connectionType = room.Connect(hub, user, authToken);
 
@@ -85,11 +89,15 @@ namespace Heisenslaught.Services
         public void ClientDisconnected(DraftHub hub)
         {
             DraftRoom room = null;
-            try
+
+            lock (connectionsRoom)
             {
-                room = connectionsRoom[hub.Context.ConnectionId];
+                if (connectionsRoom.ContainsKey(hub.Context.ConnectionId))
+                {
+                    room = connectionsRoom[hub.Context.ConnectionId];
+                }
             }
-            catch (Exception) { }
+           
             if(room != null)
             {
                 room.Disconnect(hub);

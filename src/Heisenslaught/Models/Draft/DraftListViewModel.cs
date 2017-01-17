@@ -17,5 +17,7 @@ namespace Heisenslaught.Models.Draft
         public string adminToken;
         public string team1DrafterToken;
         public string team2DrafterToken;
+        public string map;
+        public int phase;
     }
 }

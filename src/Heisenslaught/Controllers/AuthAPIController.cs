@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Heisenslaught.Services;
@@ -13,7 +13,7 @@ namespace Heisenslaught.Controllers
     {
         public AuthAPIController(IDraftService service, IHubConnectionsService hcs)
         {
-            var a = service;
+           
         }
 
         // GET: api/values

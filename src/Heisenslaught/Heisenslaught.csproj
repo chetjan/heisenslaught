@@ -53,6 +53,7 @@
     </PackageReference>
     <PackageReference Include="MongoDB.Driver" Version="2.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.2-beta1" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.6.9" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

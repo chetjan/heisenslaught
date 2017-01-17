@@ -20,7 +20,7 @@ namespace Heisenslaught.Persistence.Draft
             this.viewStore = viewStore;
             this.userManager = userManager;
 
-            if (!viewStore.CollectionExists)
+            if (viewStore.ShouldInitializeGenerators)
             {
                 RegenerateAll();
             }
@@ -74,7 +74,9 @@ namespace Heisenslaught.Persistence.Draft
                 draftToken = model.draftToken,
                 adminToken = model.adminToken,
                 team1DrafterToken = model.team1DrafterToken,
-                team2DrafterToken = model.team2DrafterToken
+                team2DrafterToken = model.team2DrafterToken,
+                map = model.config.map,
+                phase = (int)model.state.phase
             };
         }
 
@@ -96,7 +98,7 @@ namespace Heisenslaught.Persistence.Draft
         public void RegenerateAll()
         {
             viewStore.Collection.DeleteMany(Builders<DraftListViewModel>.Filter.Empty);
-            var drafts = draftStore.FindAll(null, null);
+            var drafts = draftStore.FindAll();
             foreach(var draft in drafts)
             {
                 OnDraftCreatedAsync(this, draft);
