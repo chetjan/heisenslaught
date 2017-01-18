@@ -179,7 +179,7 @@ export class SignalRConnectionService {
             }
         });
         if (manager) {
-            obsProxy['connect'] = obs.disconnect.bind(obs);
+            obsProxy['connect'] = obs.connect.bind(obs);
             obsProxy['disconnect'] = obs.disconnect.bind(obs);
         }
         return <ISignalRStateObservable>obsProxy;

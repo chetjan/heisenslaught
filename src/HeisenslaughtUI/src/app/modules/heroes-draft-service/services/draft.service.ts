@@ -17,9 +17,9 @@ export class DraftService extends SignalRHub<IDraftHubServerProxy>{
     private _draftTokens: string[];
     private _connectedUsersSubject: Subject<IDraftUser[]> = new Subject<IDraftUser[]>();
     private _connectedUsers: IDraftUser[] = [];
-
     private _draftConfig: IDraftConfigDTO;
     private _draftState: IDraftState;
+    private _reconnecting: boolean = false;
 
     @HubEventHandler()
     private updateConfig: Observable<IDraftConfigDTO>;
@@ -92,6 +92,11 @@ export class DraftService extends SignalRHub<IDraftHubServerProxy>{
         return this._connectedUsers;
     }
 
+    public disconnect() {
+        this._draftTokens = null;
+        super.disconnect();
+    }
+
     @HubMethodHandler('SetConnectedUsers')
     protected setConnectedUsers(users: IDraftUser[]): void {
         this._connectedUsers = users;
@@ -142,7 +147,32 @@ export class DraftService extends SignalRHub<IDraftHubServerProxy>{
 
     protected stateChange(newState: SignalRConnectionState, oldState: SignalRConnectionState): void {
         super.stateChange(newState, oldState);
-        console.log('State changed from ' + SignalRConnectionState[oldState] + ' to ' + SignalRConnectionState[newState]);
+        if (newState !== oldState) {
+            switch (newState) {
+                case SignalRConnectionState.DISCONNECTED:
+                    if (this._draftTokens) {
+                        this._reconnecting = true;
+                        console.log('UNEXPECTED DICONNECT', this._draftTokens);
+                        setTimeout(() => {
+                            console.log('Attemping reconnect');
+                            this.reconnect();
+
+                        }, 5000);
+                    }
+                    break;
+                case SignalRConnectionState.RECONNECTING:
+                    this._reconnecting = true;
+                    break;
+                case SignalRConnectionState.CONNECTED:
+                    if (this._reconnecting && this._draftTokens) {
+                        console.log('RECONNECTED AFTER DISCONNECT');
+                        this.connectToDraft(this._draftTokens[0], this._draftTokens[1]);
+                    }
+                    this._reconnecting = false;
+                    break;
+            }
+            console.log('!State changed from ' + SignalRConnectionState[oldState] + ' to ' + SignalRConnectionState[newState]);
+        }
     }
 
     private sortUsers() {
