@@ -822,6 +822,20 @@
         "iconLarge": ""
     },
     {
+        "id": "valeera",
+        "name": "Valeera",
+        "title": "TODO",
+        "franchise": "warcraft",
+        "roles": [
+            "melee",
+            "assassin",
+            "burst"
+        ],
+        "keywords": [],
+        "iconSmall": "http://placehold.it/80?text=V",
+        "iconLarge": ""
+    },
+    {
         "id": "varian",
         "name": "Varian",
         "title": "HIGH KING OF THE ALLIANCE",
