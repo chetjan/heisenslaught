@@ -94,22 +94,50 @@ export class DraftService extends SignalRHub<IDraftHubServerProxy>{
 
     @HubMethodHandler('SetConnectedUsers')
     protected setConnectedUsers(users: IDraftUser[]): void {
-
+        this._connectedUsers = users;
+        this.sortUsers();
+        this._connectedUsersSubject.next(users);
     }
 
     @HubMethodHandler('OnUserJoined')
     protected onUserJoined(user: IDraftUser): void {
-
+        let match = this._connectedUsers.find((item) => {
+            return item.id === user.id;
+        });
+        if (match) {
+            Object.assign(match, user);
+        } else {
+            this._connectedUsers.push(user);
+        }
+        this.sortUsers();
+        this._connectedUsersSubject.next(this.connectedUsers);
     }
 
     @HubMethodHandler('OnUserStatusUpdate')
     protected onUserStatusUpdate(user: IDraftUser): void {
-
+        let match = this._connectedUsers.find((item) => {
+            return item.id === user.id;
+        });
+        if (match) {
+            Object.assign(match, user);
+        } else {
+            this._connectedUsers.push(user);
+        }
+        this.sortUsers();
+        this._connectedUsersSubject.next(this.connectedUsers);
     }
 
     @HubMethodHandler('OnUserLeft')
     protected onUserLeft(user: IDraftUser): void {
-
+        let match = this._connectedUsers.find((item) => {
+            return item.id === user.id;
+        });
+        if (match) {
+            let idx = this._connectedUsers.indexOf(match);
+            this._connectedUsers.splice(idx, 1);
+            this.sortUsers();
+            this._connectedUsersSubject.next(this.connectedUsers);
+        }
     }
 
     protected stateChange(newState: SignalRConnectionState, oldState: SignalRConnectionState): void {
