@@ -33,7 +33,6 @@ export class NavigationComponent implements OnInit {
     if (!Array.isArray(config)) {
       baseRef = './';
       if (this.useChildren) {
-        console.log('useChildren', config);
         routes = config.children;
       } else {
         routes = [config];
@@ -41,7 +40,7 @@ export class NavigationComponent implements OnInit {
     } else {
       routes = config;
     }
-    this.buildNav(routes, baseRef);//this.router.url === '/' ? '' : this.router.url);
+    this.buildNav(routes, baseRef);
   }
 
   public buildNav(routes: Route[], baseRef: string) {
@@ -57,7 +56,6 @@ export class NavigationComponent implements OnInit {
           path += configItem.path;
         }
 
-        console.log('path', path);
         this.navItems.push({
           label: navConfig.label,
           path: path,

@@ -2,8 +2,6 @@
 import { Observable, Subscription, Subscriber } from 'rxjs';
 import { ISignalRConnection, ISignalRStateObservable, SignalRConnectionState, SignalRConnectionService } from './signalr-connection';
 export * from './signalr-connection';
-// for test
-import { Injectable } from '@angular/core';
 
 
 export function HubMethodHandler(methodName: string = null): MethodDecorator {
@@ -174,7 +172,6 @@ export abstract class SignalRHub<TServerHub> {
                             callProxy();
                         } else {
                             sub = this._connection.subscribe((state) => {
-                                console.log(this._connection.state);
                                 if (state === SignalRConnectionState.CONNECTED) {
                                     callProxy();
                                 }
@@ -192,68 +189,5 @@ export abstract class SignalRHub<TServerHub> {
         let oState = this._state;
         this._state = state;
         this.stateChange(state, oState);
-    }
-}
-
-
-
-// Test Stuff
-
-interface MyServerHub {
-    addListeners(): Promise<void>;
-}
-
-@Injectable()
-export class SignalRTestService extends SignalRHub<MyServerHub> {
-
-    @HubEventHandler('abc')
-    public onSomething: Observable<any>;
-
-    @HubEventHandler()
-    public onSomethingElse: Observable<any>;
-
-    constructor(signalRConnectionService: SignalRConnectionService) {
-        super(signalRConnectionService, 'publicServerEventHub');
-/*
-        //this.server.addListeners();
-        let sub = this.onSomething.subscribe(() => {
-            // do stuff here 
-        });
-        let sub2: Subscription;
-
-        setTimeout(() => {
-            sub.unsubscribe();
-        }, 5000);
-
-        setTimeout(() => {
-            sub = this.onSomething.subscribe(() => {
-                // do stuff here 
-            });
-        }, 8000);
-        setTimeout(() => {
-            sub2 = this.onSomethingElse.subscribe(() => {
-                // do stuff here 
-            });
-        }, 9000);
-
-        setTimeout(() => {
-            sub.unsubscribe();
-        }, 10000);
-
-        setTimeout(() => {
-            sub2.unsubscribe();
-        }, 20000);
-*/
-    }
-
-    @HubMethodHandler()
-    public updateDraftState(): void {
-        console.log('updated draft state');
-    }
-
-
-    protected stateChange(newState: SignalRConnectionState, oldState: SignalRConnectionState): void {
-        super.stateChange(newState, oldState);
-        console.log('State changed from ' + SignalRConnectionState[oldState] + ' to ' + SignalRConnectionState[newState]);
     }
 }

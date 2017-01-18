@@ -1,4 +1,4 @@
-import { NgModule, ValueProvider } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MdCardModule } from '@angular/material/card';
@@ -48,8 +48,6 @@ import { DraftConnectionStatusComponent } from './components/draft-connection-st
     DraftScreenComponent,
     DraftConnectionStatusComponent
   ],
-  providers: [
-
-  ]
+  providers: []
 })
 export class HeroesDraftingModule { }

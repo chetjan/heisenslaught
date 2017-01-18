@@ -22,9 +22,9 @@ import { LoginScreenComponent } from './screens/login-screen/login-screen.compon
 import { AuthGuard } from './modules/users/shared/guards/auth-guard.service';
 import { LoginBarComponent } from './components/login-bar/login-bar.component';
 
-
 import { HeroesService } from './modules/heroes-data-service/services/heroes.service';
 import { DraftService } from './modules/heroes-draft-service/services/draft.service';
+
 
 @NgModule({
   declarations: [
