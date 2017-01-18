@@ -12,9 +12,12 @@ namespace Heisenslaught.Hubs
 
         private ServerEventService eventService;
 
-        public PublicServerEventHub(ServerEventService eventService)
+        public PublicServerEventHub(
+            //ServerEventService eventService
+            )
         {
-            this.eventService = eventService;
+            ///this.eventService = eventService;
+            var a = 123;
         }
 
         public void AddListeners()

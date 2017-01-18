@@ -3,7 +3,7 @@ import { LoginService } from './modules/users/shared/services/login.service';
 import { Observable } from 'rxjs';
 
 
-import { SignalRConnection, SignalRConnectionState } from './services/signalr/signalr-connection';
+import { SignalRTestService } from './services/signalr/signalr-hub';
 
 
 @Component({
@@ -17,13 +17,13 @@ export class AppComponent {
   constructor(
     private loginService: LoginService,
     private elm: ElementRef,
-    signalR: SignalRConnection
+    //signalR: SignalRTestService
   ) {
     let user = JSON.parse((<HTMLElement>elm.nativeElement).getAttribute('authenticatedUser'));
     (<HTMLElement>elm.nativeElement).removeAttribute('authenticatedUser');
     loginService.initialize(user);
 
-
+/*
     let sub = signalR.subscribe((state: SignalRConnectionState) => {
       console.log('state', SignalRConnectionState[state]);
     });
@@ -31,6 +31,7 @@ export class AppComponent {
     setTimeout(() => {
      // signalR.reconnect();
     }, 5000);
+    */
 
   }
 

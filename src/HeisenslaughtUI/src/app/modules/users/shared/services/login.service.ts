@@ -4,7 +4,7 @@ import { LoginWindow } from './login-window';
 import { Subject, Observable, Subscriber } from 'rxjs';
 import { Http } from '@angular/http';
 import { AuthenticatedUser } from './types/user';
-import { SignalRConnection } from '../../../../services/signalr/signalr-connection';
+import { SignalRConnectionService } from '../../../../services/signalr/signalr-connection';
 
 export * from './types/user';
 
@@ -22,7 +22,7 @@ export class LoginService {
     private http: Http,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    @Optional() private signalRConnection: SignalRConnection
+    @Optional() private signalRService: SignalRConnectionService
   ) {
     if (window.localStorage) {
       this._returnUrl = window.localStorage.getItem('login.returnUrl');
@@ -79,8 +79,8 @@ export class LoginService {
   }
 
   private reconnectSignalR(): void {
-    if (this.signalRConnection) {
-      this.signalRConnection.reconnect();
+    if (this.signalRService) {
+      this.signalRService.reconnectAll();
     }
   }
 

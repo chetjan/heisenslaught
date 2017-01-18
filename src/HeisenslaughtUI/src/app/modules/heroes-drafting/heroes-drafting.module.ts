@@ -12,9 +12,6 @@ import { MdButtonToggleModule } from '@angular/material/button-toggle';
 
 import { HeroesDraftingRoutingModule } from './heroes-drafting-routing.module';
 
-import { HeroesService } from '../heroes-data-service/heroes-data-service.module';
-import { DraftService } from '../heroes-draft-service/heroes-draft-service.module';
-
 import { HeroIconComponent, HeroPickComponent, HeroSearchComponent, TeamHeroPicksComponent, HeroFilter } from './components/components';
 import { HeroesCommonModule } from '../heroes-common/heroes-common.module';
 import { AppCommonModule } from '../app-common/app-common.module';
@@ -52,8 +49,7 @@ import { DraftConnectionStatusComponent } from './components/draft-connection-st
     DraftConnectionStatusComponent
   ],
   providers: [
-    HeroesService,
-    <ValueProvider>{ provide: DraftService, useValue: new DraftService() }
+
   ]
 })
 export class HeroesDraftingModule { }

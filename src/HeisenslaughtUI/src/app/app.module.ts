@@ -8,7 +8,7 @@ import { MaterialModule } from '@angular/material';
 import { MdSidenavModule } from '@angular/material/sidenav';
 import { CovalentCoreModule } from '@covalent/core';
 
-import { SignalRConnection } from './services/signalr/signalr-connection';
+import { SignalRConnectionService } from './services/signalr/signalr-connection';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -23,6 +23,8 @@ import { AuthGuard } from './modules/users/shared/guards/auth-guard.service';
 import { LoginBarComponent } from './components/login-bar/login-bar.component';
 
 
+import { HeroesService } from './modules/heroes-data-service/services/heroes.service';
+import { DraftService } from './modules/heroes-draft-service/services/draft.service';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,13 @@ import { LoginBarComponent } from './components/login-bar/login-bar.component';
     AppRoutingModule
   ],
   exports: [],
-  providers: [LoginService, AuthGuard, SignalRConnection],
+  providers: [
+    LoginService,
+    AuthGuard,
+    SignalRConnectionService,
+    HeroesService,
+    DraftService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

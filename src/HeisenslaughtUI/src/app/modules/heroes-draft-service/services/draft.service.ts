@@ -1,4 +1,158 @@
 import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { SignalRHub, SignalRConnectionService, HubEventHandler, HubMethodHandler, SignalRConnectionState }
+    from '../../../services/signalr/signalr-hub';
+import { IDraftHubServerProxy } from './types/draft-hub-proxy';
+import { IDraftConfigAdminDTO, IDraftConfigDTO, ICreateDraftDTO } from './types/draft-config';
+import { IDraftState } from './types/draft-state';
+import { IDraftUser } from './types/draft-users';
+
+export { SignalRConnectionState } from '../../../services/signalr/signalr-hub';
+export * from './types/draft-state';
+export * from './types/draft-users';
+export * from './types/draft-config';
+
+@Injectable()
+export class DraftService extends SignalRHub<IDraftHubServerProxy>{
+    private _draftTokens: string[];
+    private _connectedUsersSubject: Subject<IDraftUser[]> = new Subject<IDraftUser[]>();
+    private _connectedUsers: IDraftUser[] = [];
+
+    private _draftConfig: IDraftConfigDTO;
+    private _draftState: IDraftState;
+
+    @HubEventHandler()
+    private updateConfig: Observable<IDraftConfigDTO>;
+
+    @HubEventHandler()
+    private updateDraftState: Observable<IDraftState>;
+
+
+    constructor(signalRConnectionService: SignalRConnectionService) {
+        super(signalRConnectionService, 'draftHub');
+    }
+
+    public connectToDraft(draftToken: string, userToken?: string): Promise<IDraftConfigDTO> {
+        this._draftTokens = [draftToken, userToken];
+        this.connect();
+        let p = this.server.connectToDraft(draftToken, userToken);
+        p.then((config) => {
+            this._draftConfig = config;
+            this._draftState = config.state;
+            this.emitClientEvent('updateConfig', config);
+            this.emitClientEvent('updateDraftState', config.state);
+        });
+        return p;
+    }
+
+    public createDraft(createCfg: ICreateDraftDTO): Promise<IDraftConfigAdminDTO> {
+        let p = this.server.createDraft(createCfg);
+        p.then((config) => {
+            this._draftConfig = config;
+            this._draftState = config.state;
+        });
+        return p;
+    }
+
+    // TODO: refactor for consistancy - resetDraft vs restartDraft
+    public resetDraft(draftToken: string, adminToken: string): Promise<IDraftConfigAdminDTO> {
+        let p = this.server.restartDraft(draftToken, adminToken);
+        p.then((config) => {
+            this._draftConfig = config;
+            this._draftState = config.state;
+        });
+        return p;
+    }
+
+    public closeDraft(draftToken: string, adminToken: string): Promise<void> {
+        return this.server.closeDraft(draftToken, adminToken);
+    }
+
+    public setReady(draftToken: string, teamToken: string): Promise<boolean> {
+        return this.server.setReady(draftToken, teamToken);
+    }
+
+    public pickHero(heroId: string, draftToken: string, teamToken: string): Promise<boolean> {
+        return this.server.pickHero(heroId, draftToken, teamToken);
+    }
+
+    public get draftConfigObservable(): Observable<IDraftConfigDTO> {
+        return this.updateConfig;
+    }
+
+    public get draftStateObservable(): Observable<IDraftState> {
+        return this.updateDraftState;
+    }
+
+    public get connectedUserObsevable(): Observable<IDraftUser[]> {
+        return this._connectedUsersSubject.asObservable();
+    }
+
+    public get connectedUsers(): IDraftUser[] {
+        return this._connectedUsers;
+    }
+
+    @HubMethodHandler('SetConnectedUsers')
+    protected setConnectedUsers(users: IDraftUser[]): void {
+
+    }
+
+    @HubMethodHandler('OnUserJoined')
+    protected onUserJoined(user: IDraftUser): void {
+
+    }
+
+    @HubMethodHandler('OnUserStatusUpdate')
+    protected onUserStatusUpdate(user: IDraftUser): void {
+
+    }
+
+    @HubMethodHandler('OnUserLeft')
+    protected onUserLeft(user: IDraftUser): void {
+
+    }
+
+    protected stateChange(newState: SignalRConnectionState, oldState: SignalRConnectionState): void {
+        super.stateChange(newState, oldState);
+        console.log('State changed from ' + SignalRConnectionState[oldState] + ' to ' + SignalRConnectionState[newState]);
+    }
+
+    private sortUsers() {
+        this._connectedUsers.sort((a, b) => {
+            let aT = a.connectionTypes & 1;
+            let bT = b.connectionTypes & 1;
+            if (aT > bT) {
+                return -1;
+            } if (aT < bT) {
+                return 1;
+            }
+
+            aT = a.connectionTypes & 2;
+            bT = b.connectionTypes & 2;
+            if (aT > bT) {
+                return -1;
+            } if (aT < bT) {
+                return 1;
+            }
+
+            aT = a.connectionTypes & 4;
+            bT = b.connectionTypes & 4;
+            if (aT > bT) {
+                return -1;
+            } if (aT < bT) {
+                return 1;
+            }
+
+            return a.name.localeCompare(b.name);
+        });
+    }
+
+}
+
+
+
+/*
+import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs/Rx';
 
 import { IDraftConfigAdminDTO, IDraftConfigDTO, ICreateDraftDTO } from './types/draft-config';
@@ -11,6 +165,7 @@ export { ICreateDraftDTO, IDraftConfigAdminDTO, IDraftConfigDTO, IDraftConfigDra
 export { IDraftState, DraftPhase } from './types/draft-state';
 export { IDraftUser } from './types/draft-users';
 export { HubConnectionState } from './types/hub-connection-sate';
+
 
 @Injectable()
 export class DraftService {
@@ -28,6 +183,7 @@ export class DraftService {
     public connectedUsers: IDraftUser[] = [];
 
     constructor() {
+      
         try {
             this.hub = $.connection['draftHub'];
             this.hub.client.updateConfig = (config: IDraftConfigDTO) => {
@@ -113,6 +269,7 @@ export class DraftService {
         } catch (e) {
             console.error(e);
         }
+        
     }
 
     private sortUsers() {
@@ -307,3 +464,4 @@ export class DraftService {
         });
     }
 }
+*/
