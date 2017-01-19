@@ -43,32 +43,35 @@ namespace Heisenslaught.Infrastructure
 
         public DraftConnectionType Connect(DraftHub hub, HSUser user, string authToken)
         {
-            var connectionType = GetConnectionType(authToken);
-            hub.Groups.Add(hub.Context.ConnectionId, RoomName);
-            _conService.OnUserJoinedChannel(user, hub, RoomName, (int)connectionType);
+            if (user != null)
+            {
+                var connectionType = GetConnectionType(authToken);
+                hub.Groups.Add(hub.Context.ConnectionId, RoomName);
+                _conService.OnUserJoinedChannel(user, hub, RoomName, (int)connectionType);
 
-            hub.Clients.Caller.SetConnectedUsers(GetDraftConnections());
-            hub.Clients.Group(RoomName, new string[] { hub.Context.ConnectionId }).OnUserJoined(GetDraftConnection(user.Id));
-
-            UpdateDraftState(hub);
-            return connectionType;
+                hub.Clients.Caller.SetConnectedUsers(GetDraftConnections());
+                hub.Clients.Group(RoomName, new string[] { hub.Context.ConnectionId }).OnUserJoined(GetDraftConnection(user.Id));
+                return connectionType;
+            }
+            return DraftConnectionType.NONE;
         }
 
         public void Disconnect(DraftHub hub)
         {
             var user = _conService.GetUserFromConnection(hub.Context.ConnectionId);
-            var connection = GetDraftConnection(user.Id);
-            _conService.OnUserLeftChannel(hub, RoomName);
-            if(user == null || !_conService.IsUserConnected(user.Id, hub.GetType(), RoomName))
-            {
-                // send user left message
-                hub.Clients.Group(RoomName, new string[] { hub.Context.ConnectionId }).OnUserLeft(connection);
+            if (user != null) {
+                var connection = GetDraftConnection(user.Id);
+                _conService.OnUserLeftChannel(hub, RoomName);
+                if(user == null || !_conService.IsUserConnected(user.Id, hub.GetType(), RoomName))
+                {
+                    // send user left message
+                    hub.Clients.Group(RoomName, new string[] { hub.Context.ConnectionId }).OnUserLeft(connection);
+                }
+                else
+                {
+                    hub.Clients.Group(RoomName, new string[] { hub.Context.ConnectionId }).OnUserStatusUpdate(GetDraftConnection(user.Id));
+                }
             }
-            else
-            {
-                hub.Clients.Group(RoomName, new string[] { hub.Context.ConnectionId }).OnUserStatusUpdate(GetDraftConnection(user.Id));
-            }
-            UpdateDraftState(hub);
         }
 
         protected IEnumerable<DraftRoomConnection> _getDraftConnections(string userId = null)
@@ -268,6 +271,7 @@ namespace Heisenslaught.Infrastructure
     [Flags]
     public enum DraftConnectionType
     {
+        NONE = 0,
         DRAFTER_TEAM_1 = 1,
         DRAFTER_TEAM_2 = 2,
         OBSERVER = 4,

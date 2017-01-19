@@ -94,8 +94,6 @@ namespace Heisenslaught
             services.AddSingleton<IHeroDataService, HeroDataService>();
             services.AddSingleton<ServerEventService, ServerEventService>();
             
-
-
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Identity managers/validators

@@ -82,80 +82,90 @@ namespace Heisenslaught.Services
 
         public HubConnection OnUserConnected(HSUser user, Hub hub)
         {
-            _lock.EnterWriteLock();
-            try
+            if (user != null)
             {
-                var hubConnection = FindHubConnection(hub);
-                if (hubConnection == null)
+                _lock.EnterWriteLock();
+                try
                 {
-                    var u = GetConnectedUser(user.Id);
-                    if (u == null)
+                    var hubConnection = FindHubConnection(hub);
+                    if (hubConnection == null)
                     {
-                        u = user;
-                        _connectedUsers.Add(u.Id, u);
+                        var u = GetConnectedUser(user.Id);
+                        if (u == null)
+                        {
+                            u = user;
+                            _connectedUsers.Add(u.Id, u);
+                        }
+                        hubConnection = new HubConnection(u, hub);
+                        _hubConnections.Add(hubConnection);
                     }
-                    hubConnection = new HubConnection(u, hub);
-                    _hubConnections.Add(hubConnection);
+                    return hubConnection;
                 }
-                return hubConnection;
+                finally
+                {
+                    _lock.ExitWriteLock();
+                }
             }
-            finally
-            {
-                _lock.ExitWriteLock();
-            }
+            return null;
         }
 
         public void OnUserDisconnected(HSUser user, Hub hub)
         {
-            _lock.EnterWriteLock();
-            try
+            if(user != null)
             {
-                var hubConnection = FindHubConnection(hub);
-                if (hubConnection != null)
+                _lock.EnterWriteLock();
+                try
                 {
-                    if (_hubConnections.Remove(hubConnection))
+                    var hubConnection = FindHubConnection(hub);
+                    if (hubConnection != null)
                     {
-                        var userHubConnections = FindHubConnectionByUserId(user.Id);
-                        if (userHubConnections.Count() == 0)
+                        if (_hubConnections.Remove(hubConnection))
                         {
-                            _connectedUsers.Remove(user.Id);
-                            // remove channel connections
-                            var channels = FindChannelConnectionsByUserId(user.Id);
-                            for (var i = 0; i < channels.Count(); i++)
+                            var userHubConnections = FindHubConnectionByUserId(user.Id);
+                            if (userHubConnections.Count() == 0)
                             {
-                                var channel = channels.ElementAt(i);
-                                _channelConnections.Remove(channel);
+                                _connectedUsers.Remove(user.Id);
+                                // remove channel connections
+                                var channels = FindChannelConnectionsByUserId(user.Id);
+                                for (var i = 0; i < channels.Count(); i++)
+                                {
+                                    var channel = channels.ElementAt(i);
+                                    _channelConnections.Remove(channel);
+                                }
                             }
                         }
                     }
                 }
-            }
-            finally
-            {
-                _lock.ExitWriteLock();
+                finally
+                {
+                    _lock.ExitWriteLock();
+                }
             }
         }
 
         public void OnUserJoinedChannel(HSUser user, Hub hub, string channelName, int flag = 0)
         {
-            _lock.EnterWriteLock();
-            try
+            if(user != null)
             {
-                var channelConnection = FindChannelConnection(hub, channelName);
-                if (channelConnection == null)
+                _lock.EnterWriteLock();
+                try
                 {
-                    var connection = FindHubConnection(hub);
-                    if (connection == null)
+                    var channelConnection = FindChannelConnection(hub, channelName);
+                    if (channelConnection == null)
                     {
-                        connection = OnUserConnected(user, hub);
+                        var connection = FindHubConnection(hub);
+                        if (connection == null)
+                        {
+                            connection = OnUserConnected(user, hub);
+                        }
+                        channelConnection = new HubChannelConnection(connection, channelName, flag);
+                        _channelConnections.Add(channelConnection);
                     }
-                    channelConnection = new HubChannelConnection(connection, channelName, flag);
-                    _channelConnections.Add(channelConnection);
                 }
-            }
-            finally
-            {
-                _lock.ExitWriteLock();
+                finally
+                {
+                    _lock.ExitWriteLock();
+                }
             }
         }
 

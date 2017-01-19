@@ -1,7 +1,7 @@
 import { Component, ElementRef } from '@angular/core';
 import { LoginService } from './modules/users/shared/services/login.service';
 import { Observable } from 'rxjs';
-
+import { ServerEventService } from './services/signalr/signalr-server-event.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +13,8 @@ export class AppComponent {
 
   constructor(
     private loginService: LoginService,
-    private elm: ElementRef
+    private elm: ElementRef,
+    serverEventService: ServerEventService
   ) {
     let user = JSON.parse((<HTMLElement>elm.nativeElement).getAttribute('authenticatedUser'));
     (<HTMLElement>elm.nativeElement).removeAttribute('authenticatedUser');

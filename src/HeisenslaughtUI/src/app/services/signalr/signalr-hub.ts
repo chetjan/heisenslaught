@@ -1,8 +1,37 @@
 
 import { Observable, Subscription, Subscriber } from 'rxjs';
-import { ISignalRConnection, ISignalRStateObservable, SignalRConnectionState, SignalRConnectionService } from './signalr-connection';
+import { ISignalRConnection, SignalRStateChange, SignalRConnectionState, SignalRConnectionService } from './signalr-connection';
 export * from './signalr-connection';
 
+// ulgly hack to allow semi lazy hubs
+export function Hub(hubName: string): ClassDecorator {
+    return (target: any): void => {
+        Reflect.defineMetadata(HubMethodHandler, hubName, target);
+        let hubKey = hubName.toLowerCase();
+        let proxies: Object = $.connection.hub.proxies;
+        if (proxies.hasOwnProperty(hubKey)) {
+            let client = proxies[hubKey].client;
+
+            let clientMethods: Array<{ name: string, method: Function, self?: any }> =
+                Reflect.getMetadata(HubMethodHandler, target.prototype) || [];
+            for (let i = 0; i < clientMethods.length; i++) {
+                let def = clientMethods[i];
+                client[def.name] = function (...args: any[]) {
+                    return def.method.apply(def.self, args);
+                };
+            }
+
+            let eventProperties: Array<{ name: string, property: string, callback?: Function }> =
+                Reflect.getMetadata(HubEventHandler, target.prototype) || [];
+            for (let i = 0; i < eventProperties.length; i++) {
+                let def = eventProperties[i];
+                client[def.name] = function (...args: any[]) {
+                    def.callback.apply(def.callback, args);
+                };
+            }
+        }
+    };
+}
 
 export function HubMethodHandler(methodName: string = null): MethodDecorator {
     return (target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): void => {
@@ -33,17 +62,19 @@ interface HubPoxy<TServerHub> extends SignalR.Hub.Proxy {
 
 export abstract class SignalRHub<TServerHub> {
     private _connection: ISignalRConnection;
-    private _stateObserver: ISignalRStateObservable;
+    private _stateObserver: Observable<SignalRStateChange>;
     private _state: SignalRConnectionState;
     private _serverMethods: TServerHub;
     private _hub: HubPoxy<TServerHub>;
     private _subscription: Subscription;
     private _hasEventSubs: boolean = false;
+    private _hubName: string;
 
-    public constructor(signalRConnectionService: SignalRConnectionService, hubName: string) {
-        this._connection = signalRConnectionService.getConnection('publicServerEventHub');
-        this._stateObserver = signalRConnectionService.getState('publicServerEventHub');
-        this._state = this._stateObserver.state;
+    public constructor(signalRConnectionService: SignalRConnectionService, hubName: string, connectionUrl?: string) {
+        this._hubName = hubName;
+        this._connection = signalRConnectionService.getConnection(hubName, connectionUrl);
+        this._stateObserver = this._connection.stateChange;
+        this._state = this._connection.state;
         this._hub = $.connection[hubName];
         this.setupHubEvents();
         this.setupClientMethods();
@@ -54,7 +85,7 @@ export abstract class SignalRHub<TServerHub> {
     }
 
     public get hubName(): string {
-        return this._connection.hubName;
+        return this._hubName;
     }
 
     public get server(): TServerHub {
@@ -65,7 +96,7 @@ export abstract class SignalRHub<TServerHub> {
         return this._state;
     }
 
-    public get stateObserver(): ISignalRStateObservable {
+    public get stateObserver(): Observable<SignalRStateChange> {
         return this._stateObserver;
     }
 
@@ -97,7 +128,7 @@ export abstract class SignalRHub<TServerHub> {
     public reconnect() {
         if (this._state === SignalRConnectionState.DISCONNECTED) {
             if (this._hasEventSubs || this._subscription) {
-                this._connection.connect();
+                this._connection.start();
             }
         }
     }
@@ -109,25 +140,20 @@ export abstract class SignalRHub<TServerHub> {
     }
 
     private setupClientMethods(): void {
-        let clientMethods: Array<{ name: string, method: Function }> =
+        let clientMethods: Array<{ name: string, method: Function, self?: any }> =
             Reflect.getMetadata(HubMethodHandler, this.constructor.prototype) || [];
         clientMethods.forEach(value => {
-            if (this._hub.client[value.name]) {
-                throw new Error('Duplicate client method "' + value.name + '" on hub "' + this.hubName + '"');
-            }
-            this._hub.client[value.name] = value.method.bind(this);
+            value.self = this;
         });
     }
 
     private setupHubEvents(): void {
-        let eventProperties: Array<{ name: string, property: string }> =
+        let eventProperties: Array<{ name: string, property: string, callback?: Function }> =
             Reflect.getMetadata(HubEventHandler, this.constructor.prototype) || [];
         eventProperties.forEach(value => {
             let currSubscriber: Subscriber<SignalRConnectionState> = null;
-            if (this._hub.client[value.name]) {
-                throw new Error('Duplicate event method "' + value.name + '" on hub "' + this.hubName + '"');
-            }
-            this._hub.client[value.name] = (event: any) => {
+            value.callback = (event: any) => {
+                console.log('event callback', currSubscriber);
                 if (currSubscriber) {
                     currSubscriber.next(event);
                 }
@@ -185,9 +211,10 @@ export abstract class SignalRHub<TServerHub> {
 
     protected stateChange(newState: SignalRConnectionState, oldState: SignalRConnectionState): void { }
 
-    private handleStateChanged(state: SignalRConnectionState): void {
-        let oState = this._state;
-        this._state = state;
-        this.stateChange(state, oState);
+    private handleStateChanged(state: SignalRStateChange): void {
+        this._state = state.newState;
+        this.stateChange(state.newState, state.oldState);
     }
 }
+
+

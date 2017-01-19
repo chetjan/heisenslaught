@@ -25,6 +25,7 @@ import { LoginBarComponent } from './components/login-bar/login-bar.component';
 import { HeroesService } from './modules/heroes-data-service/services/heroes.service';
 import { DraftService } from './modules/heroes-draft-service/services/draft.service';
 
+import { ServerEventService } from './services/signalr/signalr-server-event.service';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { DraftService } from './modules/heroes-draft-service/services/draft.serv
     AuthGuard,
     SignalRConnectionService,
     HeroesService,
-    DraftService
+    DraftService,
+    ServerEventService
   ],
   bootstrap: [AppComponent]
 })

@@ -11,9 +11,12 @@ namespace Heisenslaught.Controllers
     [Route("api/auth")]
     public class AuthAPIController : Controller
     {
-        public AuthAPIController(IDraftService service, IHubConnectionsService hcs)
+        private readonly ServerEventService eventService;
+
+
+        public AuthAPIController(ServerEventService eventService)
         {
-           
+            this.eventService = eventService;
         }
 
         // GET: api/values

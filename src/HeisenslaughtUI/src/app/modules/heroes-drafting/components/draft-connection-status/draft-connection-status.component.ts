@@ -28,7 +28,7 @@ export class DraftConnectionStatusComponent implements OnInit, OnDestroy {
     this.updateUserConnections(this.draftService.connectedUsers);
 
     this.connectionStateSub = this.draftService.stateObserver.subscribe((state) => {
-      this.updateConnectionState(state);
+      this.updateConnectionState(state.newState);
     });
     this.userSubscription = this.draftService.connectedUserObsevable.subscribe((users) => {
       this.updateUserConnections(users);

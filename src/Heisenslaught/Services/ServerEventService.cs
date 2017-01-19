@@ -17,38 +17,36 @@ namespace Heisenslaught.Services
 
     public class ServerEventService
     {
-    
-        private readonly HashSet<string> publicContexts = new HashSet<string>();
-        private readonly Dictionary<string, Func<Hub, bool>> protectedContexts = new Dictionary<string, Func<Hub, bool>>();
-
-        private readonly IHubConnectionContext<PublicServerEventHub> publicHub;
-        private readonly IHubConnectionContext<ProtectedServerEventHub> protectedHub;
-
-
-        public ServerEventService(IHubConnectionContext<PublicServerEventHub> publicHub, IHubConnectionContext<ProtectedServerEventHub> protectedHub)
+        private readonly Dictionary<string, Func<Hub, bool>> eventContexts = new Dictionary<string, Func<Hub, bool>>();
+        private readonly IServiceProvider serviceProvider;
+        private IHubConnectionContext<ServerEventHub> hubContext;
+       
+        public ServerEventService(IServiceProvider serviceProvider)
         {
-            this.protectedHub = protectedHub;
-            this.publicHub = publicHub;
+            this.serviceProvider = serviceProvider;
+            registerEventContext("system.broadcast.all");
+            registerEventContext("system.broadcast.users");
         }
 
-        public void registerPublicEventContext(string name)
+        private IHubConnectionContext<ServerEventHub> Hub
         {
-            lock (publicContexts)
-            {
-                if (!publicContexts.Add(name))
+            get {
+                if(hubContext == null)
                 {
-                    // throw error;
+                    hubContext = (IHubConnectionContext<ServerEventHub>)serviceProvider.GetService(typeof(IHubConnectionContext<ServerEventHub>));
                 }
+                return hubContext;
             }
         }
 
-        public void registerProtectedEventContext(string name, Func<Hub,bool> permissionCheck = null)
+
+        public void registerEventContext(string name, Func<Hub,bool> permissionCheck = null)
         {
-            lock (protectedContexts)
+            lock (eventContexts)
             {
-                if (protectedContexts.ContainsKey(name))
+                if (!eventContexts.ContainsKey(name))
                 {
-                    protectedContexts.Add(name, permissionCheck);
+                    eventContexts.Add(name, permissionCheck);
                 }
                 else
                 {
@@ -57,31 +55,16 @@ namespace Heisenslaught.Services
             }
         }
 
-
-        public void ConnectToPublicContexts(Hub hub, string[] contexts)
+        public void AddEventContextListeners(Hub hub, string[] contexts)
         {
-            lock (publicContexts)
-            {
-                for(var i = 0; i < contexts.Length; i++)
-                {
-                    var name = contexts[i];
-                    if (publicContexts.Contains(name))
-                    {
-                        hub.Groups.Add(hub.Context.ConnectionId, name);
-                    }
-                }
-            }
-        }
-        public void ConnectToProtectedContexts(Hub hub, string[] contexts)
-        {
-            lock (protectedContexts)
+            lock (eventContexts)
             {
                 for (var i = 0; i < contexts.Length; i++)
                 {
                     var name = contexts[i];
-                    if (protectedContexts.ContainsKey(name))
+                    if (eventContexts.ContainsKey(name))
                     {
-                        var check = protectedContexts[name];
+                        var check = eventContexts[name];
                         if(check == null || check(hub))
                         {
                             hub.Groups.Add(hub.Context.ConnectionId, name);
@@ -90,15 +73,15 @@ namespace Heisenslaught.Services
                 }
             }
         }
-
-        public void DisconnectFromPublicContexts(Hub hub, string[] contexts)
+   
+        public void RemoveEventContextListeners(Hub hub, string[] contexts)
         {
-            lock (publicContexts)
+            lock (eventContexts)
             {
                 for (var i = 0; i < contexts.Length; i++)
                 {
                     var name = contexts[i];
-                    if (publicContexts.Contains(name))
+                    if (eventContexts.ContainsKey(name))
                     {
                         hub.Groups.Remove(hub.Context.ConnectionId, name);
                     }
@@ -106,33 +89,9 @@ namespace Heisenslaught.Services
             }
         }
 
-        public void DisconnectFromProtectedContexts(Hub hub, string[] contexts)
+        public void Emit(string context, object data)
         {
-            lock (protectedContexts)
-            {
-                for (var i = 0; i < contexts.Length; i++)
-                {
-                    var name = contexts[i];
-                    if (protectedContexts.ContainsKey(name))
-                    {
-                        hub.Groups.Remove(hub.Context.ConnectionId, name);
-                    }
-                }
-            }
-        }
-
-        public void EmitPublic(string context, object data)
-        {
-            publicHub.Group(context).Clients.All.emit(new ServerEvent {
-                context = context,
-                type = data.GetType().Name,
-                data = data
-            });
-        }
-
-        public void EmitProtected(string context, object data)
-        {
-            protectedHub.Group(context).Clients.All.emit(new ServerEvent
+            Hub.Group(context).Clients.All.emit(new ServerEvent
             {
                 context = context,
                 type = data.GetType().Name,
