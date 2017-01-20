@@ -1,5 +1,6 @@
 ﻿using AspNet.Security.OAuth.BattleNet;
 using Heisenslaught.Config;
+using Heisenslaught.Extentions;
 using Heisenslaught.Models.Users;
 using Heisenslaught.Persistence.Draft;
 using Heisenslaught.Persistence.User;
@@ -16,8 +17,6 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System;
 
-using Heisenslaught.Extentions;
-using Heisenslaught.Persistence.service;
 
 namespace Heisenslaught
 {
@@ -80,13 +79,21 @@ namespace Heisenslaught
                 return new DraftStore(db);
             });
 
-            services.AddSingleton<DraftListViewStore>(provider =>
+            services.AddSingleton(provider =>
             {
                 var options = provider.GetService<IOptions<MongoSettings>>();
                 var client = new MongoClient(options.Value.ConnectionString);
                 var db = client.GetDatabase(options.Value.Database);
                 return new DraftListViewStore(db);
             });
+            services.AddSingleton(provider =>
+            {
+                var options = provider.GetService<IOptions<MongoSettings>>();
+                var client = new MongoClient(options.Value.ConnectionString);
+                var db = client.GetDatabase(options.Value.Database);
+                return new DraftJoinedStore(db);
+            });
+            
 
             // services
             services.AddSingleton<IHubConnectionsService, HubConnectionsService>();

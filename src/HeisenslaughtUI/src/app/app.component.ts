@@ -19,6 +19,9 @@ export class AppComponent {
     let user = JSON.parse((<HTMLElement>elm.nativeElement).getAttribute('authenticatedUser'));
     (<HTMLElement>elm.nativeElement).removeAttribute('authenticatedUser');
     loginService.initialize(user);
+    serverEventService.get('system.broadcast.all').subscribe((event) => {
+      console.log('event', event);
+    });
   }
 
   public get user(): Observable<any> {

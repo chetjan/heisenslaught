@@ -18,17 +18,25 @@ namespace Heisenslaught.Services
         private readonly IHeroDataService _heroDataService;
         private readonly UserManager<HSUser> _userManager;
         private readonly IHubConnectionsService _connectionService;
+        private readonly DraftJoinedStore _joinedStore;
 
         private Dictionary<string, DraftRoom> activeRooms = new Dictionary<string, DraftRoom>();
         private Dictionary<string, DraftRoom> connectionsRoom = new Dictionary<string, DraftRoom>();
 
 
-        public DraftService(IDraftStore draftStore, IHeroDataService heroDataService, UserManager<HSUser> userManager, IHubConnectionsService connectionService)
+        public DraftService(
+            IDraftStore draftStore, 
+            IHeroDataService heroDataService, 
+            UserManager<HSUser> userManager, 
+            IHubConnectionsService connectionService,
+            DraftJoinedStore joinedStore
+        )
         {
             _draftStore = draftStore;
             _heroDataService = heroDataService;
             _userManager = userManager;
             _connectionService = connectionService;
+            _joinedStore = joinedStore;
         }
         public List<DraftRoom> ActiveRooms{
             get
@@ -61,7 +69,7 @@ namespace Heisenslaught.Services
            
             var user = await _userManager.GetUserAsync((ClaimsPrincipal)hub.Context.User);
             var connectionType = room.Connect(hub, user, authToken);
-
+            _joinedStore.Create(new UserJoinedDraftModel(user.Id, room.DraftModel.Id, connectionType));
             TryActivateDraftRoom(room);
             
 
