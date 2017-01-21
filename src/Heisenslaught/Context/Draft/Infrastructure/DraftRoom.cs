@@ -1,14 +1,12 @@
-﻿using Heisenslaught.DataTransfer;
-using Heisenslaught.Exceptions;
-using Heisenslaught.Models.Draft;
-using Heisenslaught.Models.Users;
-using Heisenslaught.Services;
+﻿using Heisenslaught.HeroData;
+using Heisenslaught.Infrastructure.Hubs;
+using Heisenslaught.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace Heisenslaught.Infrastructure
+namespace Heisenslaught.Draft
 {
     public class DraftRoom
     {
@@ -74,7 +72,7 @@ namespace Heisenslaught.Infrastructure
             }
         }
 
-        protected IEnumerable<DraftRoomConnection> _getDraftConnections(string userId = null)
+        protected IEnumerable<DraftRoomConnection> GetDraftRoomConnections(string userId = null)
         {
             var result =_conService.Query<IEnumerable<DraftRoomConnection>>((List<HubChannelConnection> cons) => {
                 var q = from c in cons
@@ -93,12 +91,12 @@ namespace Heisenslaught.Infrastructure
 
         protected DraftRoomConnection GetDraftConnection(string userId)
         {
-            return _getDraftConnections(userId).FirstOrDefault();
+            return GetDraftRoomConnections(userId).FirstOrDefault();
         }
 
         protected List<DraftRoomConnection> GetDraftConnections()
         {
-            return _getDraftConnections().ToList();
+            return GetDraftRoomConnections().ToList();
         }
 
         public int ConnectionCount

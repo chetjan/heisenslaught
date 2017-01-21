@@ -1,18 +1,12 @@
-﻿using Heisenslaught.Infrastructure;
-using Heisenslaught.Models.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MongoDB.Driver;
-using MongoDB.Bson.Serialization.Attributes;
-using Heisenslaught.Persistence.MongoDb.Models;
+﻿using Heisenslaught.Infrastructure.MongoDb;
+using Heisenslaught.Users;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
+using System;
 
-namespace Heisenslaught.Models.Draft
+namespace Heisenslaught.Draft
 {
-
-
     public class UserJoinedDraftModel : IMongoDocument<string>
     {
         [BsonId]

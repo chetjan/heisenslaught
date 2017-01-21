@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Dynamic.Core;
-using System.Threading.Tasks;
+﻿using Heisenslaught.Infrastructure.ServerEvents;
 using Microsoft.AspNetCore.Mvc;
-using Heisenslaught.Services;
+using System.Collections.Generic;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Heisenslaught.Controllers
+namespace Heisenslaught.Users
 {
     [Route("api/auth")]
     public class AuthAPIController : Controller

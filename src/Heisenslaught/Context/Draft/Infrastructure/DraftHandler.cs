@@ -1,9 +1,8 @@
-﻿using Heisenslaught.Models.Draft;
-using Heisenslaught.Services;
+﻿using Heisenslaught.HeroData;
 using System;
 using System.Collections.Generic;
 
-namespace Heisenslaught.Infrastructure
+namespace Heisenslaught.Draft
 {
     public class DraftHandler
     {

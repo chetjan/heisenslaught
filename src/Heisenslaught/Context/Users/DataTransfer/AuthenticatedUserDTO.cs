@@ -1,8 +1,7 @@
-﻿using Heisenslaught.Models.Users;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Heisenslaught.DataTransfer.Users
+namespace Heisenslaught.Users
 {
     public class AuthenticatedUserDTO : UserBaseDTO
     {

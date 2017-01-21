@@ -1,12 +1,11 @@
-﻿using Heisenslaught.Models.Users;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Heisenslaught.Persistence.User
+namespace Heisenslaught.Users
 {
     public class HSRoleStore : IRoleStore<HSRole>
     {

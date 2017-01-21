@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 
-namespace Heisenslaught.Models.Users
+namespace Heisenslaught.Users
 {
     public class HSUserLogin : IEquatable<HSUserLogin>, IEquatable<UserLoginInfo>
     {

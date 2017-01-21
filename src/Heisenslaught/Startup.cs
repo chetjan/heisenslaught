@@ -1,10 +1,11 @@
 ﻿using AspNet.Security.OAuth.BattleNet;
-using Heisenslaught.Config;
-using Heisenslaught.Extentions;
-using Heisenslaught.Models.Users;
-using Heisenslaught.Persistence.Draft;
-using Heisenslaught.Persistence.User;
-using Heisenslaught.Services;
+using Heisenslaught.Draft;
+using Heisenslaught.HeroData;
+using Heisenslaught.Infrastructure.Extentions;
+using Heisenslaught.Infrastructure.Hubs;
+using Heisenslaught.Infrastructure.MongoDb;
+using Heisenslaught.Infrastructure.ServerEvents;
+using Heisenslaught.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Heisenslaught.Models.Users
+namespace Heisenslaught.Users
 {
     public class HSUserValidator : IUserValidator<HSUser>
     {

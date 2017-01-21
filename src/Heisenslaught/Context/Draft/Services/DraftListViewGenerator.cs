@@ -1,10 +1,8 @@
-﻿using Heisenslaught.Models.Draft;
-using Heisenslaught.Models.Users;
-using Heisenslaught.Persistence.User;
+﻿using Heisenslaught.Users;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Driver;
 
-namespace Heisenslaught.Persistence.Draft
+namespace Heisenslaught.Draft
 {
     public class DraftListViewGenerator
     {

@@ -1,8 +1,4 @@
-﻿using Heisenslaught.Infrastructure;
-using Heisenslaught.Models.Draft;
-
-
-namespace Heisenslaught.DataTransfer
+﻿namespace Heisenslaught.Draft
 {
     public class DraftConfigAdminDTO : DraftConfigDTO 
     {

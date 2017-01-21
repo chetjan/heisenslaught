@@ -1,9 +1,9 @@
-﻿using MongoDB.Bson;
-using System;
+﻿using Heisenslaught.Infrastructure.MongoDb;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using Heisenslaught.Persistence.MongoDb.Models;
+using System;
 
-namespace Heisenslaught.Models.Draft
+namespace Heisenslaught.Draft
 {
     public class DraftModel : IMongoDocument<string>
     {
@@ -28,10 +28,10 @@ namespace Heisenslaught.Models.Draft
             {
                 this.config = config;
                 state = new DraftStateModel();
-                draftToken = generateToken();
-                adminToken = generateToken();
-                team1DrafterToken = generateToken();
-                team2DrafterToken = generateToken();
+                draftToken = GenerateToken();
+                adminToken = GenerateToken();
+                team1DrafterToken = GenerateToken();
+                team2DrafterToken = GenerateToken();
                 if (config.firstPick != 1 && config.firstPick != 2)
                 {
                     int rng = rnd.Next(1, 10000);
@@ -41,7 +41,7 @@ namespace Heisenslaught.Models.Draft
             }
         }
 
-        private string generateToken()
+        private string GenerateToken()
         {
             string token = null;
             while (token == null || token.IndexOfAny(new char[] { '/', '+' }) != -1)

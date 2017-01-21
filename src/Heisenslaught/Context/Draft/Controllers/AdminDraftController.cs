@@ -1,24 +1,18 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Heisenslaught.Persistence.Draft;
-using Heisenslaught.Services;
-using Heisenslaught.Models.Draft;
-using Heisenslaught.DataTransfer;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Heisenslaught.Controllers.Admin.Draft
+namespace Heisenslaught.Draft
 {
     [Route("api/admin/draft")]
-    public class AdminDraftApiController : Controller
+    public class AdminDraftController : Controller
     {
         private readonly IDraftStore draftStore;
         private readonly DraftListViewStore draftListViewStore;
         private readonly IDraftService draftService;
-        public AdminDraftApiController(
+        public AdminDraftController(
             IDraftStore draftStore,
             DraftListViewStore draftListViewStore,
             IDraftService draftService

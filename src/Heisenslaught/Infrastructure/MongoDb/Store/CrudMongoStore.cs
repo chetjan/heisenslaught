@@ -1,16 +1,13 @@
-﻿using Heisenslaught.Persistence.MongoDb.Models;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
-using Heisenslaught.Persistence.MongoDb.Options;
-using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
 
-namespace Heisenslaught.Persistence.MongoDb.Store
+namespace Heisenslaught.Infrastructure.MongoDb
 {
     public class CrudMongoStore<Tkey, TDocument>  : ICrudMongoStore<Tkey, TDocument>  where TDocument : IMongoDocument<Tkey> 
     {

@@ -1,5 +1,5 @@
-﻿namespace Heisenslaught.Config
-{
+﻿namespace Heisenslaught.Infrastructure.MongoDb
+{ 
     public class MongoSettings
     {
         public string ConnectionString { get; set; }

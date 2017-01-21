@@ -1,12 +1,7 @@
-﻿using Heisenslaught.Models.Draft;
-using Heisenslaught.Persistence.MongoDb.Store;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Heisenslaught.Infrastructure.MongoDb;
 using MongoDB.Driver;
 
-namespace Heisenslaught.Persistence.Draft
+namespace Heisenslaught.Draft
 {
     public class DraftJoinedStore : CrudMongoStore<string, UserJoinedDraftModel>
     {

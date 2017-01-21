@@ -1,16 +1,13 @@
-﻿using Heisenslaught.DataTransfer;
-using Heisenslaught.Infrastructure;
-using Heisenslaught.Models.Draft;
-using Heisenslaught.Models.Users;
-using Heisenslaught.Persistence.Draft;
+﻿using Heisenslaught.HeroData;
+using Heisenslaught.Infrastructure.Hubs;
+using Heisenslaught.Users;
 using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 
-namespace Heisenslaught.Services
+namespace Heisenslaught.Draft
 {
     public class DraftService : IDraftService
     {

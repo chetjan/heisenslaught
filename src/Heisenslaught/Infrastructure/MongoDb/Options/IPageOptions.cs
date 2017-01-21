@@ -1,12 +1,10 @@
 ﻿using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Heisenslaught.Persistence.MongoDb.Options
+namespace Heisenslaught.Infrastructure.MongoDb
 {
     public interface IPageOptions<TPagable, TDocument>
     {

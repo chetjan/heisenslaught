@@ -1,14 +1,12 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Heisenslaught.Persistence.MongoDb.Models;
-using MongoDB.Driver;
-using System.Threading;
-using Heisenslaught.Persistence.MongoDb.Options;
 using System.Linq.Dynamic.Core;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Heisenslaught.Persistence.MongoDb.Store
+namespace Heisenslaught.Infrastructure.MongoDb
 {
     public interface ICrudMongoStore<TKey, TDocument> where TDocument : IMongoDocument<TKey>
     {

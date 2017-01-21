@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 
 
-namespace Heisenslaught.Services
+namespace Heisenslaught.HeroData
 {
     public class HeroData
     {

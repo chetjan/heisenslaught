@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 
-namespace Heisenslaught.Config
+namespace Heisenslaught.Infrastructure.MongoDb
 {
     public class UserCreationSettings
     {

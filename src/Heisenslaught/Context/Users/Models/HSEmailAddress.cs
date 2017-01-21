@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Heisenslaught.Models.Users
+namespace Heisenslaught.Users
 {
     public class HSEmailAddress
     {

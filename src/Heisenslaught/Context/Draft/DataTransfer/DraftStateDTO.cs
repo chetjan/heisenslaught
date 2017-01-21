@@ -1,9 +1,7 @@
-﻿using Heisenslaught.Infrastructure;
-using Heisenslaught.Models.Draft;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
-namespace Heisenslaught.DataTransfer
+namespace Heisenslaught.Draft
 {
     public class DraftStateDTO
     {

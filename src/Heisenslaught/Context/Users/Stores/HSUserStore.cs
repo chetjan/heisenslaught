@@ -1,5 +1,4 @@
-﻿using Heisenslaught.Models.Users;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System;
@@ -8,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Heisenslaught.Persistence.User
+namespace Heisenslaught.Users
 {
     public class HSUserStore : IUserStore<HSUser>, IUserLoginStore<HSUser>, IUserPasswordStore<HSUser>, IUserEmailStore<HSUser>, IUserRoleStore<HSUser>
     {

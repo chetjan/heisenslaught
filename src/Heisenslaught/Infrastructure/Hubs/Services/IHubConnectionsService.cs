@@ -1,9 +1,9 @@
-﻿using Heisenslaught.Models.Users;
+﻿using Heisenslaught.Users;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 
-namespace Heisenslaught.Services
+namespace Heisenslaught.Infrastructure.Hubs
 {
     public interface IHubConnectionsService
     {

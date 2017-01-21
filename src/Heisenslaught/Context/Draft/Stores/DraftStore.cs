@@ -1,14 +1,8 @@
-﻿using Heisenslaught.Models.Draft;
-using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
+﻿using Heisenslaught.Infrastructure.MongoDb;
 using MongoDB.Driver;
 using System.Collections.Generic;
-using System.Linq;
-using System;
-using Heisenslaught.Persistence.MongoDb.Store;
-using System.Linq.Dynamic.Core;
 
-namespace Heisenslaught.Persistence.Draft
+namespace Heisenslaught.Draft
 {
     public class DraftStore : CrudMongoStore<string, DraftModel>, IDraftStore
     {

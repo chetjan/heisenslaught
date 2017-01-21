@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 
-namespace Heisenslaught.Extentions
+namespace Heisenslaught.Infrastructure.Extentions
 {
     public static class ServiceExtentions
     {

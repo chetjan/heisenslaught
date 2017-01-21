@@ -1,15 +1,12 @@
-﻿using Heisenslaught.DataTransfer;
-using Heisenslaught.Exceptions;
-using Heisenslaught.Hubs;
-using Heisenslaught.Models.Users;
-using Heisenslaught.Services;
+﻿using Heisenslaught.Infrastructure.Hubs;
+using Heisenslaught.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR.Hubs;
 using System;
 using System.Threading.Tasks;
 
 
-namespace Heisenslaught
+namespace Heisenslaught.Draft
 {
     public class DraftHub : UserAwareHub
     {

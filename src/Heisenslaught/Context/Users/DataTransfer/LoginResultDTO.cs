@@ -1,4 +1,4 @@
-﻿namespace Heisenslaught.DataTransfer.Users
+﻿namespace Heisenslaught.Users
 {
     public class LoginResultDTO<TData>
     {

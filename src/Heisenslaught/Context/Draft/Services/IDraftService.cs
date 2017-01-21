@@ -1,10 +1,8 @@
-﻿using Heisenslaught.DataTransfer;
-using Heisenslaught.Infrastructure;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
-namespace Heisenslaught.Services
+namespace Heisenslaught.Draft
 {
     public interface IDraftService
     {

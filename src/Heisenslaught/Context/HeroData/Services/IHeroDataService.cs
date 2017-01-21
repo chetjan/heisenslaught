@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Heisenslaught.Services
+namespace Heisenslaught.HeroData
 {
     public interface IHeroDataService
     {

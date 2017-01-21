@@ -1,12 +1,11 @@
-﻿using Heisenslaught.DataTransfer.Users;
-using Heisenslaught.Models.Users;
+﻿using Heisenslaught.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 
-namespace Heisenslaught.Controllers
+namespace Heisenslaught.AngularApplication
 {
     public class AngularController : Controller
     {

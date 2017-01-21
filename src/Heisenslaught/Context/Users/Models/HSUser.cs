@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace Heisenslaught.Models.Users
+namespace Heisenslaught.Users
 {
     public class HSUser : IEquatable<HSUser>
     {

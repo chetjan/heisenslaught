@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Heisenslaught.Models.Draft
+namespace Heisenslaught.Draft
 {
     public class DraftConfigModel
     {

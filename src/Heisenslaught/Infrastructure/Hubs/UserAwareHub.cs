@@ -1,11 +1,10 @@
-﻿using Heisenslaught.Models.Users;
-using Heisenslaught.Services;
+﻿using Heisenslaught.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Heisenslaught.Hubs
+namespace Heisenslaught.Infrastructure.Hubs
 {
     public abstract class UserAwareHub : Hub
     {

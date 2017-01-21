@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Heisenslaught.Persistence.MongoDb.Models
+﻿namespace Heisenslaught.Infrastructure.MongoDb
 {
     public interface IMongoDocument<TKey>
     {

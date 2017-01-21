@@ -1,8 +1,8 @@
-﻿using Heisenslaught.Persistence.MongoDb.Models;
+﻿using Heisenslaught.Infrastructure.MongoDb;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Heisenslaught.Models.Draft
+namespace Heisenslaught.Draft
 {
     public class DraftListViewModel : IMongoDocument<string>
     {

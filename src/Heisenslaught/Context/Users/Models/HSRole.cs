@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 
 
-namespace Heisenslaught.Models.Users
+namespace Heisenslaught.Users
 {
     public class HSRole
     {

@@ -1,13 +1,9 @@
-﻿using Heisenslaught.Hubs;
-using Heisenslaught.Models.Users;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Hubs;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Heisenslaught.Services
+namespace Heisenslaught.Infrastructure.ServerEvents
 {
     public class ServerEvent{
         public string context;
@@ -24,8 +20,8 @@ namespace Heisenslaught.Services
         public ServerEventService(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
-            registerEventContext("system.broadcast.all");
-            registerEventContext("system.broadcast.users");
+            RegisterEventContext("system.broadcast.all");
+            RegisterEventContext("system.broadcast.users");
         }
 
         private IHubConnectionContext<ServerEventHub> Hub
@@ -40,7 +36,7 @@ namespace Heisenslaught.Services
         }
 
 
-        public void registerEventContext(string name, Func<Hub,bool> permissionCheck = null)
+        public void RegisterEventContext(string name, Func<Hub,bool> permissionCheck = null)
         {
             lock (eventContexts)
             {

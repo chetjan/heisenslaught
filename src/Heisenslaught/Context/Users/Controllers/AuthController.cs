@@ -1,6 +1,4 @@
-﻿using Heisenslaught.Config;
-using Heisenslaught.DataTransfer.Users;
-using Heisenslaught.Models.Users;
+﻿using Heisenslaught.Infrastructure.MongoDb;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 
 
-namespace Heisenslaught.Controllers
+namespace Heisenslaught.Users
 {
     [Authorize]
     public class AuthController : Controller

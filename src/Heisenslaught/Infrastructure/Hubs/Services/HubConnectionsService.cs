@@ -1,11 +1,11 @@
-﻿using Heisenslaught.Models.Users;
+﻿using Heisenslaught.Users;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace Heisenslaught.Services
+namespace Heisenslaught.Infrastructure.Hubs
 {
     public class HubConnection{
         public Type HubType;
