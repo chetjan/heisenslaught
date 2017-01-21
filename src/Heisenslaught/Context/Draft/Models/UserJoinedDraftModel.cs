@@ -2,7 +2,6 @@
 using Heisenslaught.Users;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Driver;
 using System;
 
 namespace Heisenslaught.Draft
@@ -13,8 +12,10 @@ namespace Heisenslaught.Draft
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        public MongoDBRef user;
-        public MongoDBRef draft;
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string user;
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string draft;
         public DateTime joinedOn;
         public DraftConnectionType joinedAs;
 
@@ -23,9 +24,9 @@ namespace Heisenslaught.Draft
 
         public UserJoinedDraftModel(string userId, string draftId, DraftConnectionType joinedAs)
         {
-            this.user = new MongoDBRef("users", userId);
-            this.draft = new MongoDBRef("drafts", draftId);
-            this.joinedOn = new DateTime();
+            this.user = userId;
+            this.draft = draftId;
+            this.joinedOn = DateTime.Now;
             this.joinedAs = joinedAs;
         }
     }

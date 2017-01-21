@@ -160,12 +160,9 @@ export class DraftConfigScreenComponent implements OnDestroy {
   }
 
   private initConfigDraft() {
-    console.log('CONNECT TO DRAFT');
     this.draftService.connectToDraft(this.draftToken, this.adminToken).then((config) => {
-      console.log('statrt sub');
       this.currentConfig = <IDraftConfigAdminDTO>config;
       this.stateSubscription = this.draftService.draftStateObservable.subscribe((state) => {
-        console.log('stste', state);
         this.currentConfig.state = state;
         this.changeRef.detectChanges();
       });

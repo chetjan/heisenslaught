@@ -41,6 +41,15 @@ namespace Heisenslaught.Infrastructure.MongoDb
             }
         }
 
+        public IQueryable<TDocument> QueryableCollection
+        {
+            get
+            {
+
+                return Collection.AsQueryable<TDocument>();
+            }
+        }
+
         protected void Emit<T>(EventHandler<T> handler, T evt)
         {
             handler?.Invoke(this, evt);

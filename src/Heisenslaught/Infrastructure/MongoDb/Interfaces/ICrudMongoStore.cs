@@ -19,6 +19,7 @@ namespace Heisenslaught.Infrastructure.MongoDb
 
         string CollectionName { get; }
         IMongoCollection<TDocument> Collection { get; }
+        IQueryable<TDocument> QueryableCollection { get; }
         bool CollectionExists { get; }
 
         void Create(TDocument document);
