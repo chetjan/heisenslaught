@@ -8,6 +8,9 @@ import { SignalRConnectionService } from '../../../../services/signalr/signalr-c
 
 export * from './types/user';
 
+const KEEP_ALIVE_INTERVAL = 5 * 60 * 1000;
+const KEEP_ALIVE_USER_ACTION_TIME = 2 * 60 * 60 * 1000;
+
 @Injectable()
 export class LoginService {
 
@@ -17,6 +20,7 @@ export class LoginService {
   private _authenticatedUserSubject: Subject<AuthenticatedUser> = new Subject();
   private _authenticatedUserObservable: Observable<AuthenticatedUser>;
   private _returnUrl: string;
+  private _lastMouseMoved: number;
 
   constructor(
     private http: Http,
@@ -39,6 +43,16 @@ export class LoginService {
         this._battlenetLoginWindow.close();
       }
     });
+    window.addEventListener('mousemove', () => {
+      this._lastMouseMoved = new Date().getTime();
+    });
+    setInterval(() => {
+      let mouseDelta = new Date().getTime() - this._lastMouseMoved;
+      if (mouseDelta < KEEP_ALIVE_USER_ACTION_TIME) {
+         this.http.get('/auth/user').toPromise();
+      }
+    }, KEEP_ALIVE_INTERVAL);
+    this._lastMouseMoved = new Date().getTime();
   }
 
   public set returnUrl(value: string) {
