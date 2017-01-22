@@ -15,6 +15,7 @@ namespace Heisenslaught.Draft
         public DraftHub(IDraftService draftService, IHubConnectionsService connectionService, UserManager<HSUser> userManager) : base(connectionService, userManager)
         {
             _draftService = draftService;
+            
         }
 
         public override Task OnDisconnected(bool stopCalled)

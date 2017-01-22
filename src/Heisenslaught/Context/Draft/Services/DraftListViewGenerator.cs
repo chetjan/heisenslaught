@@ -67,6 +67,7 @@ namespace Heisenslaught.Draft
                 Id = model.Id,
                 userId = user?.Id,
                 battleTag = user?.BattleTag,
+                displayName = user?.BattleTagDisplay,
                 team1Name = model.config.team1Name,
                 team2Name = model.config.team2Name,
                 draftToken = model.draftToken,

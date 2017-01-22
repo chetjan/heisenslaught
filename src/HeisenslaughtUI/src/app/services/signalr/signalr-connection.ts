@@ -123,32 +123,13 @@ abstract class SignalRConnectionBase {
             };
         }).share();
     }
-
-
-
-    protected handleStateChange(state: SignalRStateChange) {
-        let nState = this.getState(state.newState);
-        let oState = this._state;
-        //if (oState !== nState) {
-            this._state = nState;
-            console.log('handle state changed from', SignalRConnectionState[oState], 'to', SignalRConnectionState[nState]);
-            if (this._stateChangeSubscriber) {
-                this._stateChangeSubscriber.next({
-                    newState: nState,
-                    oldState: oState,
-                    fromHandler: true
-                });
-            }
-        //}
-    }
-
 }
 
 
 class SignalRConnection extends SignalRConnectionBase {
     private _url: string;
     private _connection: SignalR.Connection;
-
+    private _started: boolean = false;
     constructor(url?: string) {
         super();
         this._url = url;
@@ -161,12 +142,14 @@ class SignalRConnection extends SignalRConnectionBase {
 
     public start(): void {
         if (this._hasSubs && this._state === SignalRConnectionState.DISCONNECTED) {
+            this._started = true;
             this.connection.start();
         }
     }
 
     public stop(): void {
         if (this._state !== SignalRConnectionState.DISCONNECTED) {
+            this._started = false;
             this.connection.stop();
         }
     }
@@ -212,6 +195,25 @@ class SignalRConnection extends SignalRConnectionBase {
                 break;
         }
         return state;
+    }
+
+    protected handleStateChange(state: SignalRStateChange) {
+        let nState = this.getState(state.newState);
+        let oState = this._state;
+        this._state = nState;
+        if (this._stateChangeSubscriber) {
+            this._stateChangeSubscriber.next({
+                newState: nState,
+                oldState: oState
+            });
+        }
+        if (this._state === SignalRConnectionState.DISCONNECTED && this._started) {
+            console.log('UNEXPECTED DISCONNECT')
+            setTimeout(() => {
+                console.log('RECONNECTING')
+                this.start();
+            }, 10000);
+        }
     }
 
 }
@@ -390,6 +392,18 @@ export class SignalRConnectionService {
         this._connections.forEach((connection) => {
             connection.stop();
         });
+        this._connections.forEach((connection) => {
+            connection.start();
+        });
+    }
+
+    public disconnectAll(): void {
+        this._connections.forEach((connection) => {
+            connection.stop();
+        });
+    }
+
+    public connectAll(): void {
         this._connections.forEach((connection) => {
             connection.start();
         });

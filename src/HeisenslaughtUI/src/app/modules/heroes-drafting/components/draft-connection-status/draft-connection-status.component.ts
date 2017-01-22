@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { DraftService, SignalRConnectionState, IDraftUser } from '../../../heroes-draft-service/heroes-draft-service.module';
+import { DraftHubService, SignalRConnectionState, IDraftUser } from '../../../heroes-draft-service/heroes-draft-service.module';
 
 
 @Component({
@@ -19,7 +19,7 @@ export class DraftConnectionStatusComponent implements OnInit, OnDestroy {
   public connectedUsers: IDraftUser[] = [];
 
   constructor(
-    private draftService: DraftService,
+    private draftService: DraftHubService,
     private changeRef: ChangeDetectorRef
   ) { }
 

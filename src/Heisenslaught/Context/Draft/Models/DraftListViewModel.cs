@@ -11,6 +11,7 @@ namespace Heisenslaught.Draft
         public string Id { get; set; }
         public string userId;
         public string battleTag;
+        public string displayName;
         public string team1Name;
         public string team2Name;
         public string draftToken;

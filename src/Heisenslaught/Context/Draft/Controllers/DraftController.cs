@@ -18,17 +18,20 @@ namespace Heisenslaught.Draft
     {
         private readonly DraftJoinedStore draftJoinedStore;
         private readonly IDraftStore draftStore;
+        private readonly DraftListViewStore draftListViewStore;
         private readonly UserManager<HSUser> userMananger;
 
         public DraftController(
             IDraftStore draftStore,
             DraftJoinedStore draftJoinedStore,
+            DraftListViewStore draftListViewStore,
             UserManager<HSUser> userMananger
         )
         {
             this.draftStore = draftStore;
             this.draftJoinedStore = draftJoinedStore;
             this.userMananger = userMananger;
+            this.draftListViewStore = draftListViewStore;
         }
 
         [HttpGet("recent/joined")]
@@ -42,8 +45,8 @@ namespace Heisenslaught.Draft
         {
             var userId = userMananger.GetUserId(User);
             var result = from joined in draftJoinedStore.QueryableCollection
-                         where joined.user == userId
-                         join draft in draftStore.QueryableCollection on joined.draft equals draft.Id
+                         where joined.user == userId && joined.joinedAs != DraftConnectionType.ADMIN
+                         join draft in draftListViewStore.QueryableCollection on joined.draft equals draft.Id
                          select new
                          {
                              joinedOn = joined.joinedOn,
@@ -60,11 +63,12 @@ namespace Heisenslaught.Draft
                           {
                               joinedOn = draftJoins.First().joinedOn,
                               draftToken = draftJoins.First().draft.draftToken,
-                              team1Name = draftJoins.First().draft.config.team1Name,
-                              team2Name = draftJoins.First().draft.config.team2Name,
-                              map = draftJoins.First().draft.config.map,
-                              isOwner = draftJoins.First().draft.createdBy == userId,
-                              adminToken = draftJoins.First().draft.createdBy == userId
+                              team1Name = draftJoins.First().draft.team1Name,
+                              team2Name = draftJoins.First().draft.team2Name,
+                              createdBy = draftJoins.First().draft.displayName,
+                              map = draftJoins.First().draft.map,
+                              isOwner = draftJoins.First().draft.userId == userId,
+                              adminToken = draftJoins.First().draft.userId == userId
                                 ? draftJoins.First().draft.adminToken : null,
                               team1DraftToken = draftJoins.Max(x => x.joindAsTeam1Drafter) == 1 ? draftJoins.First().draft.team1DrafterToken : null,
                               team2DraftToken = draftJoins.Max(x => x.joindAsTeam2Drafter) == 1 ? draftJoins.First().draft.team2DrafterToken : null

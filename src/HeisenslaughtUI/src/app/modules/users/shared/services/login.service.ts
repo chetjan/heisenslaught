@@ -84,6 +84,18 @@ export class LoginService {
     }
   }
 
+  private connectSignalR(): void {
+    if (this.signalRService) {
+      this.signalRService.reconnectAll();
+    }
+  }
+
+  private disconnectSignalR(): void {
+    if (this.signalRService) {
+      this.signalRService.reconnectAll();
+    }
+  }
+
   private setAuthenticatedUser(authenticatedUser: AuthenticatedUser, noEvent?: boolean): void {
     this._authenticatedUser = authenticatedUser;
     if (!noEvent && window.localStorage) {

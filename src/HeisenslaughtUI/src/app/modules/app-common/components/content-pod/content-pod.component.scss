@@ -1,0 +1,27 @@
+:host{
+    display: block;
+}
+
+md-card, md-card-content, md-card-title, md-card-actions{
+    padding:0px;
+    margin: 0px;
+    font-size: 14px;
+}
+
+md-card-title{
+    border-bottom: 1px solid lightgray;
+    padding:8px;
+    padding-top:10px;
+    font-weight: 700;
+    min-height: 36px;
+    vertical-align: middle;
+}
+
+md-card-actions{
+    border-top: 1px solid lightgray;
+    padding:0px;
+    &:last-child{
+        padding: 0px;
+        margin: 0px;
+    }
+}

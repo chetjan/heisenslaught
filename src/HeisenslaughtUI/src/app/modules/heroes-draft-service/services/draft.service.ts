@@ -14,7 +14,7 @@ export * from './types/draft-config';
 
 @Injectable()
 @Hub('draftHub')
-export class DraftService extends SignalRHub<IDraftHubServerProxy>{
+export class DraftHubService extends SignalRHub<IDraftHubServerProxy>{
     private _draftTokens: string[];
     private _connectedUsersSubject: Subject<IDraftUser[]> = new Subject<IDraftUser[]>();
     private _connectedUsers: IDraftUser[] = [];
@@ -148,18 +148,16 @@ export class DraftService extends SignalRHub<IDraftHubServerProxy>{
 
     protected stateChange(newState: SignalRConnectionState, oldState: SignalRConnectionState): void {
         super.stateChange(newState, oldState);
-
-        console.log('state changed from ', oldState, 'to', newState);
-
         if (newState !== oldState) {
             switch (newState) {
                 case SignalRConnectionState.DISCONNECTED:
                     if (this._draftTokens) {
                         this._reconnecting = true;
-                        setTimeout(() => {
+                       /* setTimeout(() => {
                             console.log('Attemping to reconnect...');
                             this.reconnect();
                         }, 10000);
+                        */
                     }
                     break;
                 case SignalRConnectionState.RECONNECTING:

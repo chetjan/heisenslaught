@@ -84,9 +84,10 @@ export class ServerEventService extends SignalRHub<IServerEventProxy> {
             switch (newState) {
                 case SignalRConnectionState.DISCONNECTED:
                     this._reconnecting = true;
-                    setTimeout(() => {
+                    /*setTimeout(() => {
                         this.reconnect();
                     }, 10000);
+                    */
                     break;
                 case SignalRConnectionState.RECONNECTING:
                     this._reconnecting = true;

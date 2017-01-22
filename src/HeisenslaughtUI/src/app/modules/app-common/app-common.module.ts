@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@angular/material';
 import { HtmlTooltipComponent } from './components/html-tooltip/html-tooltip.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
+import { ContentPodComponent } from './components/content-pod/content-pod.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -12,11 +13,13 @@ import { NavigationComponent } from './components/navigation/navigation.componen
   ],
   declarations: [
     HtmlTooltipComponent,
-    NavigationComponent
+    NavigationComponent,
+    ContentPodComponent
   ],
   exports: [
     HtmlTooltipComponent,
-    NavigationComponent
+    NavigationComponent,
+    ContentPodComponent
   ]
 })
 export class AppCommonModule { }

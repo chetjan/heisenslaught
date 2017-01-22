@@ -1,0 +1,9 @@
+<div fxLayoutGap="20px" fxLayout="column" fxLayout.gt-sm="row">
+    <div fxFlex xstyle="outline:1px solid red"></div>
+    <div *ngIf="user" fxFlex fxFlex.gt-sm="400px">
+        <div fxLayout="column" fxLayoutGap="20px">
+            <my-joined-drafts-pod></my-joined-drafts-pod>
+            <my-created-drafts-pod></my-created-drafts-pod>
+        </div>
+    </div>
+</div>
