@@ -114,9 +114,9 @@ namespace Heisenslaught
 
             // initialize Identity
             services.AddIdentity<HSUser, HSRole>(options=> {
-                options.Cookies.ExternalCookie.ExpireTimeSpan = TimeSpan.FromHours(2);
+                options.Cookies.ExternalCookie.ExpireTimeSpan = TimeSpan.FromDays(14);
                 options.Cookies.ExternalCookie.SlidingExpiration = true;
-                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromHours(2);
+                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(14);
                 options.Cookies.ApplicationCookie.SlidingExpiration = true;
             })
                 .AddDefaultTokenProviders();

@@ -1,5 +1,6 @@
 ﻿using Heisenslaught.Infrastructure.MongoDb;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -57,7 +58,7 @@ namespace Heisenslaught.Users
                 }
                 return View("LoginEvent");
             }
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: true);
             if (result.Succeeded) // logged in
             {
                 // Update any authentication tokens if login succeeded
@@ -88,8 +89,9 @@ namespace Heisenslaught.Users
                                 await _userManager.AddToRoleAsync(user, "su");
                             }
 
-                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            await _signInManager.SignInAsync(user, isPersistent: true);
                             await _signInManager.UpdateExternalAuthenticationTokensAsync(info);
+                           
                             ViewData["loginResult"] = new LoginResultDTO<AuthenticatedUserDTO>(true, new AuthenticatedUserDTO(user));
                             return View("LoginEvent");
                         }
