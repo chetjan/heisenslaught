@@ -49,7 +49,7 @@ export class LoginService {
     setInterval(() => {
       let mouseDelta = new Date().getTime() - this._lastMouseMoved;
       if (mouseDelta < KEEP_ALIVE_USER_ACTION_TIME) {
-         this.http.get('/auth/user').toPromise();
+        this.http.get('/auth/user').toPromise();
       }
     }, KEEP_ALIVE_INTERVAL);
     this._lastMouseMoved = new Date().getTime();
@@ -77,6 +77,10 @@ export class LoginService {
       this.setAuthenticatedUser(authenticatedUser);
       this._initialized = true;
     }
+  }
+
+  public get isLoggedIn(): boolean {
+    return !!this._authenticatedUser;
   }
 
   private handleExternalUserChange(): void {

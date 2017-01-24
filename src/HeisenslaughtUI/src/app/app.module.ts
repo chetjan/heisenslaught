@@ -21,6 +21,7 @@ import { HeroesCommonModule } from './modules/heroes-common/heroes-common.module
 
 import { LoginService } from './modules/users/shared/services/login.service';
 import { LoginScreenComponent } from './screens/login-screen/login-screen.component';
+import { PermissionErrorScreenComponent } from './screens/permission-error-screen/permission-error-screen.component';
 import { AuthGuard } from './modules/users/shared/guards/auth-guard.service';
 import { LoginBarComponent } from './components/login-bar/login-bar.component';
 
@@ -35,7 +36,8 @@ import { ServerEventService } from './services/signalr/signalr-server-event.serv
     HomeScreenComponent,
     NotFoundScreenComponent,
     LoginScreenComponent,
-    LoginBarComponent
+    LoginBarComponent,
+    PermissionErrorScreenComponent
   ],
   imports: [
     BrowserModule,

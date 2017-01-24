@@ -164,6 +164,7 @@ namespace Heisenslaught
             });
 
 
+
             app.UseWebSockets();
             app.UseSignalR();
 

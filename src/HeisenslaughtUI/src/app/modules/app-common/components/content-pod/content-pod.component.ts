@@ -1,17 +1,18 @@
-import { Component, OnInit, Input, ContentChild, ViewChild, AfterContentInit, TemplateRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ContentChild, ViewChild, AfterContentInit, TemplateRef, AfterViewInit, ElementRef, ContentChildren, QueryList } from '@angular/core';
+import {MdButton} from '@angular/material/button'
 
 @Component({
   selector: 'content-pod',
   templateUrl: './content-pod.component.html',
   styleUrls: ['./content-pod.component.scss']
 })
-export class ContentPodComponent implements OnInit, AfterViewInit {
+export class ContentPodComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   @Input()
   public title: string;
 
-  @ViewChild('testRef', { read: TemplateRef })
-  public actions: TemplateRef<any>;
+  @ContentChildren('actions')
+  public actions: QueryList<ElementRef>;
 
   constructor() { }
 
@@ -19,6 +20,10 @@ export class ContentPodComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    console.log('actions', this.actions);
+  }
+
+  ngAfterContentInit() {
     console.log('actions', this.actions);
   }
 }

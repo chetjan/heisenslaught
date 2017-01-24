@@ -1,5 +1,8 @@
 <content-pod title="Recently Created Drafts">
-  <md-nav-list>
+  <div class="no-items" *ngIf="!recentDrafts || !recentDrafts.length">
+    You haven't created any drafts
+  </div>
+  <md-nav-list *ngIf="recentDrafts && !!recentDrafts.length">
     <md-list-item *ngFor="let draft of recentDrafts" [routerLink]="['/draft/config', draft.draftToken, draft.adminToken]">
       <h4 md-line>
         <span>{{getMapName(draft.map)}}</span>
@@ -9,5 +12,5 @@
       </p>
     </md-list-item>
   </md-nav-list>
-  <button #actions actions md-button>View All</button>
+  <button #actions class="view-all actions" md-button>View All</button>
 </content-pod>

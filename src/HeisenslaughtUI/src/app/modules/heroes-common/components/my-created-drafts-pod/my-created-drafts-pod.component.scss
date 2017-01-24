@@ -23,6 +23,10 @@ md-list-item {
     }
 }
 
-[actions] {
+.no-items {
+    padding: 8px;
+}
+
+button.view-all {
     width: 100%;
 }

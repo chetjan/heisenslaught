@@ -1,5 +1,8 @@
 <content-pod title="Recently Joined Drafts">
-  <md-list>
+  <div class="no-items" *ngIf="!recentDrafts || !recentDrafts.length">
+    You haven't joined any drafts
+  </div>
+  <md-list *ngIf="recentDrafts && !!recentDrafts.length">
     <md-list-item *ngFor="let draft of recentDrafts">
       <h4 md-line>
         <span>{{getMapName(draft.map)}}</span>&nbsp;<span class="joined-on"> on {{draft.joinedOn | date:'MMM d, '}}{{draft.joinedOn | date:'shortTime'}}</span>
@@ -16,5 +19,6 @@
       <p>
     </md-list-item>
   </md-list>
-  <button #actions actions md-button>View All</button>
+  <button #actions md-button class="view-all actions">View All</button>
+  <button #actions md-button class="view-all actions">View All 2</button>
 </content-pod>
