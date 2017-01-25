@@ -16,11 +16,12 @@ export class LoginService {
 
   private _initialized: boolean = false;
   private _battlenetLoginWindow: LoginWindow = new LoginWindow('/auth?provider=BattleNet', 500, 620);
+  private _battlenetLoginSwitchWindow: LoginWindow = new LoginWindow('/auth/switch?provider=BattleNet', 500, 620);
   private _authenticatedUser: AuthenticatedUser;
   private _authenticatedUserSubject: Subject<AuthenticatedUser> = new Subject();
   private _authenticatedUserObservable: Observable<AuthenticatedUser>;
   private _returnUrl: string;
-  private _lastMouseMoved: number;
+  //private _lastMouseMoved: number;
 
   constructor(
     private http: Http,
@@ -41,18 +42,20 @@ export class LoginService {
         this.setAuthenticatedUser(evt.detail['data']);
         this.reconnectSignalR();
         this._battlenetLoginWindow.close();
+        this._battlenetLoginSwitchWindow.close();
       }
     });
-    window.addEventListener('mousemove', () => {
+    /*  window.addEventListener('mousemove', () => {
+        this._lastMouseMoved = new Date().getTime();
+      });
+      setInterval(() => {
+        let mouseDelta = new Date().getTime() - this._lastMouseMoved;
+        if (mouseDelta < KEEP_ALIVE_USER_ACTION_TIME) {
+          this.http.get('/auth/user').toPromise();
+        }
+      }, KEEP_ALIVE_INTERVAL);
       this._lastMouseMoved = new Date().getTime();
-    });
-    setInterval(() => {
-      let mouseDelta = new Date().getTime() - this._lastMouseMoved;
-      if (mouseDelta < KEEP_ALIVE_USER_ACTION_TIME) {
-        this.http.get('/auth/user').toPromise();
-      }
-    }, KEEP_ALIVE_INTERVAL);
-    this._lastMouseMoved = new Date().getTime();
+      */
   }
 
   public set returnUrl(value: string) {
@@ -130,6 +133,27 @@ export class LoginService {
     });
   }
 
+  public battleNetLoginSwitchUser(returnUrl = '/'): Promise<AuthenticatedUser> {
+    return new Promise<AuthenticatedUser>((resolve, reject) => {
+      this._battlenetLoginSwitchWindow.open(() => {
+        resolve(this._authenticatedUser);
+      }, returnUrl);
+    });
+    /*return new Promise((resolve, reject) => {
+      this.logOut().then(() => {
+        let logoutImage = new Image();
+        logoutImage.onerror = logoutImage.onload = () => {
+          this.battleNetLogin(returnUrl).then((user) => {
+            resolve(user);
+          }, (err) => {
+            reject(err);
+          });
+        };
+        logoutImage.src = 'https://us.battle.net/account/management/?logout';
+      });
+    });*/
+  }
+
   public loginRedirect() {
     this.router.navigate([this.returnUrl || '/'], {
       preserveFragment: true,
@@ -158,11 +182,13 @@ export class LoginService {
     return this._authenticatedUserObservable;
   }
 
-  public logOut(): void {
-    this.http.get('/auth/logout').toPromise().then(() => {
+  public logOut(): Promise<void> {
+    let p = this.http.get('/auth/logout').toPromise();
+    p.then(() => {
       this.setAuthenticatedUser(null);
       this.reconnectSignalR();
       this.returnUrl = undefined;
     });
+    return p;
   }
 }

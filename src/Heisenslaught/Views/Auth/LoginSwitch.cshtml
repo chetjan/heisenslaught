@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Battle.net Login";
+}
+
+@{
+<script>
+    var logoutImage = new Image();
+    logoutImage.onerror = logoutImage.onload = function () {
+        window.location.href = '@Html.Raw(ViewData["loginUrl"])';
+    }
+    logoutImage.src = 'https://us.battle.net/account/management/?logout'
+</script>
+
+
+}
+
+Logging Out...
