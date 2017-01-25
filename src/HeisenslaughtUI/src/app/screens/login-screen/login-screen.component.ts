@@ -15,10 +15,15 @@ export class LoginScreenComponent implements OnDestroy {
   constructor(
     private loginService: LoginService
   ) {
+    if (loginService.isLogoutCheck) {
+      loginService.loginRedirect();
+    }
     this._userSub = loginService.user.subscribe((user) => {
       if (user) {
-        this._userSub.unsubscribe();
-        this._userSub = null;
+        if (this._userSub) {
+          this._userSub.unsubscribe();
+          this._userSub = null;
+        }
         loginService.loginRedirect();
       }
     });

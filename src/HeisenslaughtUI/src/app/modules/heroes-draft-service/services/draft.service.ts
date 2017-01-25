@@ -46,6 +46,11 @@ export class DraftHubService extends SignalRHub<IDraftHubServerProxy>{
         return p;
     }
 
+    public leave(): Promise<void> {
+        this._draftTokens = undefined;
+        return this.server.leaveDraft();
+    }
+
     public createDraft(createCfg: ICreateDraftDTO): Promise<IDraftConfigAdminDTO> {
         let p = this.server.createDraft(createCfg);
         p.then((config) => {
@@ -95,6 +100,7 @@ export class DraftHubService extends SignalRHub<IDraftHubServerProxy>{
 
     public disconnect() {
         this._draftTokens = null;
+        this.leave();
         super.disconnect();
     }
 
@@ -153,11 +159,11 @@ export class DraftHubService extends SignalRHub<IDraftHubServerProxy>{
                 case SignalRConnectionState.DISCONNECTED:
                     if (this._draftTokens) {
                         this._reconnecting = true;
-                       /* setTimeout(() => {
-                            console.log('Attemping to reconnect...');
-                            this.reconnect();
-                        }, 10000);
-                        */
+                        /* setTimeout(() => {
+                             console.log('Attemping to reconnect...');
+                             this.reconnect();
+                         }, 10000);
+                         */
                     }
                     break;
                 case SignalRConnectionState.RECONNECTING:

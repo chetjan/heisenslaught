@@ -20,10 +20,10 @@ export class ContentPodComponent implements OnInit, AfterViewInit, AfterContentI
   }
 
   ngAfterViewInit() {
-    console.log('actions', this.actions);
+    //console.log('actions', this.actions);
   }
 
   ngAfterContentInit() {
-    console.log('actions', this.actions);
+    //console.log('actions', this.actions);
   }
 }

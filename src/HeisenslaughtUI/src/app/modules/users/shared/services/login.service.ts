@@ -1,5 +1,5 @@
 import { Injectable, Optional } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { LoginWindow } from './login-window';
 import { Subject, Observable, Subscriber } from 'rxjs';
 import { Http } from '@angular/http';
@@ -21,6 +21,9 @@ export class LoginService {
   private _authenticatedUserSubject: Subject<AuthenticatedUser> = new Subject();
   private _authenticatedUserObservable: Observable<AuthenticatedUser>;
   private _returnUrl: string;
+  private _currentUrl: string;
+  private _isLogoutCheck: boolean;
+
   //private _lastMouseMoved: number;
 
   constructor(
@@ -45,6 +48,14 @@ export class LoginService {
         this._battlenetLoginSwitchWindow.close();
       }
     });
+    router.events.subscribe((navEvent) => {
+      if (navEvent instanceof NavigationEnd) {
+        if (!navEvent.urlAfterRedirects.startsWith('/login')) {
+          this._currentUrl = navEvent.urlAfterRedirects;
+        }
+      }
+    });
+
     /*  window.addEventListener('mousemove', () => {
         this._lastMouseMoved = new Date().getTime();
       });
@@ -75,6 +86,10 @@ export class LoginService {
     return this._returnUrl;
   }
 
+  public get isLogoutCheck(): boolean {
+    return this._isLogoutCheck;
+  }
+
   public initialize(authenticatedUser: AuthenticatedUser): void {
     if (!this._initialized) {
       this.setAuthenticatedUser(authenticatedUser);
@@ -94,6 +109,7 @@ export class LoginService {
         (this._authenticatedUser.id !== user.id)
       ) {
         this.reconnectSignalR();
+        this.doLogoutCheck();
       }
       this.setAuthenticatedUser(user, true);
     });
@@ -101,19 +117,19 @@ export class LoginService {
 
   private reconnectSignalR(): void {
     if (this.signalRService) {
-      this.signalRService.reconnectAll();
+      this.signalRService.reconnectAll(false);
     }
   }
 
   private connectSignalR(): void {
     if (this.signalRService) {
-      this.signalRService.reconnectAll();
+      this.signalRService.connectAll();
     }
   }
 
-  private disconnectSignalR(): void {
+  private disconnectSignalR(notify = true): void {
     if (this.signalRService) {
-      this.signalRService.reconnectAll();
+      this.signalRService.disconnectAll(notify);
     }
   }
 
@@ -155,6 +171,7 @@ export class LoginService {
   }
 
   public loginRedirect() {
+    this._isLogoutCheck = false;
     this.router.navigate([this.returnUrl || '/'], {
       preserveFragment: true,
       preserveQueryParams: true,
@@ -183,12 +200,27 @@ export class LoginService {
   }
 
   public logOut(): Promise<void> {
-    let p = this.http.get('/auth/logout').toPromise();
-    p.then(() => {
-      this.setAuthenticatedUser(null);
-      this.reconnectSignalR();
-      this.returnUrl = undefined;
+    return new Promise((resolve, reject) => {
+      this.disconnectSignalR();
+      let p = this.http.get('/auth/logout').toPromise();
+      p.then(() => {
+        this.setAuthenticatedUser(null);
+        this.connectSignalR();
+        this.doLogoutCheck();
+        resolve();
+      }, (err) => {
+        reject(err);
+      });
     });
-    return p;
+  }
+
+  private doLogoutCheck(): void {
+    this.returnUrl = this._currentUrl;
+    this._isLogoutCheck = true;
+    this.router.navigate(['/login'], {
+      preserveFragment: true,
+      preserveQueryParams: true,
+      replaceUrl: true
+    });
   }
 }

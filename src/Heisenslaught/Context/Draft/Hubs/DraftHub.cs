@@ -24,6 +24,7 @@ namespace Heisenslaught.Draft
             return base.OnDisconnected(stopCalled);
         }
 
+
         [HubMethodName("createDraft")]
         public async Task<DraftConfigAdminDTO> CreateDraftAsync(CreateDraftDTO cfg)
         {
@@ -34,6 +35,11 @@ namespace Heisenslaught.Draft
         public async Task<DraftConfigDTO> ConnectToDraftAsync(string draftToken, string teamToken = null)
         {
             return await _draftService.ConnectToDraftAsync(this, draftToken, teamToken);
+        }
+
+        public void LeaveDraft()
+        {
+            _draftService.ClientDisconnected(this);
         }
 
         public DraftConfigAdminDTO RestartDraft(string draftToken, string adminToken)

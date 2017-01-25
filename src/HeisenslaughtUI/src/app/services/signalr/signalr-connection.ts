@@ -147,10 +147,10 @@ class SignalRConnection extends SignalRConnectionBase {
         }
     }
 
-    public stop(): void {
+    public stop(notify = true): void {
         if (this._state !== SignalRConnectionState.DISCONNECTED) {
             this._started = false;
-            this.connection.stop();
+            this.connection.stop(false, notify);
         }
     }
 
@@ -388,18 +388,18 @@ export class SignalRConnectionService {
         return this.getConnection(url).hasConnections;
     }
 
-    public reconnectAll(): void {
+    public reconnectAll(notify = true): void {
         this._connections.forEach((connection) => {
-            connection.stop();
+            connection.stop(notify);
         });
         this._connections.forEach((connection) => {
             connection.start();
         });
     }
 
-    public disconnectAll(): void {
+    public disconnectAll(notify = true): void {
         this._connections.forEach((connection) => {
-            connection.stop();
+            connection.stop(notify);
         });
     }
 

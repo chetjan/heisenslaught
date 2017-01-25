@@ -6,6 +6,7 @@ export interface IDraftHubServerProxy {
     restartDraft(draftToken: string, adminToken: string): Promise<IDraftConfigAdminDTO>;
     closeDraft(draftToken: string, adminToken: string): Promise<void>;
     connectToDraft(draftToken: string, teamToken?: string): Promise<IDraftConfigDTO>;
+    leaveDraft(): Promise<void>;
     setReady(draftToken: string, teamToken: string): Promise<boolean>;
     pickHero(heroId: string, draftToken: string, teamToken: string): Promise<boolean>;
 }
