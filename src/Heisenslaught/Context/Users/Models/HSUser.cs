@@ -17,6 +17,7 @@ namespace Heisenslaught.Users
         public string BattleTag { get; private set; }
         public string BattleTagNormaized { get; private set; }
         public string BattleTagDisplay { get; private set; }
+        public string SecurityStamp { get; private set; }
 
         // for later
         public string PasswordHash;
@@ -71,9 +72,15 @@ namespace Heisenslaught.Users
             _logins.Add(login);
         }
 
+
         public bool RemoveLogin(HSUserLogin login)
         {
             return this._logins.Remove(login);
+        }
+
+        public void SetSecurityStamp(string stamp)
+        {
+            SecurityStamp = stamp;
         }
 
         public IEnumerable<string> Roles

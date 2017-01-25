@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Heisenslaught.Users
 {
-    public class HSUserStore : IUserStore<HSUser>, IUserLoginStore<HSUser>, IUserPasswordStore<HSUser>, IUserEmailStore<HSUser>, IUserRoleStore<HSUser>
+    public class HSUserStore : IUserStore<HSUser>, IUserLoginStore<HSUser>, IUserPasswordStore<HSUser>, IUserEmailStore<HSUser>, IUserRoleStore<HSUser>, IUserSecurityStampStore<HSUser>
     {
         private readonly IMongoCollection<HSUser> _userCollection;
         private readonly ILogger _logger;
@@ -416,6 +416,17 @@ namespace Heisenslaught.Users
 
             var query = Builders<HSUser>.Filter.AnyEq(u => u.Roles, roleName);
             return await _userCollection.Find(query).ToListAsync(cancellationToken);
+        }
+
+        public Task SetSecurityStampAsync(HSUser user, string stamp, CancellationToken cancellationToken)
+        {
+            user.SetSecurityStamp(stamp);
+            return Task.FromResult(0);
+        }
+
+        public Task<string> GetSecurityStampAsync(HSUser user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.SecurityStamp == null ? "" : user.SecurityStamp);
         }
     }
 }
