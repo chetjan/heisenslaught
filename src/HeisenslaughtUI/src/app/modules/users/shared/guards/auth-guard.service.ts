@@ -111,7 +111,7 @@ export class AuthGuard implements CanActivate, CanLoad, CanActivateChild {
                 if (roleFn(user)) {
                   resolve(true);
                 } else {
-                  this.gotoLogin(loginParams);
+                  this.gotoPermError(loginParams);
                   resolve(false);
                 }
               } else {
@@ -128,5 +128,10 @@ export class AuthGuard implements CanActivate, CanLoad, CanActivateChild {
   protected gotoLogin(params: LoginParams) {
     this.loginService.returnUrl = params.url;
     this.router.navigate(['/login'], params.extras);
+  }
+
+  protected gotoPermError(params: LoginParams) {
+    this.loginService.returnUrl = params.url;
+    this.router.navigate(['/permerror'], params.extras);
   }
 }

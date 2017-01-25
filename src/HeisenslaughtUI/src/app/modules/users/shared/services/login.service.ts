@@ -1,11 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoginWindow } from './login-window';
 import { Subject, Observable, Subscriber } from 'rxjs';
 import { Http } from '@angular/http';
 import { AuthenticatedUser } from './types/user';
+import { SignalRConnectionService } from '../../../../services/signalr/signalr-connection';
 
 export * from './types/user';
+
+const KEEP_ALIVE_INTERVAL = 5 * 60 * 1000;
+const KEEP_ALIVE_USER_ACTION_TIME = 2 * 60 * 60 * 1000;
 
 @Injectable()
 export class LoginService {
@@ -16,21 +20,39 @@ export class LoginService {
   private _authenticatedUserSubject: Subject<AuthenticatedUser> = new Subject();
   private _authenticatedUserObservable: Observable<AuthenticatedUser>;
   private _returnUrl: string;
+  private _lastMouseMoved: number;
 
   constructor(
     private http: Http,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    @Optional() private signalRService: SignalRConnectionService
   ) {
     if (window.localStorage) {
       this._returnUrl = window.localStorage.getItem('login.returnUrl');
+      window.addEventListener('storage', (event: StorageEvent) => {
+        if (event.key === 'login.userChanged') {
+          this.handleExternalUserChange();
+        }
+      });
     }
     window.addEventListener('loginEvent', (evt: CustomEvent) => {
       if (evt.detail['success']) {
         this.setAuthenticatedUser(evt.detail['data']);
+        this.reconnectSignalR();
         this._battlenetLoginWindow.close();
       }
     });
+    window.addEventListener('mousemove', () => {
+      this._lastMouseMoved = new Date().getTime();
+    });
+    setInterval(() => {
+      let mouseDelta = new Date().getTime() - this._lastMouseMoved;
+      if (mouseDelta < KEEP_ALIVE_USER_ACTION_TIME) {
+        this.http.get('/auth/user').toPromise();
+      }
+    }, KEEP_ALIVE_INTERVAL);
+    this._lastMouseMoved = new Date().getTime();
   }
 
   public set returnUrl(value: string) {
@@ -38,8 +60,10 @@ export class LoginService {
     if (window.localStorage) {
       if (value) {
         window.localStorage.setItem('login.returnUrl', value);
+        console.log('returnUrl changed')
       } else {
         window.localStorage.removeItem('login.returnUrl');
+        console.log('returnUrl removed')
       }
     }
   }
@@ -55,8 +79,46 @@ export class LoginService {
     }
   }
 
-  private setAuthenticatedUser(authenticatedUser: AuthenticatedUser): void {
+  public get isLoggedIn(): boolean {
+    return !!this._authenticatedUser;
+  }
+
+  private handleExternalUserChange(): void {
+    this.http.get('/auth/user').map(res => res.json()).toPromise().then((user: AuthenticatedUser) => {
+      if (
+        (!this._authenticatedUser && user) ||
+        (this._authenticatedUser && !user) ||
+        (this._authenticatedUser.id !== user.id)
+      ) {
+        this.reconnectSignalR();
+      }
+      this.setAuthenticatedUser(user, true);
+    });
+  }
+
+  private reconnectSignalR(): void {
+    if (this.signalRService) {
+      this.signalRService.reconnectAll();
+    }
+  }
+
+  private connectSignalR(): void {
+    if (this.signalRService) {
+      this.signalRService.reconnectAll();
+    }
+  }
+
+  private disconnectSignalR(): void {
+    if (this.signalRService) {
+      this.signalRService.reconnectAll();
+    }
+  }
+
+  private setAuthenticatedUser(authenticatedUser: AuthenticatedUser, noEvent?: boolean): void {
     this._authenticatedUser = authenticatedUser;
+    if (!noEvent && window.localStorage) {
+      window.localStorage.setItem('login.userChanged', new Date().getTime().toString());
+    }
     this._authenticatedUserSubject.next(authenticatedUser);
   }
 
@@ -99,6 +161,7 @@ export class LoginService {
   public logOut(): void {
     this.http.get('/auth/logout').toPromise().then(() => {
       this.setAuthenticatedUser(null);
+      this.reconnectSignalR();
       this.returnUrl = undefined;
     });
   }

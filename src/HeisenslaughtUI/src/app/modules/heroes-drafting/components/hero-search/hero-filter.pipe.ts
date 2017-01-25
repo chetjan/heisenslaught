@@ -160,7 +160,6 @@ export class HeroFilter implements PipeTransform {
         if (token) {
             tokens[tokenType].push(token);
         }
-        console.log('tokens', tokens);
         return tokens;
     }
 }

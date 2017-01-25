@@ -1,0 +1,51 @@
+:host {
+    display: block;
+}
+
+md-list {
+    padding: 0px;
+    padding-bottom: 4px;
+}
+
+md-list-item {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    vertical-align: middle;
+    /deep/>.md-list-item {
+        height: auto !important;
+    }
+    h4 {
+        font-size: 14px;
+    }
+    .created-by,
+    .joined-on {
+        color: rgba(0, 0, 0, 0.42);
+        font-size: 11px;
+    }
+    .teams {
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.42);
+    }
+    .draft-links {
+        padding-top: 2px;
+        padding-bottom: 2px;
+        padding-left: 2px;
+        button {
+            padding: 4px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            min-width: 0px;
+            min-height: 0px;
+            line-height: 14px;
+            font-size: 10px;
+        }
+    }
+}
+
+.no-items {
+    padding: 8px;
+}
+
+button.view-all {
+    width: 100%;
+}

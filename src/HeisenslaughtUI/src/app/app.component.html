@@ -10,12 +10,7 @@
 </table>
 <md-sidenav-layout>
     <md-sidenav #mainNav mode="over" class="hs-dark-theme">
-        <md-nav-list>
-            <md-list-item [routerLink]="['/']" (click)="mainNav.close()"> Home </md-list-item>
-            <md-list-item [routerLink]="['/draft']" (click)="mainNav.close()"> Create Draft </md-list-item>
-            <md-list-item *ngIf="!(user | async)" (click)="mainNav.close(); login()"> Login </md-list-item>
-            <md-list-item *ngIf="(user | async)" (click)="mainNav.close(); logout()"> Logout </md-list-item>
-        </md-nav-list>
+        <app-navigation (navClick)="mainNav.close()"></app-navigation>
     </md-sidenav>
     <div class="content">
         <router-outlet></router-outlet>

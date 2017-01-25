@@ -2,7 +2,7 @@ import { Component, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { DraftService, IDraftConfigDTO, IDraftState, DraftPhase, IDraftConfigDrafterDTO }
+import { DraftHubService, IDraftConfigDTO, IDraftState, DraftPhase, IDraftConfigDrafterDTO }
   from '../../../heroes-draft-service/services/draft.service';
 import { HeroesService, HeroData, IMapData } from '../../../heroes-data-service/services/heroes.service';
 
@@ -42,7 +42,7 @@ export class DraftScreenComponent implements OnDestroy {
 
 
   constructor(
-    private draftService: DraftService,
+    private draftService: DraftHubService,
     private heroesService: HeroesService,
     private route: ActivatedRoute,
     private changeRef: ChangeDetectorRef

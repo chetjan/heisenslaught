@@ -187,6 +187,10 @@ $sideOffsetSmall: 90px;
     }
 }
 
+draft-connection-status{
+    z-index: 200;
+}
+
 @media (max-width: 1510px),
 (max-height: 860px) {
      :host {

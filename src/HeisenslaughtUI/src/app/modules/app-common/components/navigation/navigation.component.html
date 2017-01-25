@@ -1,0 +1,21 @@
+<md-nav-list>
+    <div *ngFor="let item of navItems" >
+      <md-list-item [routerLink]="[item.path]" (click)="onItemClicked(item)">
+        {{item.label}}
+      </md-list-item>
+      <pre *ngIf="item.showChildren">
+        {{item.config.path | json}}
+      </pre>
+    </div>
+    
+</md-nav-list>
+
+<!--
+<md-nav-list>
+            <md-list-item [routerLink]="['/']" (click)="mainNav.close()"> Home </md-list-item>
+            <md-list-item [routerLink]="['/draft']" (click)="mainNav.close()"> Create Draft </md-list-item>
+            <md-list-item *ngIf="!(user | async)" (click)="mainNav.close(); login()"> Login </md-list-item>
+            <md-list-item *ngIf="(user | async)" (click)="mainNav.close(); logout()"> Logout </md-list-item>
+        </md-nav-list>
+
+        -->

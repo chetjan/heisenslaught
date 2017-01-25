@@ -1,4 +1,4 @@
-import { NgModule, ValueProvider } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MdCardModule } from '@angular/material/card';
@@ -11,9 +11,6 @@ import { MdIconModule } from '@angular/material/icon';
 import { MdButtonToggleModule } from '@angular/material/button-toggle';
 
 import { HeroesDraftingRoutingModule } from './heroes-drafting-routing.module';
-
-import { HeroesService } from '../heroes-data-service/heroes-data-service.module';
-import { DraftService } from '../heroes-draft-service/heroes-draft-service.module';
 
 import { HeroIconComponent, HeroPickComponent, HeroSearchComponent, TeamHeroPicksComponent, HeroFilter } from './components/components';
 import { HeroesCommonModule } from '../heroes-common/heroes-common.module';
@@ -51,9 +48,6 @@ import { DraftConnectionStatusComponent } from './components/draft-connection-st
     DraftScreenComponent,
     DraftConnectionStatusComponent
   ],
-  providers: [
-    HeroesService,
-    <ValueProvider>{ provide: DraftService, useValue: new DraftService() }
-  ]
+  providers: []
 })
 export class HeroesDraftingModule { }

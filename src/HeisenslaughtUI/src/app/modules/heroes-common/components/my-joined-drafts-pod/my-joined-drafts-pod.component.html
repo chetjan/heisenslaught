@@ -1,0 +1,24 @@
+<content-pod title="Recently Joined Drafts">
+  <div class="no-items" *ngIf="!recentDrafts || !recentDrafts.length">
+    You haven't joined any drafts
+  </div>
+  <md-list *ngIf="recentDrafts && !!recentDrafts.length">
+    <md-list-item *ngFor="let draft of recentDrafts">
+      <h4 md-line>
+        <span>{{getMapName(draft.map)}}</span>&nbsp;<span class="joined-on"> on {{draft.joinedOn | date:'MMM d, '}}{{draft.joinedOn | date:'shortTime'}}</span>
+      </h4>
+      <p md-line class="teams">
+        <span class="team1">{{draft.team1Name}}</span>&nbsp;<span class="vs">vs</span>&nbsp;<span class="team2">{{draft.team2Name}}</span>
+      </p>
+      <p class="draft-links" md-line>
+        <button md-raised-button *ngIf="draft.adminToken" [routerLink]="['/draft/config', draft.draftToken, draft.adminToken]">Config</button>
+        <button md-raised-button *ngIf="draft.team1DraftToken" [routerLink]="['/draft', draft.draftToken, draft.team1DraftToken]">Team 1</button>
+        <button md-raised-button *ngIf="draft.team2DraftToken" [routerLink]="['/draft', draft.draftToken, draft.team2DraftToken]">Team 2</button>
+        <button md-raised-button [routerLink]="['/draft', draft.draftToken]">Observer</button>
+        <span class="created-by"> - created by {{draft.createdBy}}</span>
+      <p>
+    </md-list-item>
+  </md-list>
+  <button #actions md-button class="view-all actions">View All</button>
+  <button #actions md-button class="view-all actions">View All 2</button>
+</content-pod>

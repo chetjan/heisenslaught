@@ -1,8 +1,8 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { DraftService, ICreateDraftDTO, IDraftConfigAdminDTO, DraftPhase } from '../../../heroes-draft-service/services/draft.service';
+import { DraftHubService, ICreateDraftDTO, IDraftConfigAdminDTO, DraftPhase } from '../../../heroes-draft-service/services/draft.service';
 import { HeroesService, IMapData, HeroData } from '../../../heroes-data-service/services/heroes.service';
 
 
@@ -99,7 +99,8 @@ export class DraftConfigScreenComponent implements OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private heroesService: HeroesService,
-    private draftService: DraftService
+    private draftService: DraftHubService,
+    private changeRef: ChangeDetectorRef
   ) {
     try {
 
@@ -163,6 +164,7 @@ export class DraftConfigScreenComponent implements OnDestroy {
       this.currentConfig = <IDraftConfigAdminDTO>config;
       this.stateSubscription = this.draftService.draftStateObservable.subscribe((state) => {
         this.currentConfig.state = state;
+        this.changeRef.detectChanges();
       });
       this.loadedConfig = true;
     }, (err) => {

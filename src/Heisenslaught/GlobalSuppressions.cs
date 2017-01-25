@@ -9,4 +9,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~M:Heisenslaught.Hubs.UserAwareHub.OnConnected~System.Threading.Tasks.Task")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~M:Heisenslaught.Hubs.UserAwareHub.OnDisconnected(System.Boolean)~System.Threading.Tasks.Task")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~M:Heisenslaught.Hubs.UserAwareHub.OnUserConnected~System.Threading.Tasks.Task")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~M:Heisenslaught.Infrastructure.Hubs.UserAwareHub.OnDisconnected(System.Boolean)~System.Threading.Tasks.Task")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~M:Heisenslaught.Users.AuthController.Logout~System.Threading.Tasks.Task{System.Boolean}")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~M:Heisenslaught.AngularApplication.AngularController.Index~System.Threading.Tasks.Task{Microsoft.AspNetCore.Mvc.IActionResult}")]
 

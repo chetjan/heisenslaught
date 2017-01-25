@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { DraftService, HubConnectionState, IDraftUser } from '../../../heroes-draft-service/heroes-draft-service.module';
+import { DraftHubService, SignalRConnectionState, IDraftUser } from '../../../heroes-draft-service/heroes-draft-service.module';
 
 
 @Component({
@@ -19,16 +19,16 @@ export class DraftConnectionStatusComponent implements OnInit, OnDestroy {
   public connectedUsers: IDraftUser[] = [];
 
   constructor(
-    private draftService: DraftService,
+    private draftService: DraftHubService,
     private changeRef: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
-    this.updateConnectionState(this.draftService.connectionState);
+    this.updateConnectionState(this.draftService.state);
     this.updateUserConnections(this.draftService.connectedUsers);
 
-    this.connectionStateSub = this.draftService.connectionStateObservable.subscribe((state) => {
-      this.updateConnectionState(state);
+    this.connectionStateSub = this.draftService.stateObserver.subscribe((state) => {
+      this.updateConnectionState(state.newState);
     });
     this.userSubscription = this.draftService.connectedUserObsevable.subscribe((users) => {
       this.updateUserConnections(users);
@@ -40,21 +40,20 @@ export class DraftConnectionStatusComponent implements OnInit, OnDestroy {
     this.userSubscription.unsubscribe();
   }
 
-  private updateConnectionState(state: HubConnectionState): void {
+  private updateConnectionState(state: SignalRConnectionState): void {
     try {
-      this.connectionStatus = HubConnectionState[state].toLowerCase();
+      this.connectionStatus = SignalRConnectionState[state].toLowerCase();
       switch (state) {
-        case HubConnectionState.CONNECTED:
-        case HubConnectionState.CONNECTED_SLOW:
+        case SignalRConnectionState.CONNECTED:
           this.connectionIcon = 'wifi';
           break;
-        case HubConnectionState.CONNECTING:
+        case SignalRConnectionState.CONNECTING:
           this.connectionIcon = 'autorenew';
           break;
-        case HubConnectionState.DISCONNECTED:
+        case SignalRConnectionState.DISCONNECTED:
           this.connectionIcon = 'warning';
           break;
-        case HubConnectionState.RECONNECTING:
+        case SignalRConnectionState.RECONNECTING:
           this.connectionIcon = 'autorenew';
           break;
       }

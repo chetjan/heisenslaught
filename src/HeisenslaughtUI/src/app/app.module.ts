@@ -6,7 +6,10 @@ import { HttpModule } from '@angular/http';
 
 import { MaterialModule } from '@angular/material';
 import { MdSidenavModule } from '@angular/material/sidenav';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { CovalentCoreModule } from '@covalent/core';
+
+import { SignalRConnectionService } from './services/signalr/signalr-connection';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -14,12 +17,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { HomeScreenComponent } from './screens/home-screen/home-screen.component';
 import { NotFoundScreenComponent } from './screens/not-found-screen/not-found-screen.component';
 import { AppCommonModule } from './modules/app-common/app-common.module';
+import { HeroesCommonModule } from './modules/heroes-common/heroes-common.module';
 
 import { LoginService } from './modules/users/shared/services/login.service';
 import { LoginScreenComponent } from './screens/login-screen/login-screen.component';
+import { PermissionErrorScreenComponent } from './screens/permission-error-screen/permission-error-screen.component';
 import { AuthGuard } from './modules/users/shared/guards/auth-guard.service';
 import { LoginBarComponent } from './components/login-bar/login-bar.component';
 
+import { HeroesService } from './modules/heroes-data-service/services/heroes.service';
+import { DraftHubService } from './modules/heroes-draft-service/services/draft.service';
+import { DraftService } from './modules/heroes-draft-service/services/draft-api.service';
+import { ServerEventService } from './services/signalr/signalr-server-event.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +36,8 @@ import { LoginBarComponent } from './components/login-bar/login-bar.component';
     HomeScreenComponent,
     NotFoundScreenComponent,
     LoginScreenComponent,
-    LoginBarComponent
+    LoginBarComponent,
+    PermissionErrorScreenComponent
   ],
   imports: [
     BrowserModule,
@@ -35,11 +45,22 @@ import { LoginBarComponent } from './components/login-bar/login-bar.component';
     FormsModule,
     MaterialModule.forRoot(),
     MdSidenavModule.forRoot(),
+    FlexLayoutModule.forRoot(),
     CovalentCoreModule.forRoot(),
     AppCommonModule,
+    HeroesCommonModule,
     AppRoutingModule
   ],
-  providers: [LoginService, AuthGuard],
+  exports: [],
+  providers: [
+    LoginService,
+    AuthGuard,
+    SignalRConnectionService,
+    HeroesService,
+    DraftHubService,
+    DraftService,
+    ServerEventService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
