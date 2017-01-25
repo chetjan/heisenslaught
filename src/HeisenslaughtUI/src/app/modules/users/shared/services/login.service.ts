@@ -8,9 +8,6 @@ import { SignalRConnectionService } from '../../../../services/signalr/signalr-c
 
 export * from './types/user';
 
-const KEEP_ALIVE_INTERVAL = 5 * 60 * 1000;
-const KEEP_ALIVE_USER_ACTION_TIME = 2 * 60 * 60 * 1000;
-
 @Injectable()
 export class LoginService {
 
@@ -24,7 +21,6 @@ export class LoginService {
   private _currentUrl: string;
   private _isLogoutCheck: boolean;
 
-  //private _lastMouseMoved: number;
 
   constructor(
     private http: Http,
@@ -56,17 +52,6 @@ export class LoginService {
       }
     });
 
-    /*  window.addEventListener('mousemove', () => {
-        this._lastMouseMoved = new Date().getTime();
-      });
-      setInterval(() => {
-        let mouseDelta = new Date().getTime() - this._lastMouseMoved;
-        if (mouseDelta < KEEP_ALIVE_USER_ACTION_TIME) {
-          this.http.get('/auth/user').toPromise();
-        }
-      }, KEEP_ALIVE_INTERVAL);
-      this._lastMouseMoved = new Date().getTime();
-      */
   }
 
   public set returnUrl(value: string) {
@@ -155,19 +140,6 @@ export class LoginService {
         resolve(this._authenticatedUser);
       }, returnUrl);
     });
-    /*return new Promise((resolve, reject) => {
-      this.logOut().then(() => {
-        let logoutImage = new Image();
-        logoutImage.onerror = logoutImage.onload = () => {
-          this.battleNetLogin(returnUrl).then((user) => {
-            resolve(user);
-          }, (err) => {
-            reject(err);
-          });
-        };
-        logoutImage.src = 'https://us.battle.net/account/management/?logout';
-      });
-    });*/
   }
 
   public loginRedirect() {
