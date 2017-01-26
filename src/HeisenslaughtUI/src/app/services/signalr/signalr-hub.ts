@@ -60,7 +60,7 @@ interface HubPoxy<TServerHub> extends SignalR.Hub.Proxy {
     client: {};
 }
 
-export abstract class SignalRHub<TServerHub> {
+export abstract class SignalRHub<TServerHub extends any> {
     private _connection: ISignalRConnection;
     private _stateObserver: Observable<SignalRStateChange>;
     private _state: SignalRConnectionState;
@@ -178,11 +178,11 @@ export abstract class SignalRHub<TServerHub> {
                 if (this._serverMethods[methodName]) {
                     throw new Error('Duplicate server method "' + methodName + '" on hub "' + this.hubName + '"');
                 }
-                this._serverMethods[methodName] = (...args: any[]) => {
+                this._serverMethods[methodName] = (...args: any[]): Promise<any> => {
                     return new Promise((resolve, reject) => {
                         let sub;
                         let callProxy = () => {
-                            this._hub.server[methodName].apply(this._hub.server, args)
+                            (<Function>this._hub.server[methodName]).apply(this._hub.server, args)
                                 .done((result) => {
                                     resolve(result);
                                 })
