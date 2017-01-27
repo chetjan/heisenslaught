@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+import { AuthGuard } from '../users/shared/guards/auth-guard.service';
 import { AdminComponent } from './admin.component';
 import { AdminDashboardComponent } from './screens/admin-dashboard/admin-dashboard.component';
 
@@ -18,10 +18,25 @@ const routes: Routes = [
             },
             {
                 path: 'draft',
-                component: AdminDashboardComponent,
+                canLoad: [AuthGuard],
+                loadChildren: 'app/modules/heroes-drafting/modules/draft-admin/draft-admin.module#DraftAdminModule',
                 data: {
-                    navigation: { label: 'Drafts' }
-                },
+                    navigation: {
+                        label: 'Drafts',
+                        showChildren: 1,
+                        children: [
+                            {
+                                label: 'Active Drafts',
+                                path: 'active'
+                            },
+                            {
+                                label: 'All Drafts',
+                                path: 'all'
+                            }
+                        ]
+                    },
+                    checkRoles: ['SU', 'Admin']
+                }
             },
             {
                 path: 'users',

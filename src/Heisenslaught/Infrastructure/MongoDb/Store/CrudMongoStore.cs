@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +42,7 @@ namespace Heisenslaught.Infrastructure.MongoDb
             }
         }
 
-        public IQueryable<TDocument> QueryableCollection
+        public IMongoQueryable<TDocument> QueryableCollection
         {
             get
             {

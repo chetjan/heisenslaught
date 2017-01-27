@@ -1,0 +1,58 @@
+<app-page class="full">
+  <content-pod title="Draft Statistics">
+    <div class="container">
+      <table>
+        <tr>
+          <th colspan="2">Currently Active</th>
+        </tr>
+        <tr>
+          <th>Drafts</th>
+          <td>{{draftStats?.numActiveDrafts}}</td>
+        </tr>
+        <tr>
+          <th>Users</th>
+          <td>{{draftStats?.numConnectedUsers}}</td>
+        </tr>
+
+        <tr>
+          <th colspan="2">Past 24 Hours</th>
+        </tr>
+        <tr>
+          <th>Drafts</th>
+          <td>{{draftStats?.numDrafts24}}</td>
+        </tr>
+        <tr>
+          <th>Users</th>
+          <td>{{draftStats?.numUsers24}}</td>
+        </tr>
+
+        <tr>
+          <th colspan="2">Past Week</th>
+        </tr>
+        <tr>
+          <th>Drafts</th>
+          <td>{{draftStats?.numDraftsWeek}}</td>
+        </tr>
+        <tr>
+          <th>Users</th>
+          <td>{{draftStats?.numUsersWeek}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">Totals</th>
+        </tr>
+        <tr>
+          <th>Drafts</th>
+          <td>{{draftStats?.numDraftsEver}}</td>
+        </tr>
+        <tr>
+          <th>Users</th>
+          <td>{{draftStats?.numUsersEver}}</td>
+        </tr>
+        <tr>
+          <th>Drafts Created</th>
+          <td>{{draftStats?.numDrafts}}</td>
+        </tr>
+      </table>
+    </div>
+  </content-pod>
+</app-page>

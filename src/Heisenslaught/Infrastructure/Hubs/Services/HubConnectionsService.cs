@@ -80,6 +80,7 @@ namespace Heisenslaught.Infrastructure.Hubs
             return null;
         }
 
+
         public HubConnection OnUserConnected(HSUser user, Hub hub)
         {
             if (user != null)
@@ -301,6 +302,66 @@ namespace Heisenslaught.Infrastructure.Hubs
                 _lock.ExitReadLock();
             }
         }
+
+        public List<String> GetChannels()
+        {
+            try
+            {
+                _lock.EnterReadLock();
+                return (from c in _channelConnections
+                        select c.ChannelName).Distinct().ToList();
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
+
+        public List<String> GetChannels(Type hubType)
+        {
+            try
+            {
+                _lock.EnterReadLock();
+                return (from c in _channelConnections
+                        where c.Connection.HubType == hubType
+                        select c.ChannelName).Distinct().ToList();
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
+
+        public List<HSUser> GetUsersConnectedToAChannel()
+        {
+            try
+            {
+                _lock.EnterReadLock();
+                return (from c in _channelConnections
+                        select c.Connection.User).Distinct().ToList();
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
+
+        public List<HSUser> GetUsersConnectedToAChannel(Type hubType)
+        {
+            try
+            {
+                _lock.EnterReadLock();
+                return (from c in _channelConnections
+                        where c.Connection.HubType == hubType
+                        select c.Connection.User).Distinct().ToList();
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
+
+
 
         public HSUser GetUserFromConnection(string connectionId)
         {

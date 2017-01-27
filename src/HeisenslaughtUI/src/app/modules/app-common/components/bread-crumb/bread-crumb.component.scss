@@ -1,0 +1,23 @@
+:host {
+    display: block;
+    md-card {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        >div {
+            height: 24px;
+            line-height: 24px;
+            vertical-align: top;
+            display: inline-block;
+            >div {
+                display: inline-block;
+                vertical-align: top;
+                height: 24px;
+                line-height: 24px;
+            }
+        }
+        .parent {
+            color: lightskyblue;
+            cursor: pointer;
+        }
+    }
+}

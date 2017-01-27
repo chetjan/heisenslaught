@@ -1,0 +1,11 @@
+<div class="page-container" fxLayout="column" [fxLayoutGap]="layoutGap">
+  <div 
+    class="header" fxLayout="column" [fxLayoutGap]="layoutGap" 
+  ><app-bread-crumb *ngIf="showBreadcrumb"></app-bread-crumb><ng-content select="[header]"></ng-content></div>
+  <div class="body" fxLayout="column" fxLayout.gt-md="row" [fxLayoutGap]="layoutGap">
+    <div class="left" ><ng-content select="[leftCol]"></ng-content></div>
+    <div class="center" fxFlex>{{isHeaderFixed | json}}<ng-content></ng-content></div>
+    <div class="right" ><ng-content select="[rightCol]"></ng-content></div>
+  </div>
+  <div class="footer" fxLayout="column" [fxLayoutGap]="layoutGap"><ng-content select="[footer]"></ng-content></div>
+</div>
