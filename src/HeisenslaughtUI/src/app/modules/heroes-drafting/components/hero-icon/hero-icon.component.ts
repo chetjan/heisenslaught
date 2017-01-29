@@ -8,7 +8,7 @@ import { HeroData, HeroesService } from '../../../heroes-data-service/heroes-dat
   template: `
     <div #ttAttach>
       <svg viewBox="0 0 100 100">
-        <image [attr.xlink:href]="heroImage || hero?.iconSmall" width="100" height="100"></image>
+        <image [attr.xlink:href]="heroImage" width="100" height="100"></image>
       </svg>
       <div class="picked-icon"></div>
     </div>
@@ -41,7 +41,7 @@ export class HeroIconComponent implements OnInit, OnDestroy {
   public async getImage(id: string): Promise<string> {
     if (id) {
       let images = await this.heroesService.getHeroImages();
-      return images[id];
+      return images[id] || this.hero.iconSmall;
     }
     return undefined;
   }
