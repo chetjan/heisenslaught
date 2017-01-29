@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from '../../modules/users/shared/services/login.service';
 
 @Component({
   selector: 'permission-error-screen',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PermissionErrorScreenComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private loginService: LoginService
+  ) { }
 
   ngOnInit() {
+  }
+
+  public switchUser() {
+    this.loginService.battleNetLoginSwitchUser().then(() => {
+      this.loginService.loginRedirect();
+    });
   }
 
 }

@@ -1,5 +1,5 @@
 import { Injectable, Optional } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { LoginWindow } from './login-window';
 import { Subject, Observable, Subscriber } from 'rxjs';
 import { Http } from '@angular/http';
@@ -8,19 +8,19 @@ import { SignalRConnectionService } from '../../../../services/signalr/signalr-c
 
 export * from './types/user';
 
-const KEEP_ALIVE_INTERVAL = 5 * 60 * 1000;
-const KEEP_ALIVE_USER_ACTION_TIME = 2 * 60 * 60 * 1000;
-
 @Injectable()
 export class LoginService {
 
   private _initialized: boolean = false;
   private _battlenetLoginWindow: LoginWindow = new LoginWindow('/auth?provider=BattleNet', 500, 620);
+  private _battlenetLoginSwitchWindow: LoginWindow = new LoginWindow('/auth/switch?provider=BattleNet', 500, 620);
   private _authenticatedUser: AuthenticatedUser;
   private _authenticatedUserSubject: Subject<AuthenticatedUser> = new Subject();
   private _authenticatedUserObservable: Observable<AuthenticatedUser>;
   private _returnUrl: string;
-  private _lastMouseMoved: number;
+  private _currentUrl: string;
+  private _isLogoutCheck: boolean;
+
 
   constructor(
     private http: Http,
@@ -41,18 +41,17 @@ export class LoginService {
         this.setAuthenticatedUser(evt.detail['data']);
         this.reconnectSignalR();
         this._battlenetLoginWindow.close();
+        this._battlenetLoginSwitchWindow.close();
       }
     });
-    window.addEventListener('mousemove', () => {
-      this._lastMouseMoved = new Date().getTime();
-    });
-    setInterval(() => {
-      let mouseDelta = new Date().getTime() - this._lastMouseMoved;
-      if (mouseDelta < KEEP_ALIVE_USER_ACTION_TIME) {
-        this.http.get('/auth/user').toPromise();
+    router.events.subscribe((navEvent) => {
+      if (navEvent instanceof NavigationEnd) {
+        if (!navEvent.urlAfterRedirects.startsWith('/login')) {
+          this._currentUrl = navEvent.urlAfterRedirects;
+        }
       }
-    }, KEEP_ALIVE_INTERVAL);
-    this._lastMouseMoved = new Date().getTime();
+    });
+
   }
 
   public set returnUrl(value: string) {
@@ -70,6 +69,10 @@ export class LoginService {
 
   public get returnUrl(): string {
     return this._returnUrl;
+  }
+
+  public get isLogoutCheck(): boolean {
+    return this._isLogoutCheck;
   }
 
   public initialize(authenticatedUser: AuthenticatedUser): void {
@@ -91,6 +94,7 @@ export class LoginService {
         (this._authenticatedUser.id !== user.id)
       ) {
         this.reconnectSignalR();
+        this.doLogoutCheck();
       }
       this.setAuthenticatedUser(user, true);
     });
@@ -98,19 +102,19 @@ export class LoginService {
 
   private reconnectSignalR(): void {
     if (this.signalRService) {
-      this.signalRService.reconnectAll();
+      this.signalRService.reconnectAll(false);
     }
   }
 
   private connectSignalR(): void {
     if (this.signalRService) {
-      this.signalRService.reconnectAll();
+      this.signalRService.connectAll();
     }
   }
 
-  private disconnectSignalR(): void {
+  private disconnectSignalR(notify = true): void {
     if (this.signalRService) {
-      this.signalRService.reconnectAll();
+      this.signalRService.disconnectAll(notify);
     }
   }
 
@@ -130,7 +134,16 @@ export class LoginService {
     });
   }
 
+  public battleNetLoginSwitchUser(returnUrl = '/'): Promise<AuthenticatedUser> {
+    return new Promise<AuthenticatedUser>((resolve, reject) => {
+      this._battlenetLoginSwitchWindow.open(() => {
+        resolve(this._authenticatedUser);
+      }, returnUrl);
+    });
+  }
+
   public loginRedirect() {
+    this._isLogoutCheck = false;
     this.router.navigate([this.returnUrl || '/'], {
       preserveFragment: true,
       preserveQueryParams: true,
@@ -158,11 +171,28 @@ export class LoginService {
     return this._authenticatedUserObservable;
   }
 
-  public logOut(): void {
-    this.http.get('/auth/logout').toPromise().then(() => {
-      this.setAuthenticatedUser(null);
-      this.reconnectSignalR();
-      this.returnUrl = undefined;
+  public logOut(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.disconnectSignalR();
+      let p = this.http.get('/auth/logout').toPromise();
+      p.then(() => {
+        this.setAuthenticatedUser(null);
+        this.connectSignalR();
+        this.doLogoutCheck();
+        resolve();
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  private doLogoutCheck(): void {
+    this.returnUrl = this._currentUrl;
+    this._isLogoutCheck = true;
+    this.router.navigate(['/login'], {
+      preserveFragment: true,
+      preserveQueryParams: true,
+      replaceUrl: true
     });
   }
 }

@@ -37,6 +37,14 @@ namespace Heisenslaught.Users
             return Challenge(properties, provider);
         }
 
+        [HttpGet("auth/switch")]
+        public async Task<IActionResult> SwitchUserAsync(string provider, string returnUrl = null)
+        {
+            await _signInManager.SignOutAsync();
+            ViewData["loginUrl"] = "/auth?provider=" + provider + "&returnUrl=" + returnUrl;
+            return View("LoginSwitch");
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> CallbackAsync(string returnUrl = null, string remoteError = null)
