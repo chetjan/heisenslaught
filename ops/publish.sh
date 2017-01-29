@@ -8,7 +8,7 @@ cd "${dir}/.."
 git pull
 cd "${dir}/../src/HeisenslaughtUI"
 npm install
-./node_modules/.bin/ng build --prod
+./node_modules/.bin/ng build --prod --aot
 cd ../..
 dotnet restore
 dotnet publish
