@@ -17,12 +17,13 @@ export class HeroesComponent implements OnInit {
 
   async ngOnInit() {
     [this.heroes, this.importReport] =
-      await Promise.all([this.heroesDataService.getHeroes(), this.heroesDataService.getHeroImageImportReport()])
+      await Promise.all([this.heroesDataService.getHeroes(), this.heroesDataService.getHeroImageImportReport()]);
 
   }
 
-  public import(heroesToImport) {
-    this.heroesDataImporterService.importHeroes(heroesToImport);
+  public async import(heroesToImport) {
+    await this.heroesDataImporterService.importHeroes(heroesToImport);
+    this.importReport = await this.heroesDataService.getHeroImageImportReport();
   }
 
   public get isImporting(): boolean {
