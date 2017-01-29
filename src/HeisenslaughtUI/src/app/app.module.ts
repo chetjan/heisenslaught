@@ -7,7 +7,6 @@ import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
 import { MdSidenavModule } from '@angular/material/sidenav';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { CovalentCoreModule } from '@covalent/core';
 
 import { SignalRConnectionService } from './services/signalr/signalr-connection';
 
@@ -46,7 +45,6 @@ import { ServerEventService } from './services/signalr/signalr-server-event.serv
     MaterialModule.forRoot(),
     MdSidenavModule.forRoot(),
     FlexLayoutModule.forRoot(),
-    CovalentCoreModule.forRoot(),
     AppCommonModule,
     HeroesCommonModule,
     AppRoutingModule

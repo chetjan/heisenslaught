@@ -1,0 +1,26 @@
+:host {
+    display: block;
+    max-width: 1200px;
+    width: 100%;
+    margin: auto;
+    .page-container {
+        >div,
+        div.body>div {
+            &:empty {
+                display: none !important;
+                &+* {
+                    margin-left: 0px !important;
+                    margin-top: 0px !important;
+                }
+            }
+        }
+    }
+}
+
+:host.narrow {
+    max-width: 800px;
+}
+
+:host.full {
+    max-width: initial;
+}

@@ -1,21 +1,15 @@
 <md-nav-list>
-    <div *ngFor="let item of navItems" >
-      <md-list-item [routerLink]="[item.path]" (click)="onItemClicked(item)">
-        {{item.label}}
-      </md-list-item>
-      <pre *ngIf="item.showChildren">
-        {{item.config.path | json}}
-      </pre>
-    </div>
-    
+    <template let-item let-i="index" ngFor [ngForOf]="navItems" >
+      <div  routerLinkActive="active-child" >
+        <md-list-item [routerLink]="[item.path]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="onItemClicked(item)" >
+          <div fxLayout="row" style="width:100%" (click)="open(i)">
+            <div fxFlex>{{item.label}}</div> 
+            <div *ngIf="item.showChildren && item.children?.length" fxFlex="20px" class="child-toggle"><button (click)="toggleOpen(i); $event.stopPropagation()" md-icon-button><md-icon>{{isOpen(i) ? 'arrow_drop_up' : 'arrow_drop_down' }}</md-icon></button></div>
+          </div>
+        </md-list-item>
+        <div class="children" *ngIf="item.showChildren && item.children?.length" [hidden]="!isOpen(i)">
+          <app-navigation [configs]="item.children" [baseRef]="item.path"></app-navigation>
+        </div>
+      </div>
+    </template>
 </md-nav-list>
-
-<!--
-<md-nav-list>
-            <md-list-item [routerLink]="['/']" (click)="mainNav.close()"> Home </md-list-item>
-            <md-list-item [routerLink]="['/draft']" (click)="mainNav.close()"> Create Draft </md-list-item>
-            <md-list-item *ngIf="!(user | async)" (click)="mainNav.close(); login()"> Login </md-list-item>
-            <md-list-item *ngIf="(user | async)" (click)="mainNav.close(); logout()"> Logout </md-list-item>
-        </md-nav-list>
-
-        -->

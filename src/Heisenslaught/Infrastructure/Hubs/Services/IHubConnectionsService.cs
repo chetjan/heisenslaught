@@ -20,6 +20,10 @@ namespace Heisenslaught.Infrastructure.Hubs
         void OnUserDisconnected(HSUser user, Hub hub);
         void OnUserJoinedChannel(HSUser user, Hub hub, string channelName, int flag = 0);
         void OnUserLeftChannel(Hub hub, string channelName);
+        List<String> GetChannels();
+        List<String> GetChannels(Type hubType);
+        List<HSUser> GetUsersConnectedToAChannel();
+        List<HSUser> GetUsersConnectedToAChannel(Type hubType);
         TReturn Query<TReturn>(Func<Dictionary<string, HSUser>, TReturn> query);
         TReturn Query<TReturn>(Func<List<HubConnection>, TReturn> query);
         TReturn Query<TReturn>(Func<List<HubChannelConnection>, TReturn> query);

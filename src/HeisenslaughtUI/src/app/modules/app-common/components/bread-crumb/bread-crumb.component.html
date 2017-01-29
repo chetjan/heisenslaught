@@ -1,0 +1,9 @@
+<md-card>
+  <div *ngFor="let item of parents">
+    <div class="parent" [routerLink]="[item.path]">{{item.label}}</div>
+    <md-icon>keyboard_arrow_right</md-icon>
+  </div>
+  <div>
+    <div class="current">{{current.label}}</div>
+  </div>
+</md-card>

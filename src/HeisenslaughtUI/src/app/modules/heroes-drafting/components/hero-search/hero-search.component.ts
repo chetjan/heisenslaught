@@ -1,4 +1,4 @@
-import { Component, Input, Output, ChangeDetectorRef, EventEmitter, ViewChildren, QueryList } from '@angular/core';
+import { Component, Input, Output, ChangeDetectorRef, EventEmitter, ViewChildren, QueryList, OnInit } from '@angular/core';
 import { MdButtonToggle } from '@angular/material/button-toggle';
 import { HeroesService, HeroData } from '../../../heroes-data-service/heroes-data-service.module';
 import { IDraftState } from '../../../heroes-draft-service/heroes-draft-service.module';
@@ -10,7 +10,7 @@ export * from './hero-filter.pipe';
   templateUrl: './hero-search.component.html',
   styleUrls: ['./hero-search.component.scss']
 })
-export class HeroSearchComponent {
+export class HeroSearchComponent implements OnInit {
   private heroes: HeroData[];
   private _allRoles: string[];
   private _selectedHero: HeroData;
@@ -63,10 +63,10 @@ export class HeroSearchComponent {
     private heroesService: HeroesService,
     private ref: ChangeDetectorRef
 
-  ) {
-    heroesService.getHeroes().subscribe((data) => {
-      this.heroes = data;
-    });
+  ) { }
+
+  public async ngOnInit() {
+    this.heroes = await this.heroesService.getHeroes();
   }
 
   @Input()

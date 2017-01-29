@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +20,12 @@ namespace Heisenslaught.Infrastructure.MongoDb
 
         string CollectionName { get; }
         IMongoCollection<TDocument> Collection { get; }
-        IQueryable<TDocument> QueryableCollection { get; }
+        IMongoQueryable<TDocument> QueryableCollection { get; }
         bool CollectionExists { get; }
 
         void Create(TDocument document);
         Task CreateAsync(TDocument document, CancellationToken cancellationToken);
+        void CreateOrUpdate(TDocument document);
 
         void Update(TDocument document);
         Task UpdateAsync(TDocument document, CancellationToken cancellationToken);

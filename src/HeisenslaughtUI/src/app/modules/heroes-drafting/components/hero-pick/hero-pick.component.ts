@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, ViewChild, ElementRef } from '@angular/core';
 
-import { HeroData } from '../../../heroes-data-service/heroes-data-service.module';
+import { HeroData, HeroesService } from '../../../heroes-data-service/heroes-data-service.module';
 
 
 @Component({
@@ -16,7 +16,11 @@ export class HeroPickComponent implements OnChanges {
   @ViewChild('heroCanvas')
   private canvas: ElementRef;
 
-  public ngOnChanges(changes) {
+  public constructor(private heroesService: HeroesService) {
+
+  }
+
+  public async ngOnChanges(changes) {
     if (changes['hero']) {
       let canvas = <HTMLCanvasElement>this.canvas.nativeElement;
       let ctx = canvas.getContext('2d');
@@ -38,7 +42,8 @@ export class HeroPickComponent implements OnChanges {
           ctx.drawImage(img, 0, 0, w, h);
           ctx.restore();
         };
-        img.src = this.hero.iconSmall;
+        let heroImages = await this.heroesService.getHeroImages();
+        img.src = heroImages[this.hero.id] || this.hero.iconSmall;
       } else {
         ctx.clearRect(0, 0, w, h);
       }

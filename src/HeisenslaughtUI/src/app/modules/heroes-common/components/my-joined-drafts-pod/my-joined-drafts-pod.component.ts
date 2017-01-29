@@ -16,9 +16,6 @@ export class MyJoinedDraftsPodComponent implements OnInit {
     private draftService: DraftService,
     private heroesService: HeroesService
   ) {
-    heroesService.getMaps().subscribe((maps) => {
-      this.mapData = maps;
-    });
     draftService.getMyRecentlyJoinedDrafts().subscribe((recentDrafts) => {
       this.recentDrafts = recentDrafts;
     });
@@ -34,7 +31,8 @@ export class MyJoinedDraftsPodComponent implements OnInit {
     return 'Unknown Map';
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.mapData = await this.heroesService.getMaps();
   }
 
 }

@@ -1,0 +1,29 @@
+:host {
+    display: block;
+    md-nav-list {
+        padding: 0px;
+        md-list-item /deep/>.md-list-item {
+            height: 32px;
+        }
+    }
+    .child-toggle {
+        width: 20px;
+        height: 20px;
+        button{
+            width:20px;
+            height:20px;
+            line-height: 18px;
+            md-icon{
+                font-size: 18px;
+                line-height: 18px;
+                width:18px;
+                height: 18px;
+                padding:0px;
+            }
+        }
+    }
+    .children {
+        margin-left: 16px;
+        border-left: 1px solid lightgray;
+    }
+}

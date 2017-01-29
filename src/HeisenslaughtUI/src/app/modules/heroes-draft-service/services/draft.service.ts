@@ -61,13 +61,17 @@ export class DraftHubService extends SignalRHub<IDraftHubServerProxy>{
     }
 
     // TODO: refactor for consistancy - resetDraft vs restartDraft
-    public resetDraft(draftToken: string, adminToken: string): Promise<IDraftConfigAdminDTO> {
-        let p = this.server.restartDraft(draftToken, adminToken);
+    public async resetDraft(draftToken: string, adminToken: string): Promise<IDraftConfigAdminDTO> {
+        let config = await this.server.restartDraft(draftToken, adminToken);
+        this._draftConfig = config;
+        this._draftState = config.state;
+        return config;
+        /*let p = this.server.restartDraft(draftToken, adminToken);
         p.then((config) => {
             this._draftConfig = config;
             this._draftState = config.state;
         });
-        return p;
+        return p;*/
     }
 
     public closeDraft(draftToken: string, adminToken: string): Promise<void> {

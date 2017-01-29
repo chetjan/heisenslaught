@@ -172,7 +172,7 @@ export class LoginService {
   }
 
   public logOut(): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       this.disconnectSignalR();
       let p = this.http.get('/auth/logout').toPromise();
       p.then(() => {

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { HeroesService, HeroData, IMapData } from '../../../heroes-data-service/
   templateUrl: './draft-screen.component.html',
   styleUrls: ['./draft-screen.component.scss']
 })
-export class DraftScreenComponent implements OnDestroy {
+export class DraftScreenComponent implements OnInit, OnDestroy {
 
   private static firstSlots: number[] = [0, 2, 5, 6, 8, 11, 12];
   private static secondSlots: number[] = [1, 3, 4, 7, 9, 10, 13];
@@ -47,13 +47,7 @@ export class DraftScreenComponent implements OnDestroy {
     private route: ActivatedRoute,
     private changeRef: ChangeDetectorRef
   ) {
-    this.heroesService.getHeroes().subscribe((heroes) => {
-      this.heroes = heroes;
-    });
-    this.heroesService.getMaps().subscribe((maps) => {
-      this.maps = maps;
-    });
-
+    
     this.draftToken = this.route.snapshot.params['id'];
     this.teamToken = this.route.snapshot.params['team'];
 
@@ -73,6 +67,11 @@ export class DraftScreenComponent implements OnDestroy {
     }, (err) => {
       console.log('connect error', err);
     });
+  }
+
+  public async ngOnInit() {
+    this.heroes = await this.heroesService.getHeroes();
+    this.maps = await this.heroesService.getMaps();
   }
 
   public ngOnDestroy() {

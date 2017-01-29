@@ -1,6 +1,7 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component, Input, HostBinding, OnInit } from '@angular/core';
 
-import { IDraftConfigDTO, IDraftState, DraftPhase, IDraftConfigDrafterDTO } from '../../../heroes-draft-service/heroes-draft-service.module';
+import { IDraftConfigDTO, IDraftState, DraftPhase, IDraftConfigDrafterDTO }
+  from '../../../heroes-draft-service/heroes-draft-service.module';
 import { HeroesService, HeroData } from '../../../heroes-data-service/heroes-data-service.module';
 
 
@@ -9,7 +10,7 @@ import { HeroesService, HeroData } from '../../../heroes-data-service/heroes-dat
   templateUrl: './team-hero-picks.component.html',
   styleUrls: ['./team-hero-picks.component.scss']
 })
-export class TeamHeroPicksComponent {
+export class TeamHeroPicksComponent implements OnInit {
   private heroes: HeroData[];
 
   @Input()
@@ -31,13 +32,10 @@ export class TeamHeroPicksComponent {
   @Input()
   public selectedHero: HeroData;
 
+  constructor(private heroesService: HeroesService) { }
 
-
-  constructor(private heroesService: HeroesService) {
-    heroesService.getHeroes().subscribe((heroes) => {
-      this.heroes = heroes;
-    });
-
+  public async ngOnInit() {
+    this.heroes = await this.heroesService.getHeroes();
   }
 
   public get currentPick(): number {
