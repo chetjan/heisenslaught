@@ -824,15 +824,15 @@
     {
         "id": "valeera",
         "name": "Valeera",
-        "title": "TODO",
+        "title": "SHADOW OF THE UNCROWNED",
         "franchise": "warcraft",
         "roles": [
             "melee",
             "assassin",
             "burst"
         ],
-        "keywords": [],
-        "iconSmall": "http://placehold.it/80?text=V",
+        "keywords": ["stealth"],
+        "iconSmall": "http://us.battle.net/heroes/static/images/heroes/skins/thumbnails/standard_shadowOfTheUncrownedStandard.jpg?v=58-84",
         "iconLarge": ""
     },
     {
