@@ -110,7 +110,6 @@ $warn: (
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue.
-@debug $md-deep-purple;
 
 $heisenslaught-primary: md-palette($primary, 600, 400, 900);
 $heisenslaught-accent:  md-palette($accent, A100, 900, A400);
