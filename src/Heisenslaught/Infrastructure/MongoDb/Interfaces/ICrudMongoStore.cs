@@ -25,6 +25,7 @@ namespace Heisenslaught.Infrastructure.MongoDb
 
         void Create(TDocument document);
         Task CreateAsync(TDocument document, CancellationToken cancellationToken);
+        void CreateOrUpdate(TDocument document);
 
         void Update(TDocument document);
         Task UpdateAsync(TDocument document, CancellationToken cancellationToken);

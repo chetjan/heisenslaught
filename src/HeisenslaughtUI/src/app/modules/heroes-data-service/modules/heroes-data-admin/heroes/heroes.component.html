@@ -1,0 +1,25 @@
+<app-page class="full">
+    <md-card header xngIf="!heroes?.length">
+       <div *ngIf="!isImporting">
+            <span *ngIf="importReport?.length > 0">
+                {{importReport?.length}} of {{heroes?.length}} hero images are missing or out of date.
+            </span>
+            <span *ngIf="importReport?.length === 0">
+                All Images are up-to-date.
+            </span>
+            <button md-button (click)="import(importReport)" 
+                *ngIf="importReport?.length !== 0 && importReport?.length !== heroes?.length">Update</button>
+            <button md-button (click)="import(heroes)">{{importReport?.length === heroes?.length ? 'Import' : 'Reimport'}} All</button>
+       </div>
+        <div *ngIf="isImporting">
+            <span>Importing: {{importProgress?.name}}</span>
+            <br/>
+            <br/>
+            <md-progress-bar color="warn"  mode="determinate" [value]="(importProgress?.num||0) / (importProgress?.total||1) * 100"></md-progress-bar>
+            
+        </div>
+    </md-card>
+    <pre>
+        {{heroes | json}}
+    </pre>
+</app-page>

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 
-import { HeroData } from '../../../heroes-data-service/heroes-data-service.module';
+import { HeroData, HeroesService } from '../../../heroes-data-service/heroes-data-service.module';
 
 
 @Component({
@@ -8,7 +8,7 @@ import { HeroData } from '../../../heroes-data-service/heroes-data-service.modul
   template: `
     <div #ttAttach>
       <svg viewBox="0 0 100 100">
-        <image [attr.xlink:href]="hero.iconSmall" width="100" height="100"></image>
+        <image [attr.xlink:href]="heroImage || hero?.iconSmall" width="100" height="100"></image>
       </svg>
       <div class="picked-icon"></div>
     </div>
@@ -31,20 +31,31 @@ export class HeroIconComponent implements OnInit, OnDestroy {
   private static _keyDownListener: EventListener;
   private static _keyUpListener: EventListener;
   private static _isAltDown: boolean;
-  private static _instanceCount: number = 0;
+  private static _instanceCount = 0;
 
   @Input()
   public hero: HeroData;
+
+  public heroImage: string;
+
+  public async getImage(id: string): Promise<string> {
+    if (id) {
+      let images = await this.heroesService.getHeroImages();
+      return images[id];
+    }
+    return undefined;
+  }
 
   public get isAltDown(): boolean {
     return HeroIconComponent._isAltDown;
   }
 
-  constructor() {
+  constructor(private heroesService: HeroesService) {
     this.initEvents();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.heroImage = await this.getImage(this.hero.id);
   }
 
   ngOnDestroy() {

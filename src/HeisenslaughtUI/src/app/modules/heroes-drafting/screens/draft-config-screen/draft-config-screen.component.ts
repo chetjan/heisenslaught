@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -16,7 +16,7 @@ interface ConfigPreset {
   templateUrl: './draft-config-screen.component.html',
   styleUrls: ['./draft-config-screen.component.scss']
 })
-export class DraftConfigScreenComponent implements OnDestroy {
+export class DraftConfigScreenComponent implements OnInit, OnDestroy {
   private draftToken: string;
   private adminToken: string;
   private loadedHeroes: boolean;
@@ -103,17 +103,6 @@ export class DraftConfigScreenComponent implements OnDestroy {
     private changeRef: ChangeDetectorRef
   ) {
     try {
-
-      heroesService.getMaps().subscribe((maps: IMapData[]) => {
-        this.maps = maps;
-        this.loadedMaps = true;
-      });
-
-      heroesService.getHeroes().subscribe((heroes: HeroData[]) => {
-        this.heroes = heroes;
-        this.loadedHeroes = true;
-      });
-
       this.draftToken = this.route.snapshot.params['id'];
       this.adminToken = this.route.snapshot.params['adminToken'];
 
@@ -125,6 +114,13 @@ export class DraftConfigScreenComponent implements OnDestroy {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  public async ngOnInit(){
+    this.maps = await this.heroesService.getMaps();
+    this.loadedMaps = true;
+    this.heroes = await this.heroesService.getHeroes();
+    this.loadedHeroes = true;
   }
 
   public ngOnDestroy() {

@@ -76,6 +76,8 @@ namespace Heisenslaught.Infrastructure.MongoDb
             return result;
         }
 
+       
+
         public virtual void Delete(TDocument document)
         {
             Emit(OnBeforeDelete, document);
@@ -115,6 +117,22 @@ namespace Heisenslaught.Infrastructure.MongoDb
                 Emit(OnUpdated, document);
             });
             return result;
+        }
+
+        public virtual void CreateOrUpdate(TDocument document)
+        {
+            Emit(OnBeforeCreate, document);
+            var q = Builders<TDocument>.Filter.Eq(_ => _.Id, document.Id);
+            var result = Collection.ReplaceOne(q, document, new UpdateOptions { IsUpsert = true });
+            if(result.UpsertedId != null)
+            {
+                Emit(OnCreated, document);
+            }
+            else
+            {
+                Emit(OnUpdated, document);
+            }
+            
         }
 
         public virtual TDocument FindById(Tkey id)

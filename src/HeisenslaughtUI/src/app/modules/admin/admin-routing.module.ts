@@ -39,6 +39,28 @@ const routes: Routes = [
                 }
             },
             {
+                path: 'heroesdata',
+                canLoad: [AuthGuard],
+                loadChildren: 'app/modules/heroes-data-service/modules/heroes-data-admin/heroes-data-admin.module#HeroesDataAdminModule',
+                data: {
+                    navigation: {
+                        label: 'Heroes Data',
+                        showChildren: 1,
+                        children: [
+                            {
+                                label: 'Heroes',
+                                path: 'heroes'
+                            },
+                            {
+                                label: 'Maps',
+                                path: 'maps'
+                            }
+                        ]
+                    },
+                    checkRoles: ['SU', 'Admin']
+                }
+            },
+            {
                 path: 'users',
                 component: AdminDashboardComponent,
                 data: {

@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import { RestService } from '../../../common/http/rest/rest.service';
+
 import { HeroData } from './types/hero';
 import { IMapData } from './types/map';
 
@@ -9,28 +11,44 @@ export { IMapData } from './types/map';
 
 
 @Injectable()
-export class HeroesService {
-  private heroData: Observable<HeroData[]>;
-  private mapData: Observable<IMapData[]>;
+export class HeroesService extends RestService {
+  private heroData: Promise<HeroData[]>;
+  private mapData: Promise<IMapData[]>;
 
+  private heroImages: Promise<{ [id: string]: string }>;
+  private mapImages: Promise<{ [id: string]: string }>;
 
-  constructor(private http: Http) { }
+  constructor(http: Http, @Optional() baseUrl?: string) {
+    super(http, baseUrl || 'api/herodata');
+  }
 
-  public getHeroes(): Observable<HeroData[]> {
+  public getHeroes(): Promise<HeroData[]> {
     if (!this.heroData) {
       this.heroData = this.http.get('data/heroes.json')
-        .map((res: Response) => res.json())
-        .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+        .map((res: Response) => res.json()).toPromise();
     }
     return this.heroData;
   }
 
-  public getMaps(): Observable<IMapData[]> {
+  public getMaps(): Promise<IMapData[]> {
     if (!this.mapData) {
       this.mapData = this.http.get('data/maps.json')
-        .map((res: Response) => res.json())
-        .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+        .map((res: Response) => res.json()).toPromise();
     }
     return this.mapData;
+  }
+
+  public getHeroImages(): Promise<{ [id: string]: string }> {
+    if (!this.heroImages) {
+      this.heroImages = this.get('heroes/images');
+    }
+    return this.heroImages;
+  }
+
+  public getMapImages(): Promise<{ [id: string]: string }> {
+    if (!this.mapImages) {
+      this.mapImages = this.get('maps/images');
+    }
+    return this.mapImages;
   }
 }

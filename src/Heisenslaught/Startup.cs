@@ -94,7 +94,15 @@ namespace Heisenslaught
                 var db = client.GetDatabase(options.Value.Database);
                 return new DraftJoinedStore(db);
             });
-            
+
+            services.AddSingleton(provider =>
+            {
+                var options = provider.GetService<IOptions<MongoSettings>>();
+                var client = new MongoClient(options.Value.ConnectionString);
+                var db = client.GetDatabase(options.Value.Database);
+                return new ImageStore(db);
+            });
+
 
             // services
             services.AddSingleton<IHubConnectionsService, HubConnectionsService>();
