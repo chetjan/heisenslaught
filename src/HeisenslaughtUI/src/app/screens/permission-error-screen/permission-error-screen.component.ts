@@ -15,10 +15,9 @@ export class PermissionErrorScreenComponent implements OnInit {
   ngOnInit() {
   }
 
-  public switchUser() {
-    this.loginService.battleNetLoginSwitchUser().then(() => {
-      this.loginService.loginRedirect();
-    });
+  public async switchUser() {
+    await this.loginService.battleNetLoginSwitchUser();
+    this.loginService.loginRedirect();
   }
 
 }

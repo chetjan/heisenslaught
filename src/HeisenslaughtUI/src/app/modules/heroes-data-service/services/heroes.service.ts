@@ -1,8 +1,6 @@
-import { Injectable, Optional } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
 import { RestService } from '../../../common/http/rest/rest.service';
-
 import { HeroData } from './types/hero';
 import { IMapData } from './types/map';
 
@@ -18,8 +16,12 @@ export class HeroesService extends RestService {
   private heroImages: Promise<{ [id: string]: string }>;
   private mapImages: Promise<{ [id: string]: string }>;
 
-  constructor(http: Http, @Optional() baseUrl?: string) {
-    super(http, baseUrl || 'api/herodata');
+  constructor(http: Http) {
+    super(http);
+  }
+
+  protected get baseUrl(): string {
+    return 'api/herodata';
   }
 
   public getHeroes(): Promise<HeroData[]> {

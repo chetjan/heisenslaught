@@ -1,7 +1,12 @@
 import { Http, RequestOptionsArgs } from '@angular/http';
 export abstract class RestService {
+  protected _baseUrl: string;
 
-  constructor(protected http: Http, protected baseUrl?: string) { }
+  constructor(protected http: Http) { }
+
+  protected get baseUrl(): string {
+    return '';
+  }
 
   protected get(path: string, options?: RequestOptionsArgs): Promise<any> {
     return this.http.get(this.getUrl(path), options).map(res => res.json()).toPromise();

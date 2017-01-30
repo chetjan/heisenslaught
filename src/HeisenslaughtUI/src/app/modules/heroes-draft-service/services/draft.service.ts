@@ -20,7 +20,7 @@ export class DraftHubService extends SignalRHub<IDraftHubServerProxy>{
     private _connectedUsers: IDraftUser[] = [];
     private _draftConfig: IDraftConfigDTO;
     private _draftState: IDraftState;
-    private _reconnecting: boolean = false;
+    private _reconnecting = false;
 
     @HubEventHandler()
     private updateConfig: Observable<IDraftConfigDTO>;
@@ -33,17 +33,15 @@ export class DraftHubService extends SignalRHub<IDraftHubServerProxy>{
         super(signalRConnectionService, 'draftHub');
     }
 
-    public connectToDraft(draftToken: string, userToken?: string): Promise<IDraftConfigDTO> {
+    public async connectToDraft(draftToken: string, userToken?: string): Promise<IDraftConfigDTO> {
         this._draftTokens = [draftToken, userToken];
         this.connect();
-        let p = this.server.connectToDraft(draftToken, userToken);
-        p.then((config) => {
-            this._draftConfig = config;
-            this._draftState = config.state;
-            this.emitClientEvent('updateConfig', config);
-            this.emitClientEvent('updateDraftState', config.state);
-        });
-        return p;
+        let config = await this.server.connectToDraft(draftToken, userToken);
+        this._draftConfig = config;
+        this._draftState = config.state;
+        this.emitClientEvent('updateConfig', config);
+        this.emitClientEvent('updateDraftState', config.state);
+        return config;
     }
 
     public leave(): Promise<void> {
@@ -51,13 +49,11 @@ export class DraftHubService extends SignalRHub<IDraftHubServerProxy>{
         return this.server.leaveDraft();
     }
 
-    public createDraft(createCfg: ICreateDraftDTO): Promise<IDraftConfigAdminDTO> {
-        let p = this.server.createDraft(createCfg);
-        p.then((config) => {
-            this._draftConfig = config;
-            this._draftState = config.state;
-        });
-        return p;
+    public async createDraft(createCfg: ICreateDraftDTO): Promise<IDraftConfigAdminDTO> {
+        let config = await this.server.createDraft(createCfg);
+        this._draftConfig = config;
+        this._draftState = config.state;
+        return config;
     }
 
     // TODO: refactor for consistancy - resetDraft vs restartDraft
@@ -66,12 +62,6 @@ export class DraftHubService extends SignalRHub<IDraftHubServerProxy>{
         this._draftConfig = config;
         this._draftState = config.state;
         return config;
-        /*let p = this.server.restartDraft(draftToken, adminToken);
-        p.then((config) => {
-            this._draftConfig = config;
-            this._draftState = config.state;
-        });
-        return p;*/
     }
 
     public closeDraft(draftToken: string, adminToken: string): Promise<void> {
@@ -102,9 +92,9 @@ export class DraftHubService extends SignalRHub<IDraftHubServerProxy>{
         return this._connectedUsers;
     }
 
-    public disconnect() {
+    public async disconnect() {
         this._draftTokens = null;
-        this.leave();
+        await this.leave();
         super.disconnect();
     }
 
@@ -163,11 +153,6 @@ export class DraftHubService extends SignalRHub<IDraftHubServerProxy>{
                 case SignalRConnectionState.DISCONNECTED:
                     if (this._draftTokens) {
                         this._reconnecting = true;
-                        /* setTimeout(() => {
-                             console.log('Attemping to reconnect...');
-                             this.reconnect();
-                         }, 10000);
-                         */
                     }
                     break;
                 case SignalRConnectionState.RECONNECTING:

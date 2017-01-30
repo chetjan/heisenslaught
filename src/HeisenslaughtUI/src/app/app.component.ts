@@ -10,7 +10,6 @@ import { ServerEventService } from './services/signalr/signalr-server-event.serv
 })
 export class AppComponent {
 
-
   constructor(
     private loginService: LoginService,
     private elm: ElementRef,

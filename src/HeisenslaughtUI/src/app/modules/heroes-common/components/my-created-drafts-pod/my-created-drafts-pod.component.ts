@@ -16,11 +16,7 @@ export class MyCreatedDraftsPodComponent implements OnInit {
   constructor(
     private draftService: DraftService,
     private heroesService: HeroesService
-  ) {
-    draftService.getMyRecentlyCreatedDrafts().subscribe((recentDrafts) => {
-      this.recentDrafts = recentDrafts;
-    });
-  }
+  ) { }
 
   public getMapName(mapId: string): string {
     if (this.mapData && this.mapData.length) {
@@ -33,6 +29,7 @@ export class MyCreatedDraftsPodComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.mapData = await this.heroesService.getMaps();
+    [this.mapData, this.recentDrafts] =
+      await Promise.all([this.heroesService.getMaps(), this.draftService.getMyRecentlyCreatedDrafts()]);
   }
 }

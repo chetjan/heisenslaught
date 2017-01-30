@@ -47,31 +47,27 @@ export class DraftScreenComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private changeRef: ChangeDetectorRef
   ) {
-    
     this.draftToken = this.route.snapshot.params['id'];
     this.teamToken = this.route.snapshot.params['team'];
-
-    this.draftService.connectToDraft(this.draftToken, this.teamToken).then((config) => {
-      this.draftConfig = config;
-      this.team = (<IDraftConfigDrafterDTO>config).team;
-      this.configSlots();
-      this.updateState(config.state);
-      this.configSubscription = this.draftService.draftConfigObservable.subscribe((cfg) => {
-        this.draftConfig = cfg;
-        this.configSlots();
-        this.updateState(cfg.state);
-      });
-      this.stateSubscription = this.draftService.draftStateObservable.subscribe((state) => {
-        this.updateState(state);
-      });
-    }, (err) => {
-      console.log('connect error', err);
-    });
   }
 
   public async ngOnInit() {
-    this.heroes = await this.heroesService.getHeroes();
-    this.maps = await this.heroesService.getMaps();
+    [this.heroes, this.maps, this.draftConfig] = await Promise.all([
+      this.heroesService.getHeroes(),
+      this.heroesService.getMaps(),
+      this.draftService.connectToDraft(this.draftToken, this.teamToken)
+    ]);
+    this.team = (<IDraftConfigDrafterDTO>this.draftConfig).team;
+    this.configSlots();
+    this.updateState(this.draftConfig.state);
+    this.configSubscription = this.draftService.draftConfigObservable.subscribe((cfg) => {
+      this.draftConfig = cfg;
+      this.configSlots();
+      this.updateState(cfg.state);
+    });
+    this.stateSubscription = this.draftService.draftStateObservable.subscribe((state) => {
+      this.updateState(state);
+    });
   }
 
   public ngOnDestroy() {
@@ -137,8 +133,8 @@ export class DraftScreenComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  public setReady() {
-    this.draftService.setReady(this.draftToken, this.teamToken);
+  public async setReady(): Promise<void> {
+    await this.draftService.setReady(this.draftToken, this.teamToken);
   }
 
   public get showReady(): boolean {
@@ -160,9 +156,10 @@ export class DraftScreenComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  public pick() {
-    this.draftService.pickHero(this.selectedHero.id, this.draftToken, this.teamToken);
+  public async pick(): Promise<void> {
+    let selected = this.selectedHero;
     this.selectedHero = null;
+    await this.draftService.pickHero(selected.id, this.draftToken, this.teamToken);
   }
 
   public get currentPick(): number {

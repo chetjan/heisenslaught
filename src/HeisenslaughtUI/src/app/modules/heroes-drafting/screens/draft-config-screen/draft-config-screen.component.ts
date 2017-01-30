@@ -116,10 +116,12 @@ export class DraftConfigScreenComponent implements OnInit, OnDestroy {
     }
   }
 
-  public async ngOnInit(){
-    this.maps = await this.heroesService.getMaps();
+  public async ngOnInit() {
+    [this.maps, this.heroes] = await Promise.all<any>([
+      this.heroesService.getMaps(),
+      this.heroesService.getHeroes()
+    ]);
     this.loadedMaps = true;
-    this.heroes = await this.heroesService.getHeroes();
     this.loadedHeroes = true;
   }
 
@@ -155,17 +157,14 @@ export class DraftConfigScreenComponent implements OnInit, OnDestroy {
     this.config = this.composeConfig(this.config, preset.config);
   }
 
-  private initConfigDraft() {
-    this.draftService.connectToDraft(this.draftToken, this.adminToken).then((config) => {
-      this.currentConfig = <IDraftConfigAdminDTO>config;
-      this.stateSubscription = this.draftService.draftStateObservable.subscribe((state) => {
-        this.currentConfig.state = state;
-        this.changeRef.detectChanges();
-      });
-      this.loadedConfig = true;
-    }, (err) => {
-      console.log('connect error', err);
+  private async initConfigDraft() {
+    let config = await this.draftService.connectToDraft(this.draftToken, this.adminToken);
+    this.currentConfig = <IDraftConfigAdminDTO>config;
+    this.stateSubscription = this.draftService.draftStateObservable.subscribe((state) => {
+      this.currentConfig.state = state;
+      this.changeRef.detectChanges();
     });
+    this.loadedConfig = true;
   }
 
   public get isDraftComplete(): boolean {
@@ -182,30 +181,20 @@ export class DraftConfigScreenComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  public createDraft() {
+  public async createDraft() {
     this.createError = undefined;
-    this.draftService.createDraft(this.config).then((cfg) => {
-      this.router.navigate(['draft/config', cfg.draftToken, cfg.adminToken]);
-    }, (err) => {
-      this.createError = err ? err.toString() : 'Server Error';
-    });
+    let cfg = await this.draftService.createDraft(this.config);
+    this.router.navigate(['draft/config', cfg.draftToken, cfg.adminToken]);
   }
 
-  public resetDraft() {
+  public async resetDraft() {
     this.createError = undefined;
-    this.draftService.resetDraft(this.draftToken, this.adminToken).then((cfg) => {
-      this.currentConfig = cfg;
-    }, (err) => {
-      this.createError = err ? err.toString() : 'Server Error';
-    });
+    this.currentConfig = await this.draftService.resetDraft(this.draftToken, this.adminToken);
   }
 
-  public closeDraft() {
+  public async closeDraft() {
     this.createError = undefined;
-    this.draftService.closeDraft(this.draftToken, this.adminToken).then(() => {
-    }, (err) => {
-      this.createError = err ? err.toString() : 'Server Error';
-    });
+    await this.draftService.closeDraft(this.draftToken, this.adminToken);
   }
 
   public getMapName(): string {
