@@ -6,9 +6,12 @@ import { HeroesService } from '../../../services/heroes.service';
 export class HeroesDataAdminService extends HeroesService {
 
   constructor(http: Http) {
-    super(http, 'api/admin/herodata');
+    super(http);
   }
 
+  protected get baseUrl(): string {
+    return 'api/admin/herodata';
+  }
   public getHeroImageImportReport(): Promise<any> {
     return this.get('heroes/images/report');
   }

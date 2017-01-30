@@ -10,8 +10,7 @@ export * from './types/user';
 
 @Injectable()
 export class LoginService {
-
-  private _initialized: boolean = false;
+  private _initialized = false;
   private _battlenetLoginWindow: LoginWindow = new LoginWindow('/auth?provider=BattleNet', 500, 620);
   private _battlenetLoginSwitchWindow: LoginWindow = new LoginWindow('/auth/switch?provider=BattleNet', 500, 620);
   private _authenticatedUser: AuthenticatedUser;
@@ -86,18 +85,17 @@ export class LoginService {
     return !!this._authenticatedUser;
   }
 
-  private handleExternalUserChange(): void {
-    this.http.get('/auth/user').map(res => res.json()).toPromise().then((user: AuthenticatedUser) => {
-      if (
-        (!this._authenticatedUser && user) ||
-        (this._authenticatedUser && !user) ||
-        (this._authenticatedUser.id !== user.id)
-      ) {
-        this.reconnectSignalR();
-        this.doLogoutCheck();
-      }
-      this.setAuthenticatedUser(user, true);
-    });
+  private async handleExternalUserChange(): Promise<void> {
+    let user: AuthenticatedUser = await this.http.get('/auth/user').map(res => res.json()).toPromise();
+    if (
+      (!this._authenticatedUser && user) ||
+      (this._authenticatedUser && !user) ||
+      (this._authenticatedUser.id !== user.id)
+    ) {
+      this.reconnectSignalR();
+      this.doLogoutCheck();
+    }
+    this.setAuthenticatedUser(user, true);
   }
 
   private reconnectSignalR(): void {
@@ -171,19 +169,12 @@ export class LoginService {
     return this._authenticatedUserObservable;
   }
 
-  public logOut(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.disconnectSignalR();
-      let p = this.http.get('/auth/logout').toPromise();
-      p.then(() => {
-        this.setAuthenticatedUser(null);
-        this.connectSignalR();
-        this.doLogoutCheck();
-        resolve();
-      }, (err) => {
-        reject(err);
-      });
-    });
+  public async logOut(): Promise<void> {
+    this.disconnectSignalR();
+    await this.http.get('/auth/logout').toPromise();
+    this.setAuthenticatedUser(null);
+    this.connectSignalR();
+    this.doLogoutCheck();
   }
 
   private doLogoutCheck(): void {
